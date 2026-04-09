@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shavik | 3D Animator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <audio id="bgMusic" src="iris_out.mp3" loop></audio>
+
+    <header>
+        <div class="logo">SHAVIK<span class="chainsaw">.</span>3D</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#home" data-lang="nav_home">Главная</a></li>
+                <li><a href="#portfolio" data-lang="nav_works">Работы</a></li>
+                <li><a href="#about" data-lang="nav_about">Правила</a></li>
+            </ul>
+            <div class="lang-switch">
+                <button onclick="setLang('en')">EN</button>
+                <button onclick="setLang('ru')">RU</button>
+                <button onclick="setLang('ua')">UA</button>
+            </div>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 data-lang="hero_title">Создаю 3D-миры, которые <span>разрывают</span> шаблоны</h1>
+            <p data-lang="hero_desc">Привет, я Щавик. Мой мотор — Blender. Специализируюсь на 3D-анимации, динамике и жесткой эстетике.</p>
+            <a href="#portfolio" class="btn" data-lang="hero_btn">Смотреть работы</a>
+        </div>
+    </section>
+
+    <div id="pochitaToast" class="pochita-toast">
+        <img src="images/pochita.png" alt="Pochita" class="pochita-img">
+        <div class="pochita-content">
+            <p data-lang="pochita_msg">Гав! Выключить музыку?</p>
+            <button id="muteBtn" class="pochita-btn" data-lang="pochita_yes">Да, вырубай</button>
+            <button id="keepMusicBtn" class="pochita-btn" data-lang="pochita_no">Оставь</button>
+        </div>
+    </div>
+
+    <section id="portfolio" class="portfolio">
+        <h2 data-lang="portfolio_title">Мои проекты</h2>
+        <div class="grid">
+            
+            <div class="card video-card">
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/GzQ0xF5vXik" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="card-info">
+                    <h3 data-lang="card_1_title">Rage анимация демона</h3>
+                    <p data-lang="card_1_desc">Работа с ригом и тряской</p>
+                </div>
+            </div>
+
+            <div class="card video-card">
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/vjnxFCoZpQ0" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="card-info">
+                    <h3 data-lang="card_2_title">Анимация появления и удара песчаной руки</h3>
+                    <p data-lang="card_2_desc">Разработка анимации на способность в игре Garry's Mod</p>
+                </div>
+            </div>
+
+            <div class="card video-card">
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/Wrv1_Ix1Oh8" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="card-info">
+                    <h3 data-lang="card_3_title">Падение от пули</h3>
+                    <p data-lang="card_3_desc">По факту я ее сделал за минут 5</p>
+                </div>
+            </div>
+
+            <div class="card video-card">
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/OTJSVYZXIjY" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="card-info">
+                    <h3 data-lang="card_4_title">Доставание катан из ножн</h3>
+                    <p data-lang="card_4_desc">Тоже сделана на быструю руку</p>
+                </div>
+            </div>
+			
+<div class="card video-card">
+    <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/N38p2CcBmZM" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <div class="card-info">
+        <h3 data-lang="card_5_title">Доставание катан из ножн</h3>
+        <p data-lang="card_5_desc">Тоже сделана на быструю руку</p>
+    </div>
+</div>
+			
+<div class="card video-card">
+    <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/07c5FTsRxmQ" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <div class="card-info">
+        <h3 data-lang="card_6_title">Доставание катан из ножн</h3>
+        <p data-lang="card_6_desc">Тоже сделана на быструю руку</p>
+    </div>
+</div>
+
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <h2 data-lang="about_title">Условия работы & Заказы</h2>
+        <div class="rules-container">
+            <ul class="rules-list">
+                <li><strong data-lang="rule1_title">1. Четкое ТЗ:</strong> <span data-lang="rule1_desc">Работаю только при наличии понятного технического задания. Оно должно включать описание идеи, хронометраж, разрешение (формат) и примеры (референсы), на которые стоит ориентироваться.</span></li>
+
+<li><strong data-lang="rule2_title">2. Предоплата:</strong> <span data-lang="rule2_desc">Работа начинается только после внесения предоплаты в размере 50% от согласованной стоимости. Это гарантирует бронь места в графике и серьезность ваших намерений.</span></li>
+
+<li><strong data-lang="rule3_title">3. Материалы для работы:</strong> <span data-lang="rule3_desc">Все исходники (логотипы в векторе, шрифты, озвучка или музыка) должны быть предоставлены до начала этапа анимации. Поиск или отрисовка недостающих элементов оплачиваются отдельно.</span></li>
+
+<li><strong data-lang="rule4_title">4. Согласование этапов:</strong> <span data-lang="rule4_desc">Процесс делится на этапы (раскадровка, черновая анимация, финальный рендер). Переход к следующему этапу возможен только после утверждения предыдущего.</span></li>
+
+<li><strong data-lang="rule5_title">5. Правки и корректировки:</strong> <span data-lang="rule5_desc">В стоимость включены два круга бесплатных правок, не противоречащих изначальному ТЗ. Все изменения, вносимые после утверждения этапа или кардинально меняющие концепцию, оплачиваются дополнительно.</span></li>
+
+<li><strong data-lang="rule6_title">6. Финальная оплата и передача:</strong> <span data-lang="rule6_desc">Готовый результат демонстрируется с водяным знаком или в низком качестве. Финальный файл без защитных знаков в полном разрешении передается сразу после получения оставшихся 50% оплаты.</span></li>
+
+<li><strong data-lang="rule7_title">7. Сроки реализации:</strong> <span data-lang="rule7_desc">Дедлайн фиксируется в начале работы. Помните, что время на проверку и утверждение этапов с вашей стороны не входит в чистый срок производства.</span></li>
+            </ul>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <h2 data-lang="footer_title">Связь со мной</h2>
+        <div class="social-links">
+            <a href="https://t.me/akame0001" target="_blank" class="btn-outline">Telegram</a>
+            <div class="btn-outline discord-btn">DS: geniy_kieva</div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

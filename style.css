@@ -1,0 +1,293 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: #0a0a0a;
+    color: #eaeaea;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    overflow-x: hidden;
+}
+
+header {
+    position: fixed;
+    width: 100%;
+    padding: 15px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(10, 10, 10, 0.95);
+    border-bottom: 2px solid #ff4500;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.chainsaw { color: #ff4500; }
+
+nav { display: flex; align-items: center; gap: 30px; }
+.nav-links { display: flex; list-style: none; gap: 20px;}
+.nav-links a { color: #888; text-decoration: none; font-weight: bold; transition: 0.3s; }
+.nav-links a:hover { color: #ff4500; text-shadow: 0 0 10px #ff4500; }
+
+.lang-switch { display: flex; gap: 5px; }
+.lang-switch button {
+    background: none;
+    border: 1px solid #444;
+    color: #888;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.lang-switch button:hover, .lang-switch button.active {
+    border-color: #ff4500; color: #fff; box-shadow: 0 0 10px #ff4500;
+}
+
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    background: url('https://media0.giphy.com/media/v1.Y2lkPTZjMDliOTUybzBrYmoycTgzNGNldnRpbHd0MndkeHg2eHh0cnI4bmtsYWV1NHo2ZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/T4D2epOKsQ3ZUadZ0B/source.gif') center/cover no-repeat;
+    padding: 0 20px;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(5, 5, 5, 0.85); 
+    z-index: 1;
+    transition: background 0.2s ease;
+}
+
+.hero-content { position: relative; z-index: 2; }
+
+.hero h1 { font-size: 4rem; margin-bottom: 20px; text-transform: uppercase; }
+.hero h1 span { color: #ff4500; text-shadow: 0 0 15px rgba(255, 69, 0, 0.8); }
+.hero p { font-size: 1.2rem; color: #ccc; margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+.btn {
+    display: inline-block;
+    padding: 15px 35px;
+    background: #ff4500;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    border: 2px solid #ff4500;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+@keyframes chainsawShake {
+    0% { transform: translate(2px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-2deg); }
+    20% { transform: translate(-3px, 0px) rotate(2deg); }
+    30% { transform: translate(0px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(2deg); }
+    50% { transform: translate(-1px, 2px) rotate(-2deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(2px, 1px) rotate(-2deg); }
+    80% { transform: translate(-1px, -1px) rotate(2deg); }
+    90% { transform: translate(2px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-2deg); }
+}
+
+.btn:hover {
+    background: transparent;
+    color: #ff4500;
+    box-shadow: 0 0 25px rgba(255, 69, 0, 0.6);
+    animation: chainsawShake 0.1s infinite; 
+}
+
+section { padding: 100px 5%; text-align: center; }
+section h2 { font-size: 2.5rem; text-transform: uppercase; margin-bottom: 50px; color: #fff; text-shadow: 0 0 10px #ff4500; }
+
+.grid { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
+.card { background: #141414; border: 1px solid #333; width: 350px; transition: 0.3s; }
+.card:hover { border-color: #ff4500; box-shadow: 0 0 15px rgba(255, 69, 0, 0.4); transform: translateY(-5px); }
+
+/* --- НОВЫЕ СТИЛИ ДЛЯ YOUTUBE ПЛЕЕРОВ --- */
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* Пропорция 16:9 */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-bottom: 2px solid #ff4500;
+    filter: grayscale(1) contrast(1.2); /* Ч/Б фильтр под стиль сайта */
+    transition: filter 0.3s ease;
+}
+
+.video-card:hover .video-container iframe {
+    filter: grayscale(0) contrast(1); /* Видео становится цветным при наведении мыши */
+}
+
+.card-info { padding: 20px; }
+.card-info h3 { color: #fff; text-transform: uppercase; font-size: 1.1rem; margin-bottom: 5px;}
+.card-info p { color: #888; }
+
+.about { background: #080808; border-top: 1px solid #222; }
+.rules-container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: left;
+    background: #111;
+    padding: 40px;
+    border-left: 4px solid #ff4500;
+    box-shadow: 10px 10px 0px #000;
+}
+.rules-list { list-style: none; }
+.rules-list li { margin-bottom: 25px; font-size: 1.1rem; color: #ccc; border-bottom: 1px dashed #333; padding-bottom: 15px; }
+.rules-list li:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.rules-list strong { color: #ff4500; text-transform: uppercase; display: block; margin-bottom: 5px; font-size: 1.2rem; }
+
+footer { background: #050505; padding: 60px 20px; border-top: 2px solid #ff4500; text-align: center; }
+.social-links { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 30px;}
+.btn-outline { padding: 12px 25px; border: 2px solid #ff4500; color: #ff4500; text-decoration: none; font-weight: bold; font-size: 1.1rem; transition: 0.3s; cursor: pointer; display: inline-block; }
+.btn-outline:hover { background: #ff4500; color: #fff; }
+
+.pochita-toast {
+    position: fixed;
+    bottom: 30px;
+    right: -500px; 
+    background: #141414;
+    border: 2px solid #ff4500;
+    padding: 15px 25px 15px 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 9999;
+    box-shadow: -5px 5px 20px rgba(255, 69, 0, 0.4);
+    border-radius: 10px 0 0 10px;
+    transition: right 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+}
+
+.pochita-toast.show { right: 0; }
+.pochita-img { width: 80px; height: auto; filter: drop-shadow(0 0 5px #ff4500); }
+.pochita-content p { color: #fff; font-weight: bold; margin-bottom: 10px; font-size: 1.1rem; }
+.pochita-btn { background: none; border: 1px solid #ff4500; color: #ff4500; padding: 5px 15px; cursor: pointer; font-weight: bold; transition: 0.3s; margin-right: 10px; }
+.pochita-btn:hover { background: #ff4500; color: #fff; }
+
+@media (max-width: 768px) {
+    header { 
+        flex-direction: column; 
+        padding: 10px 5%; 
+        gap: 10px; 
+    }
+    .logo { 
+        font-size: 1.5rem; 
+    }
+    nav { 
+        width: 100%; 
+        flex-direction: row; 
+        justify-content: space-between; 
+        gap: 10px; 
+    }
+    .nav-links { 
+        gap: 10px; 
+        font-size: 0.9rem; 
+    }
+    .lang-switch button { 
+        padding: 3px 6px; 
+        font-size: 0.8rem; 
+    }
+    
+    .hero { 
+        padding-top: 80px; 
+    }
+    .hero h1 { 
+        font-size: 2.2rem; 
+        margin-top: 0; 
+    }
+    .hero p { 
+        font-size: 1rem; 
+        padding: 0 10px; 
+    }
+    
+    section { 
+        padding: 70px 5% 30px; 
+    }
+    section h2 { 
+        font-size: 1.8rem; 
+        margin-bottom: 25px; 
+    }
+    
+    .card { 
+        width: 100%; 
+        max-width: 100%; 
+    }
+    
+    .rules-container { 
+        padding: 20px; 
+        box-shadow: 5px 5px 0px #000; 
+        border-left: 3px solid #ff4500;
+    }
+    .rules-list li { 
+        font-size: 0.95rem; 
+        margin-bottom: 15px; 
+    }
+    .rules-list strong { 
+        font-size: 1.1rem; 
+    }
+    
+    .pochita-toast {
+        right: 0; 
+        left: 0; 
+        bottom: -300px; 
+        width: 100%;
+        border-radius: 15px 15px 0 0; 
+        flex-direction: column; 
+        text-align: center;
+        padding: 20px; 
+        transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .pochita-toast.show { 
+        bottom: 0; 
+        right: 0; 
+    }
+    .pochita-img { 
+        width: 60px; 
+        margin-bottom: 5px; 
+    }
+    .pochita-btn { 
+        margin: 5px; 
+        width: 45%; 
+        display: inline-block; 
+    }
+}
+
+@media (max-width: 480px) {
+    .hero h1 { 
+        font-size: 1.8rem; 
+    }
+    .nav-links { 
+        flex-wrap: wrap; 
+        justify-content: center; 
+    }
+    nav { 
+        flex-direction: column; 
+    }
+}

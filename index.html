@@ -1,144 +1,616 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shavik | 3D Animator</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TikTok and Its Influence on Modern People</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Space+Grotesk:wght@400..700&family=Playfair+Display:ital,wght@1,700&display=swap">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'Inter',Arial,sans-serif;-webkit-font-smoothing:antialiased}
+#viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+#stage{position:relative;width:1920px;height:1080px;flex:none;transform-origin:center center;overflow:hidden;background:#0b0b10}
+
+/* slide format */
+#stage section{position:absolute;inset:0;width:1920px;height:1080px;display:flex;flex-direction:column;visibility:hidden;will-change:transform}
+#stage section.active{visibility:visible}
+#stage section div{display:flex;flex-direction:column}
+#stage section h1{font-size:96px;font-weight:600;line-height:1.1}
+#stage section h2{font-size:64px;font-weight:600;line-height:1.15}
+#stage section h3{font-size:44px;font-weight:600;line-height:1.2}
+#stage section p{font-size:32px;line-height:1.4}
+#stage section aside{display:none}
+#stage section svg.icon{flex:none;display:block}
+#stage section .shape{flex:none;display:block}
+
+/* slide transitions: push */
+@keyframes pushInFwd{from{transform:translateX(100%)}to{transform:translateX(0)}}
+@keyframes pushOutFwd{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+@keyframes pushInBack{from{transform:translateX(-100%)}to{transform:translateX(0)}}
+@keyframes pushOutBack{from{transform:translateX(0)}to{transform:translateX(100%)}}
+.in-fwd{animation:pushInFwd .7s cubic-bezier(.7,0,.25,1) both}
+.out-fwd{animation:pushOutFwd .7s cubic-bezier(.7,0,.25,1) both;visibility:visible!important}
+.in-back{animation:pushInBack .7s cubic-bezier(.7,0,.25,1) both}
+.out-back{animation:pushOutBack .7s cubic-bezier(.7,0,.25,1) both;visibility:visible!important}
+
+/* build-in animations (use individual translate/scale so element rotation is kept) */
+[data-build-in].pending{opacity:0}
+@keyframes b-fade{from{opacity:0}to{opacity:1}}
+@keyframes b-rise{from{opacity:0;translate:0 70px}to{opacity:1;translate:0 0}}
+@keyframes b-drop{from{opacity:0;translate:0 -70px}to{opacity:1;translate:0 0}}
+@keyframes b-left{from{opacity:0;translate:120px 0}to{opacity:1;translate:0 0}}
+@keyframes b-right{from{opacity:0;translate:-120px 0}to{opacity:1;translate:0 0}}
+@keyframes b-scale{from{opacity:0;scale:.6}to{opacity:1;scale:1}}
+@keyframes b-pop{0%{opacity:0;scale:.3}60%{opacity:1;scale:1.12}80%{scale:.96}100%{opacity:1;scale:1}}
+.b-fade{animation:b-fade .6s ease both}
+.b-rise{animation:b-rise .7s cubic-bezier(.2,.8,.2,1) both}
+.b-drop{animation:b-drop .7s cubic-bezier(.2,.8,.2,1) both}
+.b-left{animation:b-left .7s cubic-bezier(.2,.8,.2,1) both}
+.b-right{animation:b-right .7s cubic-bezier(.2,.8,.2,1) both}
+.b-scale{animation:b-scale .6s cubic-bezier(.2,.8,.2,1) both}
+.b-pop{animation:b-pop .6s cubic-bezier(.2,.8,.2,1) both}
+
+/* ---------- curtains ---------- */
+#theatre{position:fixed;inset:0;z-index:50;pointer-events:none}
+.curtain{position:absolute;top:0;bottom:0;width:50.5%;pointer-events:auto;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 18%,rgba(0,0,0,0) 80%,rgba(0,0,0,.55) 100%),
+    repeating-linear-gradient(90deg,#4a0710 0px,#8e1222 22px,#c81e33 46px,#8e1222 70px,#4a0710 92px);
+  box-shadow:inset 0 0 120px rgba(0,0,0,.6);
+  transition:transform 2.6s cubic-bezier(.65,0,.25,1)}
+.curtain.l{left:0;transform-origin:left top;border-right:3px solid #2a0308}
+.curtain.r{right:0;transform-origin:right top;border-left:3px solid #2a0308}
+#theatre.open .curtain.l{transform:translateX(-96%) scaleX(.55)}
+#theatre.open .curtain.r{transform:translateX(96%) scaleX(.55)}
+.valance{position:absolute;left:0;right:0;top:0;height:12vh;z-index:3;pointer-events:none;
+  background:
+    repeating-linear-gradient(90deg,#5a0812 0,#a8172a 30px,#5a0812 60px);
+  -webkit-mask:radial-gradient(60px 40px at 60px 100%,transparent 98%,#000) 0 0/120px 100% repeat-x;
+          mask:radial-gradient(60px 40px at 60px 100%,transparent 98%,#000) 0 0/120px 100% repeat-x;
+  box-shadow:0 10px 30px rgba(0,0,0,.6)}
+.valance-trim{position:absolute;left:0;right:0;top:calc(12vh - 46px);height:10px;z-index:4;pointer-events:none;
+  background:repeating-linear-gradient(90deg,#d4a63a 0 14px,#f5d77a 14px 22px,#9c7420 22px 30px);opacity:.9}
+#marquee{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);z-index:5;text-align:center;
+  color:#f5d77a;pointer-events:none;transition:opacity .8s ease;width:90vw}
+#marquee .t1{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-weight:700;font-size:clamp(28px,4.2vw,72px);
+  text-shadow:0 0 18px rgba(245,215,122,.55),0 4px 0 #6b4b10}
+#marquee .t2{margin-top:2vh;font-family:'Space Grotesk',Arial,sans-serif;font-size:clamp(16px,1.6vw,28px);letter-spacing:.35em;
+  text-transform:uppercase;color:#f3e3b5;opacity:.85}
+#theatre.open #marquee{opacity:0}
+#spot{position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:radial-gradient(ellipse 28% 40% at 50% 46%,rgba(255,230,160,.22),transparent 70%);
+  animation:spot 4s ease-in-out infinite alternate;transition:opacity .8s}
+@keyframes spot{from{opacity:.6}to{opacity:1}}
+#theatre.open #spot{opacity:0}
+#theatre.open .valance,#theatre.open .valance-trim{transition:transform 2.4s cubic-bezier(.65,0,.25,1) .6s;transform:translateY(-130%)}
+#theatre.gone{display:none}
+
+/* mic indicator */
+#mic{position:fixed;right:18px;bottom:16px;z-index:60;display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;
+  background:rgba(0,0,0,.55);color:#f3e3b5;font:600 14px 'Inter',Arial,sans-serif;cursor:pointer;user-select:none;border:1px solid rgba(245,215,122,.35);transition:opacity .6s}
+#mic .dot{width:10px;height:10px;border-radius:50%;background:#777}
+#mic.listening .dot{background:#2ee66d;box-shadow:0 0 0 0 rgba(46,230,109,.7);animation:pulse 1.4s infinite}
+#mic.off .dot{background:#e0484f}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(46,230,109,.7)}70%{box-shadow:0 0 0 10px rgba(46,230,109,0)}100%{box-shadow:0 0 0 0 rgba(46,230,109,0)}}
+#mic.hide{opacity:0;pointer-events:none}
+
+/* slide counter + hint */
+#hud{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:40;color:rgba(255,255,255,.55);font:500 13px 'Inter',Arial,sans-serif;
+  background:rgba(0,0,0,.35);padding:6px 12px;border-radius:999px;opacity:0;transition:opacity .4s;pointer-events:none}
+body.show-hud #hud{opacity:1}
+</style>
 </head>
 <body>
-    <audio id="bgMusic" src="iris_out.mp3" loop></audio>
-
-    <header>
-        <div class="logo">SHAVIK<span class="chainsaw">.</span>3D</div>
-        <nav>
-            <ul class="nav-links">
-                <li><a href="#home" data-lang="nav_home">Главная</a></li>
-                <li><a href="#portfolio" data-lang="nav_works">Работы</a></li>
-                <li><a href="#about" data-lang="nav_about">Правила</a></li>
-            </ul>
-            <div class="lang-switch">
-                <button onclick="setLang('en')">EN</button>
-                <button onclick="setLang('ru')">RU</button>
-                <button onclick="setLang('ua')">UA</button>
-            </div>
-        </nav>
-    </header>
-
-    <section id="home" class="hero">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1 data-lang="hero_title">Создаю 3D-миры, которые <span>разрывают</span> шаблоны</h1>
-            <p data-lang="hero_desc">Привет, я Щавик. Мой мотор — Blender. Специализируюсь на 3D-анимации, динамике и жесткой эстетике.</p>
-            <a href="#portfolio" class="btn" data-lang="hero_btn">Смотреть работы</a>
-        </div>
-    </section>
-
-    <div id="pochitaToast" class="pochita-toast">
-        <img src="images/pochita.png" alt="Pochita" class="pochita-img">
-        <div class="pochita-content">
-            <p data-lang="pochita_msg">Гав! Выключить музыку?</p>
-            <button id="muteBtn" class="pochita-btn" data-lang="pochita_yes">Да, вырубай</button>
-            <button id="keepMusicBtn" class="pochita-btn" data-lang="pochita_no">Оставь</button>
-        </div>
-    </div>
-
-    <section id="portfolio" class="portfolio">
-        <h2 data-lang="portfolio_title">Мои проекты</h2>
-        <div class="grid">
-            
-            <div class="card video-card">
-                <div class="video-container">
-                    <iframe src="https://www.youtube.com/embed/GzQ0xF5vXik" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-                <div class="card-info">
-                    <h3 data-lang="card_1_title">Rage анимация демона</h3>
-                    <p data-lang="card_1_desc">Работа с ригом и тряской</p>
-                </div>
-            </div>
-
-            <div class="card video-card">
-                <div class="video-container">
-                    <iframe src="https://www.youtube.com/embed/vjnxFCoZpQ0" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-                <div class="card-info">
-                    <h3 data-lang="card_2_title">Анимация появления и удара песчаной руки</h3>
-                    <p data-lang="card_2_desc">Разработка анимации на способность в игре Garry's Mod</p>
-                </div>
-            </div>
-
-            <div class="card video-card">
-                <div class="video-container">
-                    <iframe src="https://www.youtube.com/embed/Wrv1_Ix1Oh8" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-                <div class="card-info">
-                    <h3 data-lang="card_3_title">Падение от пули</h3>
-                    <p data-lang="card_3_desc">По факту я ее сделал за минут 5</p>
-                </div>
-            </div>
-
-            <div class="card video-card">
-                <div class="video-container">
-                    <iframe src="https://www.youtube.com/embed/OTJSVYZXIjY" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                </div>
-                <div class="card-info">
-                    <h3 data-lang="card_4_title">Доставание катан из ножн</h3>
-                    <p data-lang="card_4_desc">Тоже сделана на быструю руку</p>
-                </div>
-            </div>
-			
-<div class="card video-card">
-    <div class="video-container">
-        <iframe src="https://www.youtube.com/embed/N38p2CcBmZM" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </div>
-    <div class="card-info">
-        <h3 data-lang="card_5_title">Анимация хвоста ледяного лиса</h3>
-        <p data-lang="card_5_desc">Ручной риг сделаный мной</p>
-    </div>
+<div id="viewport"><div id="stage">
+<section id="cover" data-transition="push" style="background:radial-gradient(circle at 80% 45%, #2b1238 0%, #0b0b10 60%);color:#f4f1ea;font-family:'Inter', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:space-between;gap:32px">
+<div style="position:absolute;left:1352px;top:140px;width:400px;height:800px;display:flex;flex-direction:column;justify-content:space-between;padding:36px;border-radius:56px;border:12px solid #26262e;background:linear-gradient(160deg, #ff2d6f 0%, #7a3cff 50%, #16d9d0 100%);box-shadow:0 0 140px rgba(255,45,111,0.45)">
+<p style="align-self:center;font-size:24px;font-weight:700;color:#ffffff;background:rgba(11,11,16,0.35);padding:8px 24px;border-radius:40px">For You</p>
+<x-icon name="Play" style="align-self:center;color:#ffffff;width:150px;height:150px"></x-icon>
+<div style="display:flex;flex-direction:row;justify-content:space-between;align-items:flex-end">
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="width:190px;height:14px;border-radius:7px;background:#ffffff"></div>
+<div style="width:130px;height:14px;border-radius:7px;background:rgba(255,255,255,0.7)"></div>
 </div>
-			
-<div class="card video-card">
-    <div class="video-container">
-        <iframe src="https://www.youtube.com/embed/07c5FTsRxmQ" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </div>
-    <div class="card-info">
-        <h3 data-lang="card_6_title">Анимация блока для Kanabo</h3>
-        <p data-lang="card_6_desc">Самая первая работа</p>
-    </div>
+<div style="display:flex;flex-direction:column;gap:24px">
+<x-icon name="ThumbsUp" style="color:#ffffff;width:52px;height:52px"></x-icon>
+<x-icon name="Chat" style="color:#ffffff;width:52px;height:52px"></x-icon>
+<x-icon name="PaperPlane" style="color:#ffffff;width:52px;height:52px"></x-icon>
 </div>
+</div>
+</div>
+<p data-build-in="pop 1 auto" style="position:absolute;left:1170px;top:240px;width:270px;text-align:center;font-size:30px;font-weight:700;color:#0b0b10;background:#25f4ee;padding:14px 20px;border-radius:40px;transform:rotate(-8deg);box-shadow:0 12px 32px rgba(0,0,0,0.45)">#creativity</p>
+<p data-build-in="pop 2 auto" style="position:absolute;left:1570px;top:560px;width:210px;text-align:center;font-size:30px;font-weight:700;color:#0b0b10;background:#ff2d6f;padding:14px 20px;border-radius:40px;transform:rotate(7deg);box-shadow:0 12px 32px rgba(0,0,0,0.45)">#trends</p>
+<p data-build-in="pop 3 auto" style="position:absolute;left:1210px;top:690px;width:190px;text-align:center;font-size:30px;font-weight:700;color:#0b0b10;background:#f4f1ea;padding:14px 20px;border-radius:40px;transform:rotate(-5deg);box-shadow:0 12px 32px rgba(0,0,0,0.45)">#ideas</p>
+<p style="align-self:flex-start;font-size:26px;font-weight:700;color:#0b0b10;background:#25f4ee;padding:10px 28px;border-radius:40px">English project · Social networks</p>
+<div style="width:1000px;display:flex;flex-direction:column;gap:16px">
+<h1 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:220px;font-weight:700;line-height:1;color:#ffffff;text-shadow:6px 6px 0 #ff2d6f, -6px -6px 0 #25f4ee">TikTok</h1>
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:56px;font-weight:600;line-height:1.15;color:#f4f1ea">and its influence on modern people</p>
+</div>
+<div style="width:1150px;display:flex;flex-direction:column;gap:8px">
+<p style="font-size:24px;font-weight:600;color:#25f4ee;text-transform:uppercase;letter-spacing:2px">Prepared by</p>
+<p style="font-size:30px;line-height:1.4;color:#f4f1ea">Fedir Demianchuk · Antonina Krykun · Liubomyr Shchavinskyi</p>
+<p style="font-size:30px;line-height:1.4;color:#a3a3ad">Class 11-І</p>
+</div>
+<aside>Hello! Today we want to tell you about TikTok and its influence on modern people. We chose TikTok because almost every teenager uses it.
 
-        </div>
-    </section>
+UA: Привіт! Сьогодні ми хочемо розповісти вам про TikTok і його вплив на сучасну людину. Ми обрали TikTok, тому що ним користується майже кожен підліток.</aside>
+</section>
+<section id="features" data-transition="push" style="background:radial-gradient(circle at 90% 0%, #123a3c 0%, #0b0b10 55%);color:#f4f1ea;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<div style="position:absolute;left:128px;top:92px;width:96px;height:10px;border-radius:5px;background:linear-gradient(90deg, #25f4ee, #ff2d6f)"></div>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:700;line-height:1.1;color:#ffffff">What is TikTok?</h2>
+<p style="font-size:40px;line-height:1.3;color:#a3a3ad">A social network for making, sharing and watching short videos.</p>
+<div data-build-in="rise 1 auto" style="position:absolute;left:128px;top:410px;width:392px;display:flex;flex-direction:column;gap:20px;background:#16161c;padding:36px;border-radius:28px;border:1px solid #2c2c36;box-shadow:0 0 48px rgba(37,244,238,0.16)">
+<div style="width:88px;height:88px;display:flex;flex-direction:row;align-items:center;justify-content:center;border-radius:24px;background:linear-gradient(135deg, #25f4ee, #16bdb8)"><x-icon name="Play" style="color:#0b0b10;width:48px;height:48px"></x-icon></div>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:40px;font-weight:700;line-height:1.1;color:#ffffff">Short videos</h3>
+<p style="font-size:30px;line-height:1.4">Film, add music, text and effects right in your phone.</p>
+</div>
+<div data-build-in="rise 2 auto" style="position:absolute;left:552px;top:410px;width:392px;display:flex;flex-direction:column;gap:20px;background:#16161c;padding:36px;border-radius:28px;border:1px solid #2c2c36;box-shadow:0 0 48px rgba(255,45,111,0.16)">
+<div style="width:88px;height:88px;display:flex;flex-direction:row;align-items:center;justify-content:center;border-radius:24px;background:linear-gradient(135deg, #ff2d6f, #ff6a95)"><x-icon name="Star" style="color:#0b0b10;width:48px;height:48px"></x-icon></div>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:40px;font-weight:700;line-height:1.1;color:#ffffff">For You page</h3>
+<p style="font-size:30px;line-height:1.4">An algorithm chooses videos for every user.</p>
+</div>
+<div data-build-in="rise 3 auto" style="position:absolute;left:976px;top:410px;width:392px;display:flex;flex-direction:column;gap:20px;background:#16161c;padding:36px;border-radius:28px;border:1px solid #2c2c36;box-shadow:0 0 48px rgba(37,244,238,0.16)">
+<div style="width:88px;height:88px;display:flex;flex-direction:row;align-items:center;justify-content:center;border-radius:24px;background:linear-gradient(135deg, #25f4ee, #16bdb8)"><x-icon name="Users" style="color:#0b0b10;width:48px;height:48px"></x-icon></div>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:40px;font-weight:700;line-height:1.1;color:#ffffff">Trends and duets</h3>
+<p style="font-size:30px;line-height:1.4">Users join challenges and answer each other's videos.</p>
+</div>
+<div data-build-in="rise 4 auto" style="position:absolute;left:1400px;top:410px;width:392px;display:flex;flex-direction:column;gap:20px;background:#16161c;padding:36px;border-radius:28px;border:1px solid #2c2c36;box-shadow:0 0 48px rgba(255,45,111,0.16)">
+<div style="width:88px;height:88px;display:flex;flex-direction:row;align-items:center;justify-content:center;border-radius:24px;background:linear-gradient(135deg, #ff2d6f, #ff6a95)"><x-icon name="Lightning" style="color:#0b0b10;width:48px;height:48px"></x-icon></div>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:40px;font-weight:700;line-height:1.1;color:#ffffff">Live streams</h3>
+<p style="font-size:30px;line-height:1.4">Authors talk to their audience in real time.</p>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;flex-direction:row;justify-content:space-between">
+<p style="font-size:24px;color:#8d8d98">TikTok · English project</p>
+<p style="font-size:24px;color:#8d8d98">2</p>
+</div>
+<aside>TikTok is a social network where people make, share and watch short videos. Its main purpose is entertainment and self-expression. You can film a video, add music and effects in your phone. The "For You" page shows videos that an algorithm chooses for you. Users also join trends, make duets and go live.
 
-    <section id="about" class="about">
-        <h2 data-lang="about_title">Условия работы & Заказы</h2>
-        <div class="rules-container">
-            <ul class="rules-list">
-                <li><strong data-lang="rule1_title">1. Четкое ТЗ:</strong> <span data-lang="rule1_desc">Работаю только при наличии понятного технического задания. Оно должно включать описание идеи, хронометраж, разрешение (формат) и примеры (референсы), на которые стоит ориентироваться.</span></li>
+UA: TikTok — це соціальна мережа, де люди створюють, поширюють і дивляться короткі відео. Її головне призначення — розваги та самовираження. Можна зняти відео, додати музику й ефекти просто в телефоні. Сторінка «Для тебе» показує відео, які алгоритм підбирає саме для вас. Користувачі також долучаються до трендів, роблять дуети та виходять у прямий ефір.</aside>
+</section>
+<section id="proscons" data-transition="push" style="background:radial-gradient(circle at 50% 100%, #24143a 0%, #0b0b10 55%);color:#f4f1ea;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<div style="position:absolute;left:128px;top:92px;width:96px;height:10px;border-radius:5px;background:linear-gradient(90deg, #25f4ee, #ff2d6f)"></div>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:700;line-height:1.1;color:#ffffff">Advantages and disadvantages</h2>
+<div data-build-in="right 1 auto" style="position:absolute;left:128px;top:290px;width:800px;display:flex;flex-direction:column;gap:26px;background:#16161c;padding:48px;border-radius:28px;border:2px solid #25f4ee;box-shadow:0 0 64px rgba(37,244,238,0.2)">
+<div style="display:flex;flex-direction:row;gap:20px;align-items:center">
+<x-icon name="ThumbsUp" style="color:#25f4ee;width:56px;height:56px"></x-icon>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:40px;font-weight:700;color:#25f4ee">Advantages</h3>
+</div>
+<div style="display:flex;flex-direction:row;gap:20px;align-items:flex-start"><x-icon name="CheckCircle" style="color:#25f4ee;width:40px;height:40px"></x-icon><p style="flex:1;font-size:30px;line-height:1.4">Easy to create: you only need a phone</p></div>
+<div style="display:flex;flex-direction:row;gap:20px;align-items:flex-start"><x-icon name="CheckCircle" style="color:#25f4ee;width:40px;height:40px"></x-icon><p style="flex:1;font-size:30px;line-height:1.4">Anyone can be noticed, not only stars</p></div>
+<div style="display:flex;flex-direction:row;gap:20px;align-items:flex-start"><x-icon name="CheckCircle" style="color:#25f4ee;width:40px;height:40px"></x-icon><p style="flex:1;font-size:30px;line-height:1.4">A lot of educational content</p></div>
+<div style="display:flex;flex-direction:row;gap:20px;align-items:flex-start"><x-icon name="CheckCircle" style="color:#25f4ee;width:40px;height:40px"></x-icon><p style="flex:1;font-size:30px;line-height:1.4">New ideas, music and friends from all over the world</p></div>
+</div>
+<div data-build-in="left 2 auto" style="position:absolute;left:992px;top:290px;width:800px;display:flex;flex-direction:column;gap:26px;background:#16161c;padding:48px;border-radius:28px;border:2px solid #ff2d6f;box-shadow:0 0 64px rgba(255,45,111,0.2)">
+<div style="display:flex;flex-direction:row;gap:20px;align-items:center">
+<x-icon name="Warning" style="color:#ff2d6f;width:56px;height:56px"></x-icon>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:40px;font-weight:700;color:#ff2d6f">Disadvantages</h3>
+</div>
+<div style="display:flex;flex-direction:row;gap:20px;align-items:flex-start"><x-icon name="Clock" style="color:#ff2d6f;width:40px;height:40px"></x-icon><p style="flex:1;font-size:30px;line-height:1.4">Endless scrolling takes too much time</p></div>
+<div style="display:flex;flex-direction:row;gap:20px;align-items:flex-start"><x-icon name="Activity" style="color:#ff2d6f;width:40px;height:40px"></x-icon><p style="flex:1;font-size:30px;line-height:1.4">It becomes harder to concentrate</p></div>
+<div style="display:flex;flex-direction:row;gap:20px;align-items:flex-start"><x-icon name="Warning" style="color:#ff2d6f;width:40px;height:40px"></x-icon><p style="flex:1;font-size:30px;line-height:1.4">Fake news and dangerous challenges</p></div>
+<div style="display:flex;flex-direction:row;gap:20px;align-items:flex-start"><x-icon name="Star" style="color:#ff2d6f;width:40px;height:40px"></x-icon><p style="flex:1;font-size:30px;line-height:1.4">Pressure to look perfect and get likes</p></div>
+</div>
+<div data-build-in="pop 3 auto" style="position:absolute;left:900px;top:470px;width:120px;height:120px;display:flex;flex-direction:row;align-items:center;justify-content:center;border-radius:60px;background:linear-gradient(135deg, #25f4ee, #ff2d6f);box-shadow:0 0 48px rgba(0,0,0,0.6)">
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:40px;font-weight:700;color:#0b0b10">VS</p>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;flex-direction:row;justify-content:space-between">
+<p style="font-size:24px;color:#8d8d98">TikTok · English project</p>
+<p style="font-size:24px;color:#8d8d98">3</p>
+</div>
+<aside>TikTok has advantages. It is easy to create videos, anyone can become popular, there is a lot of educational content, and we find new ideas and friends from all over the world. But there are disadvantages too. Endless scrolling takes too much time, it becomes harder to concentrate, there are fake news and dangerous challenges, and people feel pressure to look perfect.
 
-<li><strong data-lang="rule2_title">2. Предоплата:</strong> <span data-lang="rule2_desc">Работа начинается только после внесения предоплаты в размере 50% от согласованной стоимости. Это гарантирует бронь места в графике и серьезность ваших намерений.</span></li>
+UA: У TikTok є переваги. Відео створювати легко, популярним може стати будь-хто, є багато освітнього контенту, і ми знаходимо нові ідеї та друзів з усього світу. Але є й недоліки. Нескінченне гортання забирає забагато часу, стає важче зосереджуватися, трапляються фейкові новини й небезпечні челенджі, а люди відчувають тиск — треба виглядати ідеально.</aside>
+</section>
+<section id="creativity" data-transition="push" style="background:radial-gradient(circle at 10% 0%, #123a3c 0%, #0b0b10 55%);color:#f4f1ea;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<div style="position:absolute;left:128px;top:92px;width:96px;height:10px;border-radius:5px;background:linear-gradient(90deg, #25f4ee, #ff2d6f)"></div>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:700;line-height:1.1;color:#ffffff">How TikTok changes its users</h2>
+<div data-build-in="rise 1 auto" style="position:absolute;left:128px;top:280px;width:533px;display:flex;flex-direction:column;gap:20px;background:#16161c;padding:36px;border-radius:28px;border:1px solid #2c2c36">
+<div style="display:flex;flex-direction:row;gap:16px;align-items:center">
+<div style="width:56px;height:56px;display:flex;flex-direction:row;align-items:center;justify-content:center;border-radius:16px;background:linear-gradient(135deg, #25f4ee, #ff2d6f)"><x-icon name="Tool" style="color:#0b0b10;width:32px;height:32px"></x-icon></div>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:40px;font-weight:700;color:#ffffff;white-space:nowrap">Creativity</h3>
+</div>
+<p style="font-size:28px;line-height:1.4;background:rgba(37,244,238,0.12);border-left:6px solid #25f4ee;padding:20px;border-radius:12px">Simple tools make everyone an author: we film, edit, dance and joke.</p>
+<p style="font-size:28px;line-height:1.4;background:rgba(255,45,111,0.12);border-left:6px solid #ff2d6f;padding:20px;border-radius:12px">Many people only copy trends and invent nothing new.</p>
+</div>
+<div data-build-in="rise 2 auto" style="position:absolute;left:693px;top:280px;width:533px;display:flex;flex-direction:column;gap:20px;background:#16161c;padding:36px;border-radius:28px;border:1px solid #2c2c36">
+<div style="display:flex;flex-direction:row;gap:16px;align-items:center">
+<div style="width:56px;height:56px;display:flex;flex-direction:row;align-items:center;justify-content:center;border-radius:16px;background:linear-gradient(135deg, #25f4ee, #ff2d6f)"><x-icon name="Lightbulb" style="color:#0b0b10;width:32px;height:32px"></x-icon></div>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:40px;font-weight:700;color:#ffffff;white-space:nowrap">Thinking</h3>
+</div>
+<p style="font-size:28px;line-height:1.4;background:rgba(37,244,238,0.12);border-left:6px solid #25f4ee;padding:20px;border-radius:12px">We learn to explain ideas quickly and clearly.</p>
+<p style="font-size:28px;line-height:1.4;background:rgba(255,45,111,0.12);border-left:6px solid #ff2d6f;padding:20px;border-radius:12px">The brain gets used to fast content, so books and long lessons feel boring.</p>
+</div>
+<div data-build-in="rise 3 auto" style="position:absolute;left:1258px;top:280px;width:534px;display:flex;flex-direction:column;gap:20px;background:#16161c;padding:36px;border-radius:28px;border:1px solid #2c2c36">
+<div style="display:flex;flex-direction:row;gap:16px;align-items:center">
+<div style="width:56px;height:56px;display:flex;flex-direction:row;align-items:center;justify-content:center;border-radius:16px;background:linear-gradient(135deg, #25f4ee, #ff2d6f)"><x-icon name="Chat" style="color:#0b0b10;width:32px;height:32px"></x-icon></div>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:40px;font-weight:700;color:#ffffff;white-space:nowrap">Self-expression</h3>
+</div>
+<p style="font-size:28px;line-height:1.4;background:rgba(37,244,238,0.12);border-left:6px solid #25f4ee;padding:20px;border-radius:12px">People show their hobbies, style and opinions and find their community.</p>
+<p style="font-size:28px;line-height:1.4;background:rgba(255,45,111,0.12);border-left:6px solid #ff2d6f;padding:20px;border-radius:12px">Some change themselves just to get more likes.</p>
+</div>
+<div style="position:absolute;left:128px;top:850px;width:900px;display:flex;flex-direction:row;gap:40px;align-items:center">
+<div style="display:flex;flex-direction:row;gap:12px;align-items:center"><div style="width:28px;height:28px;border-radius:8px;background:#25f4ee"></div><p style="font-size:24px;color:#a3a3ad">positive influence</p></div>
+<div style="display:flex;flex-direction:row;gap:12px;align-items:center"><div style="width:28px;height:28px;border-radius:8px;background:#ff2d6f"></div><p style="font-size:24px;color:#a3a3ad">negative influence</p></div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;flex-direction:row;justify-content:space-between">
+<p style="font-size:24px;color:#8d8d98">TikTok · English project</p>
+<p style="font-size:24px;color:#8d8d98">4</p>
+</div>
+<aside>TikTok influences creativity, thinking and self-expression. Creativity: simple tools make everyone an author, but many people only copy trends. Thinking: we learn to explain ideas quickly, but the brain gets used to fast content, and books feel boring. Self-expression: people show their hobbies and find their community, but some change themselves just to get likes.
 
-<li><strong data-lang="rule3_title">3. Материалы для работы:</strong> <span data-lang="rule3_desc">Все исходники (логотипы в векторе, шрифты, озвучка или музыка) должны быть предоставлены до начала этапа анимации. Поиск или отрисовка недостающих элементов оплачиваются отдельно.</span></li>
+UA: TikTok впливає на творчість, мислення та самовираження. Творчість: прості інструменти роблять кожного автором, але багато хто лише копіює тренди. Мислення: ми вчимося швидко пояснювати ідеї, але мозок звикає до швидкого контенту, і книжки здаються нудними. Самовираження: люди показують свої захоплення й знаходять свою спільноту, але дехто змінює себе лише заради лайків.</aside>
+</section>
+<section id="positive" data-transition="push" style="background:radial-gradient(circle at 50% 0%, #0f4244 0%, #0b0b10 55%);color:#f4f1ea;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<div style="position:absolute;left:128px;top:92px;width:96px;height:10px;border-radius:5px;background:#25f4ee"></div>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:700;line-height:1.1;color:#ffffff">Positive influence: <span style="color:#25f4ee">examples</span></h2>
+<div data-build-in="rise 1 auto" style="position:absolute;left:128px;top:300px;width:533px;display:flex;flex-direction:column;gap:24px;background:#16161c;padding:40px;border-radius:28px;border-top:10px solid #25f4ee;box-shadow:0 0 64px rgba(37,244,238,0.18)">
+<div style="width:120px;height:120px;display:flex;flex-direction:row;align-items:center;justify-content:center;border-radius:32px;background:linear-gradient(135deg, #25f4ee, #16bdb8)"><x-icon name="Book" style="color:#0b0b10;width:68px;height:68px"></x-icon></div>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:40px;font-weight:700;color:#ffffff">BookTok</h3>
+<p style="font-size:30px;line-height:1.4">Short book reviews made reading popular among teenagers again.</p>
+</div>
+<div data-build-in="rise 2 auto" style="position:absolute;left:693px;top:300px;width:533px;display:flex;flex-direction:column;gap:24px;background:#16161c;padding:40px;border-radius:28px;border-top:10px solid #25f4ee;box-shadow:0 0 64px rgba(37,244,238,0.18)">
+<div style="width:120px;height:120px;display:flex;flex-direction:row;align-items:center;justify-content:center;border-radius:32px;background:linear-gradient(135deg, #25f4ee, #16bdb8)"><x-icon name="GraduationCap" style="color:#0b0b10;width:68px;height:68px"></x-icon></div>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:40px;font-weight:700;color:#ffffff">Learning in a minute</h3>
+<p style="font-size:30px;line-height:1.4">Teachers explain English, science and history in short, simple videos.</p>
+</div>
+<div data-build-in="rise 3 auto" style="position:absolute;left:1258px;top:300px;width:534px;display:flex;flex-direction:column;gap:24px;background:#16161c;padding:40px;border-radius:28px;border-top:10px solid #25f4ee;box-shadow:0 0 64px rgba(37,244,238,0.18)">
+<div style="width:120px;height:120px;display:flex;flex-direction:row;align-items:center;justify-content:center;border-radius:32px;background:linear-gradient(135deg, #25f4ee, #16bdb8)"><x-icon name="Star" style="color:#0b0b10;width:68px;height:68px"></x-icon></div>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:40px;font-weight:700;color:#ffffff">A start for talents</h3>
+<p style="font-size:30px;line-height:1.4">Young musicians, artists and small businesses find their audience without big money.</p>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;flex-direction:row;justify-content:space-between">
+<p style="font-size:24px;color:#8d8d98">TikTok · English project</p>
+<p style="font-size:24px;color:#8d8d98">5</p>
+</div>
+<aside>Here are examples of positive influence. First, BookTok: short book reviews made reading popular among teenagers again. Second, learning: teachers explain English, science and history in short videos. Third, TikTok is a start for talents: young musicians, artists and small businesses find their audience without big money.
 
-<li><strong data-lang="rule4_title">4. Согласование этапов:</strong> <span data-lang="rule4_desc">Процесс делится на этапы (раскадровка, черновая анимация, финальный рендер). Переход к следующему этапу возможен только после утверждения предыдущего.</span></li>
+UA: Ось приклади позитивного впливу. Перший — BookTok: короткі огляди книжок знову зробили читання популярним серед підлітків. Другий — навчання: вчителі пояснюють англійську, науку та історію в коротких відео. Третій — TikTok дає старт талантам: молоді музиканти, художники й малий бізнес знаходять свою аудиторію без великих грошей.</aside>
+</section>
+<section id="negative" data-transition="push" style="background:radial-gradient(circle at 50% 0%, #4a1027 0%, #0b0b10 55%);color:#f4f1ea;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<div style="position:absolute;left:128px;top:92px;width:96px;height:10px;border-radius:5px;background:#ff2d6f"></div>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:700;line-height:1.1;color:#ffffff">Negative influence: <span style="color:#ff2d6f">examples</span></h2>
+<div data-build-in="rise 1 auto" style="position:absolute;left:128px;top:300px;width:533px;display:flex;flex-direction:column;gap:24px;background:#16161c;padding:40px;border-radius:28px;border-top:10px solid #ff2d6f;box-shadow:0 0 64px rgba(255,45,111,0.18)">
+<div style="width:120px;height:120px;display:flex;flex-direction:row;align-items:center;justify-content:center;border-radius:32px;background:linear-gradient(135deg, #ff2d6f, #ff6a95)"><x-icon name="Warning" style="color:#0b0b10;width:68px;height:68px"></x-icon></div>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:40px;font-weight:700;color:#ffffff">Dangerous challenges</h3>
+<p style="font-size:30px;line-height:1.4">Some trends push teenagers to risk their health for views.</p>
+</div>
+<div data-build-in="rise 2 auto" style="position:absolute;left:693px;top:300px;width:533px;display:flex;flex-direction:column;gap:24px;background:#16161c;padding:40px;border-radius:28px;border-top:10px solid #ff2d6f;box-shadow:0 0 64px rgba(255,45,111,0.18)">
+<div style="width:120px;height:120px;display:flex;flex-direction:row;align-items:center;justify-content:center;border-radius:32px;background:linear-gradient(135deg, #ff2d6f, #ff6a95)"><x-icon name="Clock" style="color:#0b0b10;width:68px;height:68px"></x-icon></div>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:40px;font-weight:700;color:#ffffff">Endless scrolling</h3>
+<p style="font-size:30px;line-height:1.4">"Just five minutes" becomes hours. Sleep and homework suffer.</p>
+</div>
+<div data-build-in="rise 3 auto" style="position:absolute;left:1258px;top:300px;width:534px;display:flex;flex-direction:column;gap:24px;background:#16161c;padding:40px;border-radius:28px;border-top:10px solid #ff2d6f;box-shadow:0 0 64px rgba(255,45,111,0.18)">
+<div style="width:120px;height:120px;display:flex;flex-direction:row;align-items:center;justify-content:center;border-radius:32px;background:linear-gradient(135deg, #ff2d6f, #ff6a95)"><x-icon name="Users" style="color:#0b0b10;width:68px;height:68px"></x-icon></div>
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:40px;font-weight:700;color:#ffffff">Comparing yourself</h3>
+<p style="font-size:30px;line-height:1.4">Filters and "perfect" lives make people feel worse about themselves.</p>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;flex-direction:row;justify-content:space-between">
+<p style="font-size:24px;color:#8d8d98">TikTok · English project</p>
+<p style="font-size:24px;color:#8d8d98">6</p>
+</div>
+<aside>There are negative examples too. First, dangerous challenges: some trends push teenagers to risk their health for views. Second, endless scrolling: "just five minutes" becomes hours, and sleep and homework suffer. Third, comparing yourself to others: filters and "perfect" lives make people feel worse about themselves.
 
-<li><strong data-lang="rule5_title">5. Правки и корректировки:</strong> <span data-lang="rule5_desc">В стоимость включены два круга бесплатных правок, не противоречащих изначальному ТЗ. Все изменения, вносимые после утверждения этапа или кардинально меняющие концепцию, оплачиваются дополнительно.</span></li>
+UA: Є й негативні приклади. Перший — небезпечні челенджі: деякі тренди штовхають підлітків ризикувати здоров'ям заради переглядів. Другий — нескінченне гортання: «лише п'ять хвилин» перетворюються на години, страждають сон і домашні завдання. Третій — порівняння себе з іншими: фільтри та «ідеальне» життя змушують людей гірше ставитися до себе.</aside>
+</section>
+<section id="opinion" data-transition="push" style="background:linear-gradient(135deg, #25f4ee 0%, #19c9c3 100%);color:#0b0b10;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:space-between;gap:32px">
+<p style="align-self:flex-start;font-size:26px;font-weight:700;color:#f4f1ea;background:#0b0b10;padding:10px 28px;border-radius:40px">Our opinion</p>
+<h2 style="width:900px;font-family:'Space Grotesk', Arial, sans-serif;font-size:76px;font-weight:700;line-height:1.1;color:#0b0b10">TikTok develops creativity when you create, and limits it when you only scroll.</h2>
+<p style="width:900px;font-size:34px;line-height:1.35;color:#0b0b10">It gives tools, ideas and an audience. The result depends on us.</p>
+<div data-build-in="left 1 auto" style="position:absolute;left:1100px;top:240px;width:692px;display:flex;flex-direction:row;gap:36px;align-items:center;background:#0b0b10;padding:44px;border-radius:32px;box-shadow:0 24px 64px rgba(11,11,16,0.35)">
+<x-shape kind="arrow-up" style="background:#25f4ee;width:64px;height:128px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:44px;font-weight:700;color:#25f4ee">You create</h3>
+<p style="font-size:30px;line-height:1.4;color:#f4f1ea">Imagination works, skills grow.</p>
+</div>
+</div>
+<div data-build-in="left 2 auto" style="position:absolute;left:1100px;top:540px;width:692px;display:flex;flex-direction:row;gap:36px;align-items:center;background:#0b0b10;padding:44px;border-radius:32px;box-shadow:0 24px 64px rgba(11,11,16,0.35)">
+<x-shape kind="arrow-down" style="background:#ff2d6f;width:64px;height:128px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:44px;font-weight:700;color:#ff2d6f">You only scroll</h3>
+<p style="font-size:30px;line-height:1.4;color:#f4f1ea">You copy others, your ideas sleep.</p>
+</div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;flex-direction:row;justify-content:space-between">
+<p style="font-size:24px;color:#0b0b10">TikTok · English project</p>
+<p style="font-size:24px;color:#0b0b10">7</p>
+</div>
+<aside>What is our opinion? We think TikTok develops creativity when you create, and limits it when you only scroll. It gives tools, ideas and an audience. But if we only watch and copy other people, our imagination does not work.
 
-<li><strong data-lang="rule6_title">6. Финальная оплата и передача:</strong> <span data-lang="rule6_desc">Готовый результат демонстрируется с водяным знаком или в низком качестве. Финальный файл без защитных знаков в полном разрешении передается сразу после получения оставшихся 50% оплаты.</span></li>
+UA: Яка наша думка? Ми вважаємо, що TikTok розвиває креативність, коли ти створюєш, і обмежує її, коли ти лише гортаєш стрічку. Він дає інструменти, ідеї та аудиторію. Але якщо ми тільки дивимося й копіюємо інших, наша уява не працює.</aside>
+</section>
+<section id="advice" data-transition="push" style="background:radial-gradient(circle at 90% 100%, #2b1238 0%, #0b0b10 55%);color:#f4f1ea;font-family:'Inter', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:32px">
+<div style="position:absolute;left:128px;top:92px;width:96px;height:10px;border-radius:5px;background:linear-gradient(90deg, #25f4ee, #ff2d6f)"></div>
+<h2 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:700;line-height:1.1;color:#ffffff">Our advice: use TikTok wisely</h2>
+<div data-build-in="rise 1 auto" style="position:absolute;left:128px;top:290px;width:816px;display:flex;flex-direction:row;gap:32px;align-items:flex-start;background:#16161c;padding:40px;border-radius:28px;border:1px solid #2c2c36;box-shadow:0 0 48px rgba(37,244,238,0.16)">
+<div style="width:104px;height:104px;display:flex;flex-direction:row;align-items:center;justify-content:center;border-radius:28px;background:linear-gradient(135deg, #25f4ee, #16bdb8)"><x-icon name="Clock" style="color:#0b0b10;width:60px;height:60px"></x-icon></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:40px;font-weight:700;color:#ffffff">1. Set a time limit</h3>
+<p style="font-size:30px;line-height:1.4">Decide how long you scroll and use a timer.</p>
+</div>
+</div>
+<div data-build-in="rise 2 auto" style="position:absolute;left:976px;top:290px;width:816px;display:flex;flex-direction:row;gap:32px;align-items:flex-start;background:#16161c;padding:40px;border-radius:28px;border:1px solid #2c2c36;box-shadow:0 0 48px rgba(255,45,111,0.16)">
+<div style="width:104px;height:104px;display:flex;flex-direction:row;align-items:center;justify-content:center;border-radius:28px;background:linear-gradient(135deg, #ff2d6f, #ff6a95)"><x-icon name="GraduationCap" style="color:#0b0b10;width:60px;height:60px"></x-icon></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:40px;font-weight:700;color:#ffffff">2. Follow useful accounts</h3>
+<p style="font-size:30px;line-height:1.4">Teachers, artists, science: the algorithm will show more of them.</p>
+</div>
+</div>
+<div data-build-in="rise 3 auto" style="position:absolute;left:128px;top:570px;width:816px;display:flex;flex-direction:row;gap:32px;align-items:flex-start;background:#16161c;padding:40px;border-radius:28px;border:1px solid #2c2c36;box-shadow:0 0 48px rgba(255,45,111,0.16)">
+<div style="width:104px;height:104px;display:flex;flex-direction:row;align-items:center;justify-content:center;border-radius:28px;background:linear-gradient(135deg, #ff2d6f, #ff6a95)"><x-icon name="Play" style="color:#0b0b10;width:60px;height:60px"></x-icon></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:40px;font-weight:700;color:#ffffff">3. Create, not only watch</h3>
+<p style="font-size:30px;line-height:1.4">Make your own video about your hobby or idea.</p>
+</div>
+</div>
+<div data-build-in="rise 4 auto" style="position:absolute;left:976px;top:570px;width:816px;display:flex;flex-direction:row;gap:32px;align-items:flex-start;background:#16161c;padding:40px;border-radius:28px;border:1px solid #2c2c36;box-shadow:0 0 48px rgba(37,244,238,0.16)">
+<div style="width:104px;height:104px;display:flex;flex-direction:row;align-items:center;justify-content:center;border-radius:28px;background:linear-gradient(135deg, #25f4ee, #16bdb8)"><x-icon name="Search" style="color:#0b0b10;width:60px;height:60px"></x-icon></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px">
+<h3 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:40px;font-weight:700;color:#ffffff">4. Check the facts</h3>
+<p style="font-size:30px;line-height:1.4">Do not believe everything and never repeat dangerous challenges.</p>
+</div>
+</div>
+<div style="position:absolute;left:128px;right:128px;bottom:64px;display:flex;flex-direction:row;justify-content:space-between">
+<p style="font-size:24px;color:#8d8d98">TikTok · English project</p>
+<p style="font-size:24px;color:#8d8d98">8</p>
+</div>
+<aside>Finally, our advice on how to use TikTok wisely. One: set a time limit and use a timer. Two: follow useful accounts, like teachers, artists and science, and the algorithm will show you more of them. Three: create, not only watch. Make your own video about your hobby. Four: check the facts and never repeat dangerous challenges.
 
-<li><strong data-lang="rule7_title">7. Сроки реализации:</strong> <span data-lang="rule7_desc">Дедлайн фиксируется в начале работы. Помните, что время на проверку и утверждение этапов с вашей стороны не входит в чистый срок производства.</span></li>
-            </ul>
-        </div>
-    </section>
+UA: Наостанок — наша порада, як користуватися TikTok з користю. Перше: встановіть ліміт часу й користуйтеся таймером. Друге: підписуйтеся на корисні акаунти — вчителів, художників, науку, — і алгоритм показуватиме їх більше. Третє: створюйте, а не лише дивіться. Зніміть власне відео про своє хобі. Четверте: перевіряйте факти й ніколи не повторюйте небезпечні челенджі.</aside>
+</section>
+<section id="thanks" data-transition="push" style="background:radial-gradient(circle at 80% 45%, #2b1238 0%, #0b0b10 60%);color:#f4f1ea;font-family:'Inter', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;justify-content:space-between;gap:32px">
+<div data-build-in="pop 1 auto" style="position:absolute;left:1340px;top:170px;width:220px;height:220px;display:flex;flex-direction:row;align-items:center;justify-content:center;border-radius:110px;background:linear-gradient(135deg, #ff2d6f, #ff6a95);transform:rotate(-10deg);box-shadow:0 0 96px rgba(255,45,111,0.5)"><x-icon name="ThumbsUp" style="color:#0b0b10;width:110px;height:110px"></x-icon></div>
+<div data-build-in="pop 2 auto" style="position:absolute;left:1590px;top:380px;width:180px;height:180px;display:flex;flex-direction:row;align-items:center;justify-content:center;border-radius:90px;background:linear-gradient(135deg, #25f4ee, #16bdb8);transform:rotate(8deg);box-shadow:0 0 96px rgba(37,244,238,0.45)"><x-icon name="Chat" style="color:#0b0b10;width:90px;height:90px"></x-icon></div>
+<div data-build-in="pop 3 auto" style="position:absolute;left:1300px;top:500px;width:200px;height:200px;display:flex;flex-direction:row;align-items:center;justify-content:center;border-radius:100px;background:#f4f1ea;transform:rotate(6deg);box-shadow:0 0 96px rgba(244,241,234,0.3)"><x-icon name="Star" style="color:#0b0b10;width:100px;height:100px"></x-icon></div>
+<div data-build-in="pop 4 auto" style="position:absolute;left:1540px;top:680px;width:160px;height:160px;display:flex;flex-direction:row;align-items:center;justify-content:center;border-radius:80px;background:linear-gradient(135deg, #7a3cff, #ff2d6f);transform:rotate(-8deg);box-shadow:0 0 96px rgba(122,60,255,0.5)"><x-icon name="PaperPlane" style="color:#ffffff;width:80px;height:80px"></x-icon></div>
+<p style="align-self:flex-start;font-size:26px;font-weight:700;color:#0b0b10;background:#25f4ee;padding:10px 28px;border-radius:40px">English project · Social networks</p>
+<div style="width:1150px;display:flex;flex-direction:column;gap:16px">
+<h1 style="font-family:'Space Grotesk', Arial, sans-serif;font-size:190px;font-weight:700;line-height:1;color:#ffffff;text-shadow:6px 6px 0 #ff2d6f, -6px -6px 0 #25f4ee">Thank you!</h1>
+<p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:56px;font-weight:600;line-height:1.15;color:#f4f1ea">for your attention</p>
+</div>
+<p style="font-size:40px;color:#a3a3ad">Do you have any questions?</p>
+<aside>Thank you for your attention! Do you have any questions?
 
-    <footer id="contact">
-        <h2 data-lang="footer_title">Связь со мной</h2>
-        <div class="social-links">
-            <a href="https://t.me/akame0001" target="_blank" class="btn-outline">Telegram</a>
-            <div class="btn-outline discord-btn">DS: geniy_kieva</div>
-        </div>
-    </footer>
+UA: Дякуємо за увагу! Чи є у вас запитання?</aside>
+</section>
+</div></div>
 
-    <script src="script.js"></script>
+<div id="theatre">
+  <div id="spot"></div>
+  <div class="curtain l"></div>
+  <div class="curtain r"></div>
+  <div class="valance"></div>
+  <div class="valance-trim"></div>
+  <div id="marquee">
+    <div class="t1">Ladies and gentlemen…</div>
+    <div class="t2">the show is about to begin</div>
+  </div>
+</div>
+<div id="mic" title="Click to turn voice control on/off"><span class="dot"></span><span class="lbl">Voice: starting…</span></div>
+<div id="hud"></div>
+
+<script>
+(function(){
+'use strict';
+/* ---------- icons (stroke style, 24x24) ---------- */
+const P = {
+  Play:'<polygon points="7 4 20 12 7 20 7 4" fill="currentColor" stroke="none"/>',
+  ThumbsUp:'<path d="M7 10v11"/><path d="M15 5.9 14 10h5.8a2 2 0 0 1 1.9 2.6l-2.3 7A2 2 0 0 1 17.5 21H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1h2.8a2 2 0 0 0 1.8-1.1L12 2a3.1 3.1 0 0 1 3 3.9z"/>',
+  Chat:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  PaperPlane:'<path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/>',
+  Star:'<polygon points="12 2 15.1 8.3 22 9.3 17 14.1 18.2 21 12 17.8 5.8 21 7 14.1 2 9.3 8.9 8.3 12 2"/>',
+  Users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9"/><path d="M16 3.1a4 4 0 0 1 0 7.8"/>',
+  Lightning:'<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+  CheckCircle:'<circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/>',
+  Warning:'<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+  Clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+  Activity:'<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',
+  Tool:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9z"/>',
+  Wrench:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.8-3.8a6 6 0 0 1-7.9 7.9l-6.9 6.9a2.1 2.1 0 0 1-3-3l6.9-6.9a6 6 0 0 1 7.9-7.9z"/>',
+  Lightbulb:'<path d="M15 14c.2-1 .7-1.7 1.5-2.5A5.9 5.9 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>',
+  Book:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+  GraduationCap:'<path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/><path d="M22 10v6"/>',
+  Search:'<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>'
+};
+function iconSvg(name, style){
+  const body = P[name] || P.Star;
+  return '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="'+(style||'')+'">'+body+'</svg>';
+}
+function shapeSvg(kind, style){
+  const m = /background:\s*([^;]+)/.exec(style||''); const c = m ? m[1].trim() : '#fff';
+  const rest = (style||'').replace(/background:[^;]+;?/,'');
+  let path;
+  if(kind==='arrow-up') path='<polygon points="50 0 100 40 72 40 72 100 28 100 28 40 0 40" fill="'+c+'"/>';
+  else if(kind==='arrow-down') path='<polygon points="50 100 100 60 72 60 72 0 28 0 28 60 0 60" fill="'+c+'"/>';
+  else if(kind==='arrow-right') path='<polygon points="100 50 60 0 60 28 0 28 0 72 60 72 60 100" fill="'+c+'"/>';
+  else if(kind==='arrow-left') path='<polygon points="0 50 40 0 40 28 100 28 100 72 40 72 40 100" fill="'+c+'"/>';
+  else if(kind==='ellipse') path='<ellipse cx="50" cy="50" rx="50" ry="50" fill="'+c+'"/>';
+  else if(kind==='diamond') path='<polygon points="50 0 100 50 50 100 0 50" fill="'+c+'"/>';
+  else path='<rect width="100" height="100" fill="'+c+'"/>';
+  return '<svg class="shape" viewBox="0 0 100 100" preserveAspectRatio="none" style="'+rest+'">'+path+'</svg>';
+}
+document.querySelectorAll('#stage x-icon').forEach(el=>{
+  el.outerHTML = iconSvg(el.getAttribute('name'), el.getAttribute('style'));
+});
+document.querySelectorAll('#stage x-shape').forEach(el=>{
+  el.outerHTML = shapeSvg(el.getAttribute('kind'), el.getAttribute('style'));
+});
+
+/* ---------- scaling ---------- */
+const stage = document.getElementById('stage');
+function fit(){
+  const s = Math.min(window.innerWidth/1920, window.innerHeight/1080);
+  stage.style.transform = 'scale('+s+')';
+}
+window.addEventListener('resize', fit); fit();
+
+/* ---------- slides ---------- */
+const slides = Array.from(stage.querySelectorAll('section'));
+let cur = 0, busy = false, started = false, timers = [];
+const hud = document.getElementById('hud');
+
+function parseBuild(v){
+  const parts = (v||'').trim().split(/\s+/);
+  return {fx: parts[0]||'fade', order: parseInt(parts[1]||'1',10)||1};
+}
+function resetBuilds(sec){
+  sec.querySelectorAll('[data-build-in]').forEach(el=>{
+    el.className = el.className.replace(/\bb-\w+\b/g,'').trim();
+    el.classList.add('pending');
+  });
+}
+function playBuilds(sec, delay){
+  timers.forEach(clearTimeout); timers = [];
+  sec.querySelectorAll('[data-build-in]').forEach(el=>{
+    const b = parseBuild(el.getAttribute('data-build-in'));
+    timers.push(setTimeout(()=>{
+      el.classList.remove('pending');
+      el.classList.add('b-'+b.fx);
+    }, delay + (b.order-1)*320));
+  });
+}
+function updateHud(){ hud.textContent = (cur+1)+' / '+slides.length+'   ·   ← →  navigate   ·   F  fullscreen'; }
+
+function show(i, dir){
+  if(busy || i<0 || i>=slides.length || i===cur) return;
+  busy = true;
+  const from = slides[cur], to = slides[i];
+  resetBuilds(to);
+  to.classList.add('active', dir>0?'in-fwd':'in-back');
+  from.classList.add(dir>0?'out-fwd':'out-back');
+  from.classList.remove('active');
+  cur = i; updateHud();
+  playBuilds(to, 450);
+  setTimeout(()=>{
+    to.classList.remove('in-fwd','in-back');
+    from.classList.remove('out-fwd','out-back');
+    busy = false;
+  }, 720);
+}
+slides.forEach(resetBuilds);
+slides[0].classList.add('active');
+updateHud();
+
+function next(){ if(started) show(cur+1, 1); }
+function prev(){ if(started) show(cur-1, -1); }
+
+/* ---------- curtains ---------- */
+const theatre = document.getElementById('theatre');
+const mic = document.getElementById('mic');
+const micLbl = mic.querySelector('.lbl');
+
+function swoosh(){
+  try{
+    const ac = new (window.AudioContext||window.webkitAudioContext)();
+    const len = ac.sampleRate*2.6, buf = ac.createBuffer(1,len,ac.sampleRate), d = buf.getChannelData(0);
+    for(let i=0;i<len;i++) d[i] = (Math.random()*2-1);
+    const src = ac.createBufferSource(); src.buffer = buf;
+    const f = ac.createBiquadFilter(); f.type='lowpass'; f.frequency.setValueAtTime(400,ac.currentTime);
+    f.frequency.linearRampToValueAtTime(1800,ac.currentTime+1.2); f.frequency.linearRampToValueAtTime(300,ac.currentTime+2.6);
+    const g = ac.createGain(); g.gain.setValueAtTime(0,ac.currentTime);
+    g.gain.linearRampToValueAtTime(.35,ac.currentTime+.5); g.gain.linearRampToValueAtTime(0,ac.currentTime+2.6);
+    src.connect(f); f.connect(g); g.connect(ac.destination); src.start();
+  }catch(e){}
+}
+
+function openCurtains(){
+  if(started) return;
+  started = true;
+  stopListening(true);
+  swoosh();
+  theatre.classList.add('open');
+  mic.classList.add('hide');
+  playBuilds(slides[0], 1400);
+  setTimeout(()=>{ theatre.classList.add('gone'); }, 3400);
+}
+
+/* ---------- voice: "готовы или нет" / "ready or not" ---------- */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const TRIGGER = /(гото[вв]\S*|ready|чи ні|или нет)/i;
+let rec = null, wantListen = true;
+
+function setMic(state, text){
+  mic.classList.remove('listening','off');
+  if(state) mic.classList.add(state);
+  micLbl.textContent = text;
+}
+function startListening(){
+  if(!SR){ setMic('off','Voice not supported · press Enter'); return; }
+  if(started) return;
+  wantListen = true;
+  try{
+    rec = new SR();
+    rec.lang = 'ru-RU';
+    rec.continuous = true;
+    rec.interimResults = true;
+    rec.onstart = ()=> setMic('listening','Listening… say «готовы или нет?»');
+    rec.onresult = (e)=>{
+      for(let i=e.resultIndex;i<e.results.length;i++){
+        const t = e.results[i][0].transcript;
+        if(TRIGGER.test(t)){ openCurtains(); return; }
+      }
+    };
+    rec.onerror = (e)=>{
+      if(e.error==='not-allowed' || e.error==='service-not-allowed'){
+        wantListen = false;
+        setMic('off','Mic blocked · click here or press Enter');
+      }
+    };
+    rec.onend = ()=>{ if(wantListen && !started){ setTimeout(()=>{ try{ rec.start(); }catch(_){} }, 250); } };
+    rec.start();
+  }catch(err){ setMic('off','Click to enable voice · or press Enter'); }
+}
+function stopListening(silent){
+  wantListen = false;
+  try{ rec && rec.stop(); }catch(_){}
+  if(!silent) setMic('off','Voice off · click to turn on');
+}
+mic.addEventListener('click', (e)=>{
+  e.stopPropagation();
+  if(started) return;
+  if(mic.classList.contains('listening')) stopListening(false); else startListening();
+});
+startListening();
+
+/* ---------- keyboard / click / touch ---------- */
+document.addEventListener('keydown', (e)=>{
+  const k = e.key;
+  if(!started){
+    if(k==='Enter' || k===' ' || k==='o' || k==='O' || k==='о' || k==='О'){ e.preventDefault(); openCurtains(); }
+    if(k==='f' || k==='F' || k==='а' || k==='А'){ toggleFS(); }
+    return;
+  }
+  if(['ArrowRight','ArrowDown','PageDown',' ','Enter'].includes(k)){ e.preventDefault(); next(); }
+  else if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(k)){ e.preventDefault(); prev(); }
+  else if(k==='Home'){ show(0,-1); }
+  else if(k==='End'){ show(slides.length-1,1); }
+  else if(k==='f' || k==='F' || k==='а' || k==='А'){ toggleFS(); }
+});
+document.getElementById('viewport').addEventListener('click', (e)=>{
+  if(!started) return;
+  if(e.clientX < window.innerWidth*0.25) prev(); else next();
+});
+let tx = null;
+document.addEventListener('touchstart', e=>{ tx = e.touches[0].clientX; }, {passive:true});
+document.addEventListener('touchend', e=>{
+  if(tx===null || !started) return;
+  const dx = e.changedTouches[0].clientX - tx; tx = null;
+  if(Math.abs(dx) > 50){ dx < 0 ? next() : prev(); }
+});
+function toggleFS(){
+  try{
+    if(!document.fullscreenElement) document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  }catch(_){}
+}
+let hudT;
+document.addEventListener('mousemove', ()=>{
+  if(!started) return;
+  document.body.classList.add('show-hud');
+  clearTimeout(hudT); hudT = setTimeout(()=>document.body.classList.remove('show-hud'), 1800);
+});
+})();
+</script>
 </body>
 </html>

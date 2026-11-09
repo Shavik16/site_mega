@@ -95,6 +95,9 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'In
 #mic.off .dot{background:#e0484f}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(46,230,109,.7)}70%{box-shadow:0 0 0 10px rgba(46,230,109,0)}100%{box-shadow:0 0 0 0 rgba(46,230,109,0)}}
 #mic.hide{opacity:0;pointer-events:none}
+#mic{display:none;max-width:60vw}
+body.debug #mic{display:flex}
+#mic .heard{font-weight:400;opacity:.75;margin-left:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:36vw}
 
 /* slide counter + hint */
 #hud{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:40;color:rgba(255,255,255,.55);font:500 13px 'Inter',Arial,sans-serif;
@@ -387,7 +390,7 @@ UA: Дякуємо за увагу! Чи є у вас запитання?</aside
     <div class="t2">the show is about to begin</div>
   </div>
 </div>
-<div id="mic" title="Click to turn voice control on/off"><span class="dot"></span><span class="lbl">Voice: starting…</span></div>
+<div id="mic"><span class="dot"></span><span class="lbl">Voice: starting…</span><span class="heard"></span></div>
 <div id="hud"></div>
 
 <script>
@@ -525,46 +528,99 @@ function openCurtains(){
   setTimeout(()=>{ theatre.classList.add('gone'); }, 3400);
 }
 
-/* ---------- voice: "готовы или нет" / "ready or not" ---------- */
+/* ---------- voice: "we are ready" ---------- */
+/* Hidden by default. Press M to show the debug badge (what the mic hears). */
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-const TRIGGER = /(гото[вв]\S*|ready|чи ні|или нет)/i;
-let rec = null, wantListen = true;
+const heardEl = mic.querySelector('.heard');
+let rec = null, wantListen = true, boostedTrack = null, trackMode = null;
+
+/* Loose matching: from far away the recognizer often hears only part of the phrase
+   or mishears it ("were ready", "we're reddy", "already"...). */
+const STRONG = /\b(we|were|where|we're|wear|we'r|we r|v)\s*(are|r|re)?\s*(ready|reddy|redy|readi|redi|rady|rеady)\b/i;
+const WEAK = /\b(ready|reddy|redy|readi|already)\b/i;
+function matches(t){
+  t = (t||'').toLowerCase().replace(/[^a-z' ]+/g,' ').replace(/\s+/g,' ').trim();
+  if(!t) return false;
+  if(STRONG.test(t)) return true;
+  // a short utterance containing "ready" (e.g. just "ready" / "are ready" / "okay ready")
+  if(WEAK.test(t) && t.split(' ').length <= 4) return true;
+  return false;
+}
 
 function setMic(state, text){
   mic.classList.remove('listening','off');
   if(state) mic.classList.add(state);
   micLbl.textContent = text;
 }
-function startListening(){
-  if(!SR){ setMic('off','Voice not supported · press Enter'); return; }
+
+/* Boost the microphone (auto gain + extra gain + compressor) so a normal voice
+   from a few metres away is loud enough. Used only if the browser lets us feed
+   a custom audio track into speech recognition; otherwise we still request the
+   mic with auto-gain so the OS level is raised. */
+async function getBoostedTrack(){
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({audio:{
+      autoGainControl:true, noiseSuppression:true, echoCancellation:false, channelCount:1}});
+    const ac = new (window.AudioContext||window.webkitAudioContext)();
+    const srcN = ac.createMediaStreamSource(stream);
+    const hp = ac.createBiquadFilter(); hp.type='highpass'; hp.frequency.value = 90;
+    const gain = ac.createGain(); gain.gain.value = 4.0;
+    const comp = ac.createDynamicsCompressor();
+    comp.threshold.value = -30; comp.knee.value = 20; comp.ratio.value = 6; comp.attack.value = .005; comp.release.value = .2;
+    const dest = ac.createMediaStreamDestination();
+    srcN.connect(hp); hp.connect(gain); gain.connect(comp); comp.connect(dest);
+    const resume = ()=>{ if(ac.state!=='running') ac.resume().catch(()=>{}); };
+    resume(); document.addEventListener('keydown', resume, {once:true}); document.addEventListener('click', resume, {once:true});
+    return dest.stream.getAudioTracks()[0];
+  }catch(e){ return null; }
+}
+
+function makeRec(){
+  const r = new SR();
+  r.lang = 'en-US';
+  r.continuous = true;
+  r.interimResults = true;
+  r.maxAlternatives = 5;
+  r.onstart = ()=> setMic('listening','Listening ('+(trackMode||'default mic')+')');
+  r.onresult = (e)=>{
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      const res = e.results[i];
+      heardEl.textContent = '“'+res[0].transcript.trim()+'”';
+      for(let a=0;a<res.length;a++){
+        if(matches(res[a].transcript)){ openCurtains(); return; }
+      }
+    }
+  };
+  r.onerror = (e)=>{
+    if(e.error==='not-allowed' || e.error==='service-not-allowed'){
+      wantListen = false; setMic('off','Mic blocked — allow mic for this site');
+    } else if(e.error==='audio-capture' && trackMode==='boosted'){
+      trackMode = 'default mic'; boostedTrack = null;   // fall back to plain mic
+    }
+  };
+  r.onend = ()=>{ if(wantListen && !started){ setTimeout(startRec, 200); } };
+  return r;
+}
+function startRec(){
+  if(!wantListen || started) return;
+  rec = makeRec();
+  if(boostedTrack && boostedTrack.readyState==='live'){
+    try{ rec.start(boostedTrack); trackMode='boosted'; return; }catch(_){ /* not supported */ }
+  }
+  trackMode = 'default mic';
+  try{ rec.start(); }catch(_){}
+}
+async function startListening(){
+  if(!SR){ setMic('off','Voice not supported in this browser'); return; }
   if(started) return;
   wantListen = true;
-  try{
-    rec = new SR();
-    rec.lang = 'ru-RU';
-    rec.continuous = true;
-    rec.interimResults = true;
-    rec.onstart = ()=> setMic('listening','Listening… say «готовы или нет?»');
-    rec.onresult = (e)=>{
-      for(let i=e.resultIndex;i<e.results.length;i++){
-        const t = e.results[i][0].transcript;
-        if(TRIGGER.test(t)){ openCurtains(); return; }
-      }
-    };
-    rec.onerror = (e)=>{
-      if(e.error==='not-allowed' || e.error==='service-not-allowed'){
-        wantListen = false;
-        setMic('off','Mic blocked · click here or press Enter');
-      }
-    };
-    rec.onend = ()=>{ if(wantListen && !started){ setTimeout(()=>{ try{ rec.start(); }catch(_){} }, 250); } };
-    rec.start();
-  }catch(err){ setMic('off','Click to enable voice · or press Enter'); }
+  if(!boostedTrack) boostedTrack = await getBoostedTrack();
+  startRec();
 }
 function stopListening(silent){
   wantListen = false;
-  try{ rec && rec.stop(); }catch(_){}
-  if(!silent) setMic('off','Voice off · click to turn on');
+  try{ rec && rec.abort(); }catch(_){}
+  if(!silent) setMic('off','Voice off');
 }
 mic.addEventListener('click', (e)=>{
   e.stopPropagation();
@@ -576,6 +632,7 @@ startListening();
 /* ---------- keyboard / click / touch ---------- */
 document.addEventListener('keydown', (e)=>{
   const k = e.key;
+  if(k==='m'||k==='M'||k==='ь'||k==='Ь'){ document.body.classList.toggle('debug'); return; }
   if(!started){
     if(k==='Enter' || k===' ' || k==='o' || k==='O' || k==='о' || k==='О'){ e.preventDefault(); openCurtains(); }
     if(k==='f' || k==='F' || k==='а' || k==='А'){ toggleFS(); }

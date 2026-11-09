@@ -550,16 +550,20 @@ function matches(t){
    "swap"/"swop" must be the LAST word of what was said — so a sentence that just
    contains a similar word never flips the slide. One utterance = one slide. */
 const SWAP_END = /(^|\s)(swap|swop)$/;
+/* "back" is a common word, so it is even stricter: the whole phrase must be
+   short (max 3 words) and end with "back" — e.g. "back", "go back", "swap back". */
+function isBack(t){ return /(^|\s)back$/.test(t) && t.split(' ').length <= 3; }
 const swapDone = {}; let lastSwap = 0, sessionId = 0;
 function handleSwapFinal(idx, res){
   const key = sessionId+':'+idx;
   if(swapDone[key]) return;
   for(let a=0;a<Math.min(res.length,2);a++){
     const t = (res[a].transcript||'').toLowerCase().replace(/[^a-z' ]+/g,' ').replace(/\s+/g,' ').trim();
-    if(SWAP_END.test(t)){
+    const back = isBack(t);
+    if(back || SWAP_END.test(t)){
       swapDone[key] = true;
       const now = Date.now();
-      if(now - lastSwap > 1200){ lastSwap = now; next(); }
+      if(now - lastSwap > 1200){ lastSwap = now; back ? prev() : next(); }
       return;
     }
   }

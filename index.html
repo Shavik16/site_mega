@@ -520,10 +520,8 @@ function swoosh(){
 function openCurtains(){
   if(started) return;
   started = true;
-  stopListening(true);
   swoosh();
   theatre.classList.add('open');
-  mic.classList.add('hide');
   playBuilds(slides[0], 1400);
   setTimeout(()=>{ theatre.classList.add('gone'); }, 3400);
 }
@@ -545,6 +543,19 @@ function matches(t){
   // a short utterance containing "ready" (e.g. just "ready" / "are ready" / "okay ready")
   if(WEAK.test(t) && t.split(' ').length <= 4) return true;
   return false;
+}
+
+/* "swap" = next slide. Count new occurrences per result so one word = one slide. */
+const SWAP = /\b(swap|swaps|swop|swopp?|swab|swapp|swamp|svap|swapped)\b/gi;
+const swapSeen = {}; let lastSwap = 0, sessionId = 0;
+function handleSwap(idx, text){
+  const n = ((text||'').match(SWAP)||[]).length;
+  const key = sessionId+':'+idx, seen = swapSeen[key]||0;
+  if(n > seen){
+    swapSeen[key] = n;
+    const now = Date.now();
+    if(now - lastSwap > 900){ lastSwap = now; next(); }
+  }
 }
 
 function setMic(state, text){
@@ -586,6 +597,7 @@ function makeRec(){
     for(let i=e.resultIndex;i<e.results.length;i++){
       const res = e.results[i];
       heardEl.textContent = '“'+res[0].transcript.trim()+'”';
+      if(started){ handleSwap(i, res[0].transcript); continue; }
       for(let a=0;a<res.length;a++){
         if(matches(res[a].transcript)){ openCurtains(); return; }
       }
@@ -598,12 +610,12 @@ function makeRec(){
       trackMode = 'default mic'; boostedTrack = null;   // fall back to plain mic
     }
   };
-  r.onend = ()=>{ if(wantListen && !started){ setTimeout(startRec, 200); } };
+  r.onend = ()=>{ if(wantListen){ setTimeout(startRec, 200); } };
   return r;
 }
 function startRec(){
-  if(!wantListen || started) return;
-  rec = makeRec();
+  if(!wantListen) return;
+  rec = makeRec(); sessionId++;
   if(boostedTrack && boostedTrack.readyState==='live'){
     try{ rec.start(boostedTrack); trackMode='boosted'; return; }catch(_){ /* not supported */ }
   }
@@ -612,7 +624,6 @@ function startRec(){
 }
 async function startListening(){
   if(!SR){ setMic('off','Voice not supported in this browser'); return; }
-  if(started) return;
   wantListen = true;
   if(!boostedTrack) boostedTrack = await getBoostedTrack();
   startRec();
@@ -624,7 +635,6 @@ function stopListening(silent){
 }
 mic.addEventListener('click', (e)=>{
   e.stopPropagation();
-  if(started) return;
   if(mic.classList.contains('listening')) stopListening(false); else startListening();
 });
 startListening();

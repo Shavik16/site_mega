@@ -6,6 +6,6 @@ Live: https://shavik16.github.io/site_mega/
 
 - Opens behind closed curtains. Say **"We are ready"** — the curtains open.
   No microphone? Press **Enter** or **Space**. Press **M** to show/hide the hidden mic check.
-- Navigate: ← → arrows, click, or swipe. **F** — fullscreen.
+- Navigate: say **"swap"** for the next slide, or ← → arrows, click, swipe. **F** — fullscreen.
 
 The previous portfolio site is kept in the `portfolio-archive` branch.

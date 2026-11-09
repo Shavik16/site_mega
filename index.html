@@ -539,22 +539,29 @@ const WEAK = /\b(ready|reddy|redy|readi|already)\b/i;
 function matches(t){
   t = (t||'').toLowerCase().replace(/[^a-z' ]+/g,' ').replace(/\s+/g,' ').trim();
   if(!t) return false;
+  if(/\byou\b|\?/.test(t)) return false;   // "are you ready?" from someone else
   if(STRONG.test(t)) return true;
   // a short utterance containing "ready" (e.g. just "ready" / "are ready" / "okay ready")
   if(WEAK.test(t) && t.split(' ').length <= 4) return true;
   return false;
 }
 
-/* "swap" = next slide. Count new occurrences per result so one word = one slide. */
-const SWAP = /\b(swap|swaps|swop|swopp?|swab|swapp|swamp|svap|swapped)\b/gi;
-const swapSeen = {}; let lastSwap = 0, sessionId = 0;
-function handleSwap(idx, text){
-  const n = ((text||'').match(SWAP)||[]).length;
-  const key = sessionId+':'+idx, seen = swapSeen[key]||0;
-  if(n > seen){
-    swapSeen[key] = n;
-    const now = Date.now();
-    if(now - lastSwap > 900){ lastSwap = now; next(); }
+/* "swap" = next slide. Strict: only the FINAL (confirmed) text counts, and
+   "swap"/"swop" must be the LAST word of what was said — so a sentence that just
+   contains a similar word never flips the slide. One utterance = one slide. */
+const SWAP_END = /(^|\s)(swap|swop)$/;
+const swapDone = {}; let lastSwap = 0, sessionId = 0;
+function handleSwapFinal(idx, res){
+  const key = sessionId+':'+idx;
+  if(swapDone[key]) return;
+  for(let a=0;a<Math.min(res.length,2);a++){
+    const t = (res[a].transcript||'').toLowerCase().replace(/[^a-z' ]+/g,' ').replace(/\s+/g,' ').trim();
+    if(SWAP_END.test(t)){
+      swapDone[key] = true;
+      const now = Date.now();
+      if(now - lastSwap > 1200){ lastSwap = now; next(); }
+      return;
+    }
   }
 }
 
@@ -597,7 +604,7 @@ function makeRec(){
     for(let i=e.resultIndex;i<e.results.length;i++){
       const res = e.results[i];
       heardEl.textContent = '“'+res[0].transcript.trim()+'”';
-      if(started){ handleSwap(i, res[0].transcript); continue; }
+      if(started){ if(res.isFinal) handleSwapFinal(i, res); continue; }
       for(let a=0;a<res.length;a++){
         if(matches(res[a].transcript)){ openCurtains(); return; }
       }

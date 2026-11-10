@@ -87,18 +87,6 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'In
 #theatre.open .valance,#theatre.open .valance-trim{transition:transform 2.4s cubic-bezier(.65,0,.25,1) .6s;transform:translateY(-130%)}
 #theatre.gone{display:none}
 
-/* mic indicator */
-#mic{position:fixed;right:18px;bottom:16px;z-index:60;display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;
-  background:rgba(0,0,0,.55);color:#f3e3b5;font:600 14px 'Inter',Arial,sans-serif;cursor:pointer;user-select:none;border:1px solid rgba(245,215,122,.35);transition:opacity .6s}
-#mic .dot{width:10px;height:10px;border-radius:50%;background:#777}
-#mic.listening .dot{background:#2ee66d;box-shadow:0 0 0 0 rgba(46,230,109,.7);animation:pulse 1.4s infinite}
-#mic.off .dot{background:#e0484f}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(46,230,109,.7)}70%{box-shadow:0 0 0 10px rgba(46,230,109,0)}100%{box-shadow:0 0 0 0 rgba(46,230,109,0)}}
-#mic.hide{opacity:0;pointer-events:none}
-#mic{display:none;max-width:60vw}
-body.debug #mic{display:flex}
-#mic .heard{font-weight:400;opacity:.75;margin-left:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:36vw}
-
 /* slide counter + hint */
 #hud{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:40;color:rgba(255,255,255,.55);font:500 13px 'Inter',Arial,sans-serif;
   background:rgba(0,0,0,.35);padding:6px 12px;border-radius:999px;opacity:0;transition:opacity .4s;pointer-events:none}
@@ -133,7 +121,7 @@ body.show-hud #hud{opacity:1}
 </div>
 <div style="width:1150px;display:flex;flex-direction:column;gap:8px">
 <p style="font-size:24px;font-weight:600;color:#25f4ee;text-transform:uppercase;letter-spacing:2px">Prepared by</p>
-<p style="font-size:30px;line-height:1.4;color:#f4f1ea">Fedir Demianchuk · Antonina Krykun · Liubomyr Shchavinskyi</p>
+<p style="font-size:30px;line-height:1.4;color:#f4f1ea">Fedir Demianchuk · Liubomyr Shchavinskyi</p>
 <p style="font-size:30px;line-height:1.4;color:#a3a3ad">Class 11-І</p>
 </div>
 <aside>Hello! Today we want to tell you about TikTok and its influence on modern people. We chose TikTok because almost every teenager uses it.
@@ -390,7 +378,6 @@ UA: Дякуємо за увагу! Чи є у вас запитання?</aside
     <div class="t2">the show is about to begin</div>
   </div>
 </div>
-<div id="mic"><span class="dot"></span><span class="lbl">Voice: starting…</span><span class="heard"></span></div>
 <div id="hud"></div>
 
 <script>
@@ -500,8 +487,6 @@ function prev(){ if(started) show(cur-1, -1); }
 
 /* ---------- curtains ---------- */
 const theatre = document.getElementById('theatre');
-const mic = document.getElementById('mic');
-const micLbl = mic.querySelector('.lbl');
 
 function swoosh(){
   try{
@@ -526,152 +511,9 @@ function openCurtains(){
   setTimeout(()=>{ theatre.classList.add('gone'); }, 3400);
 }
 
-/* ---------- voice: "we are ready" ---------- */
-/* Hidden by default. Press M to show the debug badge (what the mic hears). */
-const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-const heardEl = mic.querySelector('.heard');
-let rec = null, wantListen = true, boostedTrack = null, trackMode = null;
-
-/* Loose matching: from far away the recognizer often hears only part of the phrase
-   or mishears it ("were ready", "we're reddy", "already"...). */
-const STRONG = /\b(we|were|where|we're|wear|we'r|we r|v)\s*(are|r|re)?\s*(ready|reddy|redy|readi|redi|rady|rеady)\b/i;
-const WEAK = /\b(ready|reddy|redy|readi|already)\b/i;
-function matches(t){
-  t = (t||'').toLowerCase().replace(/[^a-z' ]+/g,' ').replace(/\s+/g,' ').trim();
-  if(!t) return false;
-  if(/\byou\b|\?/.test(t)) return false;   // "are you ready?" from someone else
-  if(STRONG.test(t)) return true;
-  // a short utterance containing "ready" (e.g. just "ready" / "are ready" / "okay ready")
-  if(WEAK.test(t) && t.split(' ').length <= 4) return true;
-  return false;
-}
-
-/* "swap" = next slide. Strict: only the FINAL (confirmed) text counts, and
-   "swap"/"swop" must be the LAST word of what was said — so a sentence that just
-   contains a similar word never flips the slide. One utterance = one slide. */
-const SWAP_END = /(^|\s)(swap|swop)$/;
-/* "back" is a common word, so it is even stricter: the whole phrase must be
-   short (max 3 words) and end with "back" — e.g. "back", "go back", "swap back". */
-function isBack(t){ return /(^|\s)back$/.test(t) && t.split(' ').length <= 3; }
-const swapDone = {}; let lastSwap = 0, sessionId = 0;
-/* Fast path: act on the live (interim) text as soon as the phrase ENDS with the
-   command word and nothing new is heard for HOLD ms (you paused after it).
-   If more words or a different word arrive, the pending action is cancelled.
-   The final text is still checked as a safety net. */
-const HOLD = 280;
-let pending = null;   // {key, timer, dir}
-function norm(t){ return (t||'').toLowerCase().replace(/[^a-z' ]+/g,' ').replace(/\s+/g,' ').trim(); }
-function commandOf(res){
-  for(let a=0;a<Math.min(res.length,2);a++){
-    const t = norm(res[a].transcript);
-    if(isBack(t)) return -1;
-    if(SWAP_END.test(t)) return 1;
-  }
-  return 0;
-}
-function fire(key, dir){
-  if(swapDone[key]) return;
-  swapDone[key] = true;
-  const now = Date.now();
-  if(now - lastSwap > 700){ lastSwap = now; dir < 0 ? prev() : next(); }
-}
-function handleCommand(idx, res){
-  const key = sessionId+':'+idx;
-  if(swapDone[key]) return;
-  const dir = commandOf(res);
-  if(pending && (pending.key!==key || pending.dir!==dir)){ clearTimeout(pending.timer); pending = null; }
-  if(!dir) return;
-  if(res.isFinal){ if(pending){ clearTimeout(pending.timer); pending = null; } fire(key, dir); return; }
-  if(!pending){
-    pending = {key, dir, timer: setTimeout(()=>{ pending = null; fire(key, dir); }, HOLD)};
-  }
-}
-
-function setMic(state, text){
-  mic.classList.remove('listening','off');
-  if(state) mic.classList.add(state);
-  micLbl.textContent = text;
-}
-
-/* Boost the microphone (auto gain + extra gain + compressor) so a normal voice
-   from a few metres away is loud enough. Used only if the browser lets us feed
-   a custom audio track into speech recognition; otherwise we still request the
-   mic with auto-gain so the OS level is raised. */
-async function getBoostedTrack(){
-  try{
-    const stream = await navigator.mediaDevices.getUserMedia({audio:{
-      autoGainControl:true, noiseSuppression:true, echoCancellation:false, channelCount:1}});
-    const ac = new (window.AudioContext||window.webkitAudioContext)();
-    const srcN = ac.createMediaStreamSource(stream);
-    const hp = ac.createBiquadFilter(); hp.type='highpass'; hp.frequency.value = 90;
-    const gain = ac.createGain(); gain.gain.value = 4.0;
-    const comp = ac.createDynamicsCompressor();
-    comp.threshold.value = -30; comp.knee.value = 20; comp.ratio.value = 6; comp.attack.value = .005; comp.release.value = .2;
-    const dest = ac.createMediaStreamDestination();
-    srcN.connect(hp); hp.connect(gain); gain.connect(comp); comp.connect(dest);
-    const resume = ()=>{ if(ac.state!=='running') ac.resume().catch(()=>{}); };
-    resume(); document.addEventListener('keydown', resume, {once:true}); document.addEventListener('click', resume, {once:true});
-    return dest.stream.getAudioTracks()[0];
-  }catch(e){ return null; }
-}
-
-function makeRec(){
-  const r = new SR();
-  r.lang = 'en-US';
-  r.continuous = true;
-  r.interimResults = true;
-  r.maxAlternatives = 5;
-  r.onstart = ()=> setMic('listening','Listening ('+(trackMode||'default mic')+')');
-  r.onresult = (e)=>{
-    for(let i=e.resultIndex;i<e.results.length;i++){
-      const res = e.results[i];
-      heardEl.textContent = '“'+res[0].transcript.trim()+'”';
-      if(started){ handleCommand(i, res); continue; }
-      for(let a=0;a<res.length;a++){
-        if(matches(res[a].transcript)){ openCurtains(); return; }
-      }
-    }
-  };
-  r.onerror = (e)=>{
-    if(e.error==='not-allowed' || e.error==='service-not-allowed'){
-      wantListen = false; setMic('off','Mic blocked — allow mic for this site');
-    } else if(e.error==='audio-capture' && trackMode==='boosted'){
-      trackMode = 'default mic'; boostedTrack = null;   // fall back to plain mic
-    }
-  };
-  r.onend = ()=>{ if(wantListen){ setTimeout(startRec, 200); } };
-  return r;
-}
-function startRec(){
-  if(!wantListen) return;
-  rec = makeRec(); sessionId++;
-  if(boostedTrack && boostedTrack.readyState==='live'){
-    try{ rec.start(boostedTrack); trackMode='boosted'; return; }catch(_){ /* not supported */ }
-  }
-  trackMode = 'default mic';
-  try{ rec.start(); }catch(_){}
-}
-async function startListening(){
-  if(!SR){ setMic('off','Voice not supported in this browser'); return; }
-  wantListen = true;
-  if(!boostedTrack) boostedTrack = await getBoostedTrack();
-  startRec();
-}
-function stopListening(silent){
-  wantListen = false;
-  try{ rec && rec.abort(); }catch(_){}
-  if(!silent) setMic('off','Voice off');
-}
-mic.addEventListener('click', (e)=>{
-  e.stopPropagation();
-  if(mic.classList.contains('listening')) stopListening(false); else startListening();
-});
-startListening();
-
 /* ---------- keyboard / click / touch ---------- */
 document.addEventListener('keydown', (e)=>{
   const k = e.key;
-  if(k==='m'||k==='M'||k==='ь'||k==='Ь'){ document.body.classList.toggle('debug'); return; }
   if(!started){
     if(k==='Enter' || k===' ' || k==='o' || k==='O' || k==='о' || k==='О'){ e.preventDefault(); openCurtains(); }
     if(k==='f' || k==='F' || k==='а' || k==='А'){ toggleFS(); }

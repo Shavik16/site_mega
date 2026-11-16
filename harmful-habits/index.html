@@ -50,8 +50,7 @@ body.show-hud #back{opacity:1;pointer-events:auto}
 #notes b{display:block;margin-bottom:6px;color:#F07A45;font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
 body.notes #notes{display:block}
 body.thumb #bar,body.thumb #hud,body.thumb #back{display:none!important}
-body.thumb #stage *{animation:none!important}
-@media (prefers-reduced-motion: reduce){#stage *,#stage > section{animation:none!important}}
+body.thumb #stage *,body.still #stage *,body.still #stage > section{animation:none!important}
 </style>
 <style>
 /* ---------- deck styles ---------- */
@@ -122,6 +121,17 @@ h2 { font-family: 'Oswald', Arial, sans-serif; font-size: 72px; line-height: 1.1
 .pt, .tip { animation: slidein 450ms ease-out both; animation-delay: calc(var(--i) * 100ms + 50ms); }
 .help { animation: rise 500ms ease-out both; animation-delay: 450ms; }
 
+
+/* ---------- site: bolder arrivals than the deck file ---------- */
+@keyframes s-head{from{opacity:0;transform:translateX(-90px)}}
+@keyframes s-rise{from{opacity:0;transform:translateY(70px)}}
+@keyframes s-slide{from{opacity:0;transform:translateX(130px)}}
+@keyframes s-pop{0%{opacity:0;transform:scale(.85)}60%{opacity:1;transform:scale(1.03)}100%{opacity:1;transform:scale(1)}}
+#stage .head{animation:s-head .7s cubic-bezier(.2,.8,.2,1) .15s both}
+#stage .panel{animation:s-rise .75s cubic-bezier(.2,.8,.2,1) .25s both}
+#stage .pt,#stage .tip{animation:s-slide .7s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 130ms + 300ms)}
+#stage .help{animation:s-pop .8s cubic-bezier(.2,.8,.2,1) .75s both}
+#stage .pbg,#stage .bg3d{animation:fadein .6s ease-out both}
 </style>
 </head>
 <body>
@@ -139,8 +149,8 @@ function rr(x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.
 function rgb(c,f){return &#x27;rgb(&#x27;+Math.min(255,c[0]*f|0)+&#x27;,&#x27;+Math.min(255,c[1]*f|0)+&#x27;,&#x27;+Math.min(255,c[2]*f|0)+&#x27;)&#x27;;}
 function rot(p,a,b,c){const x=p[0]*Math.cos(a)+p[2]*Math.sin(a),z=-p[0]*Math.sin(a)+p[2]*Math.cos(a),y=p[1]*Math.cos(b)-z*Math.sin(b),w=p[1]*Math.sin(b)+z*Math.cos(b);return [x*Math.cos(c)-y*Math.sin(c),x*Math.sin(c)+y*Math.cos(c),w];}
 function pj(p){const f=CAM/(CAM-p[2]);return [S.cx*W+p[0]*S.R*f,S.cy*H-p[1]*S.R*f,f];}
-const still=!!(window.matchMedia&amp;&amp;matchMedia(&#x27;(prefers-reduced-motion: reduce)&#x27;).matches);let t0=null;
-function frame(ts){if(t0===null)t0=ts;const t=(ts-t0)/1000;g.clearRect(0,0,W,H);g.save();rr(0,0,W,H,24);g.clip();
+const still=false;let t0=null;
+function frame(ts){if(t0===null)t0=ts;const t=(ts-t0)/1000*1.5;g.clearRect(0,0,W,H);g.save();rr(0,0,W,H,24);g.clip();
 const X=S.cx*W,Y=S.cy*H,q=g.createRadialGradient(X,Y,0,X,Y,S.R*1.6);q.addColorStop(0,&#x27;rgba(240,122,69,0.14)&#x27;);q.addColorStop(1,&#x27;rgba(240,122,69,0)&#x27;);g.fillStyle=q;g.fillRect(0,0,W,H);
 draw(t);g.restore();
 if(S.label){g.font=&#x27;24px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#7F8DA0&#x27;;g.textAlign=&#x27;right&#x27;;g.textBaseline=&#x27;top&#x27;;g.fillText(S.label,W-32,28);}
@@ -201,8 +211,8 @@ function rr(x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.
 function rgb(c,f){return &#x27;rgb(&#x27;+Math.min(255,c[0]*f|0)+&#x27;,&#x27;+Math.min(255,c[1]*f|0)+&#x27;,&#x27;+Math.min(255,c[2]*f|0)+&#x27;)&#x27;;}
 function rot(p,a,b,c){const x=p[0]*Math.cos(a)+p[2]*Math.sin(a),z=-p[0]*Math.sin(a)+p[2]*Math.cos(a),y=p[1]*Math.cos(b)-z*Math.sin(b),w=p[1]*Math.sin(b)+z*Math.cos(b);return [x*Math.cos(c)-y*Math.sin(c),x*Math.sin(c)+y*Math.cos(c),w];}
 function pj(p){const f=CAM/(CAM-p[2]);return [S.cx*W+p[0]*S.R*f,S.cy*H-p[1]*S.R*f,f];}
-const still=!!(window.matchMedia&amp;&amp;matchMedia(&#x27;(prefers-reduced-motion: reduce)&#x27;).matches);let t0=null;
-function frame(ts){if(t0===null)t0=ts;const t=(ts-t0)/1000;g.clearRect(0,0,W,H);g.save();rr(0,0,W,H,24);g.clip();
+const still=false;let t0=null;
+function frame(ts){if(t0===null)t0=ts;const t=(ts-t0)/1000*1.5;g.clearRect(0,0,W,H);g.save();rr(0,0,W,H,24);g.clip();
 const X=S.cx*W,Y=S.cy*H,q=g.createRadialGradient(X,Y,0,X,Y,S.R*1.6);q.addColorStop(0,&#x27;rgba(240,122,69,0.14)&#x27;);q.addColorStop(1,&#x27;rgba(240,122,69,0)&#x27;);g.fillStyle=q;g.fillRect(0,0,W,H);
 draw(t);g.restore();
 if(S.label){g.font=&#x27;24px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#7F8DA0&#x27;;g.textAlign=&#x27;right&#x27;;g.textBaseline=&#x27;top&#x27;;g.fillText(S.label,W-32,28);}
@@ -257,8 +267,8 @@ function rr(x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.
 function rgb(c,f){return &#x27;rgb(&#x27;+Math.min(255,c[0]*f|0)+&#x27;,&#x27;+Math.min(255,c[1]*f|0)+&#x27;,&#x27;+Math.min(255,c[2]*f|0)+&#x27;)&#x27;;}
 function rot(p,a,b,c){const x=p[0]*Math.cos(a)+p[2]*Math.sin(a),z=-p[0]*Math.sin(a)+p[2]*Math.cos(a),y=p[1]*Math.cos(b)-z*Math.sin(b),w=p[1]*Math.sin(b)+z*Math.cos(b);return [x*Math.cos(c)-y*Math.sin(c),x*Math.sin(c)+y*Math.cos(c),w];}
 function pj(p){const f=CAM/(CAM-p[2]);return [S.cx*W+p[0]*S.R*f,S.cy*H-p[1]*S.R*f,f];}
-const still=!!(window.matchMedia&amp;&amp;matchMedia(&#x27;(prefers-reduced-motion: reduce)&#x27;).matches);let t0=null;
-function frame(ts){if(t0===null)t0=ts;const t=(ts-t0)/1000;g.clearRect(0,0,W,H);g.save();rr(0,0,W,H,24);g.clip();
+const still=false;let t0=null;
+function frame(ts){if(t0===null)t0=ts;const t=(ts-t0)/1000*1.5;g.clearRect(0,0,W,H);g.save();rr(0,0,W,H,24);g.clip();
 const X=S.cx*W,Y=S.cy*H,q=g.createRadialGradient(X,Y,0,X,Y,S.R*1.6);q.addColorStop(0,&#x27;rgba(240,122,69,0.14)&#x27;);q.addColorStop(1,&#x27;rgba(240,122,69,0)&#x27;);g.fillStyle=q;g.fillRect(0,0,W,H);
 draw(t);g.restore();
 if(S.label){g.font=&#x27;24px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#7F8DA0&#x27;;g.textAlign=&#x27;right&#x27;;g.textBaseline=&#x27;top&#x27;;g.fillText(S.label,W-32,28);}
@@ -313,8 +323,8 @@ function rr(x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.
 function rgb(c,f){return &#x27;rgb(&#x27;+Math.min(255,c[0]*f|0)+&#x27;,&#x27;+Math.min(255,c[1]*f|0)+&#x27;,&#x27;+Math.min(255,c[2]*f|0)+&#x27;)&#x27;;}
 function rot(p,a,b,c){const x=p[0]*Math.cos(a)+p[2]*Math.sin(a),z=-p[0]*Math.sin(a)+p[2]*Math.cos(a),y=p[1]*Math.cos(b)-z*Math.sin(b),w=p[1]*Math.sin(b)+z*Math.cos(b);return [x*Math.cos(c)-y*Math.sin(c),x*Math.sin(c)+y*Math.cos(c),w];}
 function pj(p){const f=CAM/(CAM-p[2]);return [S.cx*W+p[0]*S.R*f,S.cy*H-p[1]*S.R*f,f];}
-const still=!!(window.matchMedia&amp;&amp;matchMedia(&#x27;(prefers-reduced-motion: reduce)&#x27;).matches);let t0=null;
-function frame(ts){if(t0===null)t0=ts;const t=(ts-t0)/1000;g.clearRect(0,0,W,H);g.save();rr(0,0,W,H,24);g.clip();
+const still=false;let t0=null;
+function frame(ts){if(t0===null)t0=ts;const t=(ts-t0)/1000*1.5;g.clearRect(0,0,W,H);g.save();rr(0,0,W,H,24);g.clip();
 const X=S.cx*W,Y=S.cy*H,q=g.createRadialGradient(X,Y,0,X,Y,S.R*1.6);q.addColorStop(0,&#x27;rgba(240,122,69,0.14)&#x27;);q.addColorStop(1,&#x27;rgba(240,122,69,0)&#x27;);g.fillStyle=q;g.fillRect(0,0,W,H);
 draw(t);g.restore();
 if(S.label){g.font=&#x27;24px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#7F8DA0&#x27;;g.textAlign=&#x27;right&#x27;;g.textBaseline=&#x27;top&#x27;;g.fillText(S.label,W-32,28);}
@@ -367,8 +377,8 @@ function rr(x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.
 function rgb(c,f){return &#x27;rgb(&#x27;+Math.min(255,c[0]*f|0)+&#x27;,&#x27;+Math.min(255,c[1]*f|0)+&#x27;,&#x27;+Math.min(255,c[2]*f|0)+&#x27;)&#x27;;}
 function rot(p,a,b,c){const x=p[0]*Math.cos(a)+p[2]*Math.sin(a),z=-p[0]*Math.sin(a)+p[2]*Math.cos(a),y=p[1]*Math.cos(b)-z*Math.sin(b),w=p[1]*Math.sin(b)+z*Math.cos(b);return [x*Math.cos(c)-y*Math.sin(c),x*Math.sin(c)+y*Math.cos(c),w];}
 function pj(p){const f=CAM/(CAM-p[2]);return [S.cx*W+p[0]*S.R*f,S.cy*H-p[1]*S.R*f,f];}
-const still=!!(window.matchMedia&amp;&amp;matchMedia(&#x27;(prefers-reduced-motion: reduce)&#x27;).matches);let t0=null;
-function frame(ts){if(t0===null)t0=ts;const t=(ts-t0)/1000;g.clearRect(0,0,W,H);g.save();rr(0,0,W,H,24);g.clip();
+const still=false;let t0=null;
+function frame(ts){if(t0===null)t0=ts;const t=(ts-t0)/1000*1.5;g.clearRect(0,0,W,H);g.save();rr(0,0,W,H,24);g.clip();
 const X=S.cx*W,Y=S.cy*H,q=g.createRadialGradient(X,Y,0,X,Y,S.R*1.6);q.addColorStop(0,&#x27;rgba(240,122,69,0.14)&#x27;);q.addColorStop(1,&#x27;rgba(240,122,69,0)&#x27;);g.fillStyle=q;g.fillRect(0,0,W,H);
 draw(t);g.restore();
 if(S.label){g.font=&#x27;24px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#7F8DA0&#x27;;g.textAlign=&#x27;right&#x27;;g.textBaseline=&#x27;top&#x27;;g.fillText(S.label,W-32,28);}
@@ -447,12 +457,14 @@ if(front){g.lineWidth=.5;DC.forEach(d=&gt;{g.fillStyle=rgb(d.c,S.dim);g.strokeSt
 'use strict';
 const stage=document.getElementById('stage');
 if(/[?&]thumb\b/.test(location.search))document.body.classList.add('thumb');
+if(/[?&]still\b/.test(location.search))document.body.classList.add('still');
 function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform='scale('+s+')';}
 addEventListener('resize',fit);fit();
 
 const slides=Array.from(stage.querySelectorAll(':scope > section'));
 const hud=document.getElementById('hud'),bar=document.getElementById('bar'),notes=document.getElementById('notes');
-const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches||document.body.classList.contains('thumb');
+/* motion is on even when Windows "animation effects" are off; ?still turns it off */
+const reduce=document.body.classList.contains('thumb')||document.body.classList.contains('still');
 let cur=0,busy=false;
 
 stage.querySelectorAll('.foot a').forEach(a=>{a.target='_blank';a.rel='noopener';});

@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Вплив шкідливих звичок на людину</title>
+<meta name="description" content="Презентація: як куріння, вейпи, алкоголь, наркотики, ігри та соцмережі впливають на людину. 6 слайдів з джерелами, 3D-моделями молекул і текстом виступу.">
+<meta property="og:title" content="Вплив шкідливих звичок на людину">
+<meta property="og:description" content="6 слайдів з джерелами, 3D-моделями молекул і текстом виступу.">
+<meta property="og:image" content="https://shavik16.github.io/site_mega/thumbs/harmful-habits.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400..700&family=Rubik:wght@400..700&display=swap">
+<style>
+/* ---------- presenter ---------- */
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;background:#0d1219;overflow:hidden}
+#viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#stage{position:relative;width:1920px;height:1080px;flex:none;transform-origin:center center;overflow:hidden;background:#F4F0E8}
+#stage > section{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;isolation:isolate;display:none}
+#stage > section.active,#stage > section.leaving{display:flex}
+#stage section aside{display:none}
+#stage p,#stage h1,#stage h2,#stage h3{margin:0}
+#stage h1{font-size:96px;font-weight:600}
+#stage h2{font-size:64px;font-weight:600}
+#stage h3{font-size:44px;font-weight:600}
+#stage .pbg,#stage iframe.emb{z-index:-1}
+#stage iframe.emb{border:0;background:transparent}
+#stage .body{min-height:0}
+
+@keyframes pushInFwd{from{transform:translateX(100%)}to{transform:translateX(0)}}
+@keyframes pushOutFwd{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+@keyframes pushInBack{from{transform:translateX(-100%)}to{transform:translateX(0)}}
+@keyframes pushOutBack{from{transform:translateX(0)}to{transform:translateX(100%)}}
+#stage > section.in-fwd{animation:pushInFwd .55s cubic-bezier(.7,0,.25,1) both}
+#stage > section.out-fwd{animation:pushOutFwd .55s cubic-bezier(.7,0,.25,1) both}
+#stage > section.in-back{animation:pushInBack .55s cubic-bezier(.7,0,.25,1) both}
+#stage > section.out-back{animation:pushOutBack .55s cubic-bezier(.7,0,.25,1) both}
+
+#bar{position:fixed;left:0;top:0;height:4px;width:0;background:#E8622C;transition:width .4s ease;z-index:30}
+#hud{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:40;color:rgba(255,255,255,.8);font:500 13px Rubik,Arial,sans-serif;
+  background:rgba(10,14,20,.65);padding:7px 14px;border-radius:999px;opacity:0;transition:opacity .4s;pointer-events:none;white-space:nowrap}
+#back{position:fixed;left:14px;top:14px;z-index:40;color:#fff;font:500 14px Rubik,Arial,sans-serif;text-decoration:none;
+  background:rgba(10,14,20,.65);padding:8px 14px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .4s}
+body.show-hud #hud{opacity:1}
+body.show-hud #back{opacity:1;pointer-events:auto}
+#notes{position:fixed;left:50%;bottom:56px;transform:translateX(-50%);width:min(900px,92vw);max-height:38vh;overflow:auto;z-index:45;
+  background:rgba(10,14,20,.93);color:#E8EDF2;font:400 17px/1.55 Rubik,Arial,sans-serif;padding:18px 22px;border-radius:14px;
+  box-shadow:0 10px 40px rgba(0,0,0,.4);display:none}
+#notes b{display:block;margin-bottom:6px;color:#F07A45;font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+body.notes #notes{display:block}
+body.thumb #bar,body.thumb #hud,body.thumb #back{display:none!important}
+body.thumb #stage *{animation:none!important}
+@media (prefers-reduced-motion: reduce){#stage *,#stage > section{animation:none!important}}
+</style>
+<style>
+/* ---------- deck styles ---------- */
+body { font-family: 'Rubik', Arial, sans-serif; color: #3A4554; }
+
+section {
+  padding: 128px 128px 160px;
+  background: #F4F0E8;
+  color: #3A4554;
+  font-family: 'Rubik', Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  box-sizing: border-box;
+}
+section.dark { background: #17212F; color: #C9D2DC; }
+
+.head { display: flex; flex-direction: column; gap: 12px; }
+.eyebrow { font-size: 24px; line-height: 1.2; font-weight: 600; letter-spacing: 3px; color: #B5400E; }
+.dark .eyebrow { color: #F07A45; }
+h2 { font-family: 'Oswald', Arial, sans-serif; font-size: 72px; line-height: 1.1; font-weight: 600; color: #17212F; }
+.dark h2 { color: #F4F0E8; }
+
+.body { flex: 1; display: flex; flex-direction: row; gap: 64px; }
+
+.panel { width: 560px; flex-shrink: 0; box-sizing: border-box; padding: 48px; border-radius: 24px; background: #17212F; display: flex; flex-direction: column; justify-content: center; gap: 8px; }
+.panel.p3d { background: transparent; }
+.pbg { position: absolute; left: 128px; top: 304px; width: 560px; height: 616px; border-radius: 24px; background: #17212F; }
+.plabel { font-size: 24px; line-height: 1.3; font-weight: 600; color: #F07A45; }
+.stat { font-family: 'Oswald', Arial, sans-serif; font-size: 120px; line-height: 1; font-weight: 600; color: #F07A45; }
+.stat2 { font-family: 'Oswald', Arial, sans-serif; font-size: 72px; line-height: 1; font-weight: 600; color: #F07A45; }
+.cap { font-size: 24px; line-height: 1.3; color: #D5DCE4; }
+.note { font-size: 24px; line-height: 1.3; color: #9AA7B6; }
+.panel hr { border: none; border-top: 2px solid #34445A; margin: 16px 0; }
+
+.pts { flex: 1; display: flex; flex-direction: column; gap: 32px; }
+.pt { border-left: 6px solid #E8622C; padding-left: 28px; }
+.pt p { font-size: 30px; line-height: 1.35; color: #3A4554; }
+.pt b { font-weight: 600; color: #17212F; }
+
+.tips { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.tip { background: #222E3F; border-radius: 20px; padding: 32px; }
+.tip p { font-size: 30px; line-height: 1.35; color: #D5DCE4; }
+.tip b { font-weight: 600; color: #F4F0E8; }
+
+.help { width: 560px; flex-shrink: 0; box-sizing: border-box; padding: 40px; border-radius: 24px; background: #E8622C; display: flex; flex-direction: column; justify-content: center; gap: 8px; }
+.help h3 { font-size: 30px; line-height: 1.2; font-weight: 700; color: #17212F; }
+.help .hs { font-size: 24px; line-height: 1.3; color: #17212F; }
+.help .hnum { font-family: 'Oswald', Arial, sans-serif; font-size: 72px; line-height: 1.05; font-weight: 600; color: #17212F; }
+.help hr { border: none; border-top: 2px solid #17212F; margin: 12px 0; }
+
+.foot { position: absolute; left: 128px; bottom: 64px; width: 1664px; font-size: 24px; line-height: 1.2; color: #5A6372; white-space: nowrap; }
+.foot a { color: #5A6372; text-decoration: underline; }
+.dark .foot { color: #9AA7B6; }
+.dark .foot a { color: #9AA7B6; }
+
+@property --n { syntax: '<integer>'; inherits: false; initial-value: 0 }
+@keyframes count { from { --n: 0 } }
+.n { animation: count 1.2s ease-out both }
+
+@keyframes headin { from { opacity: 0; transform: translateX(-40px); } }
+@keyframes rise { from { opacity: 0; transform: translateY(32px); } }
+@keyframes slidein { from { opacity: 0; transform: translateX(56px); } }
+@keyframes fadein { from { opacity: 0; } }
+.head { animation: headin 500ms ease-out both; }
+.pbg, .bg3d { animation: fadein 500ms ease-out both; }
+.panel { animation: rise 500ms ease-out both; animation-delay: 100ms; }
+.pt, .tip { animation: slidein 450ms ease-out both; animation-delay: calc(var(--i) * 100ms + 50ms); }
+.help { animation: rise 500ms ease-out both; animation-delay: 450ms; }
+
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<a id="back" href="../">← Усі презентації</a>
+<div id="viewport"><div id="stage">
+<section id="habits" data-transition="push">
+<div class="pbg"></div>
+<iframe class="bg3d emb" title="3D-модель" aria-hidden="true" tabindex="-1" sandbox="allow-scripts" style="position:absolute; left:128px; top:304px; width:560px; height:616px" srcdoc="&lt;style&gt;html,body{margin:0;height:100%;overflow:hidden;background:transparent}canvas{display:block;width:100%;height:100%}&lt;/style&gt;&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+const S={cx:.72,cy:.5,R:165,a0:.4,spin:.25,pitch:.25,tilt:1.25,dim:.8,label:&#x27;&#x27;};
+const cv=document.getElementById(&#x27;c&#x27;),g=cv.getContext(&#x27;2d&#x27;),PI=Math.PI,CAM=4;let W=560,H=616;
+function fit(){const d=window.devicePixelRatio||1;W=cv.clientWidth||560;H=cv.clientHeight||616;cv.width=Math.round(W*d);cv.height=Math.round(H*d);g.setTransform(d,0,0,d,0,0);}
+fit();addEventListener(&#x27;resize&#x27;,fit);
+function rr(x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();}
+function rgb(c,f){return &#x27;rgb(&#x27;+Math.min(255,c[0]*f|0)+&#x27;,&#x27;+Math.min(255,c[1]*f|0)+&#x27;,&#x27;+Math.min(255,c[2]*f|0)+&#x27;)&#x27;;}
+function rot(p,a,b,c){const x=p[0]*Math.cos(a)+p[2]*Math.sin(a),z=-p[0]*Math.sin(a)+p[2]*Math.cos(a),y=p[1]*Math.cos(b)-z*Math.sin(b),w=p[1]*Math.sin(b)+z*Math.cos(b);return [x*Math.cos(c)-y*Math.sin(c),x*Math.sin(c)+y*Math.cos(c),w];}
+function pj(p){const f=CAM/(CAM-p[2]);return [S.cx*W+p[0]*S.R*f,S.cy*H-p[1]*S.R*f,f];}
+const still=!!(window.matchMedia&amp;&amp;matchMedia(&#x27;(prefers-reduced-motion: reduce)&#x27;).matches);let t0=null;
+function frame(ts){if(t0===null)t0=ts;const t=(ts-t0)/1000;g.clearRect(0,0,W,H);g.save();rr(0,0,W,H,24);g.clip();
+const X=S.cx*W,Y=S.cy*H,q=g.createRadialGradient(X,Y,0,X,Y,S.R*1.6);q.addColorStop(0,&#x27;rgba(240,122,69,0.14)&#x27;);q.addColorStop(1,&#x27;rgba(240,122,69,0)&#x27;);g.fillStyle=q;g.fillRect(0,0,W,H);
+draw(t);g.restore();
+if(S.label){g.font=&#x27;24px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#7F8DA0&#x27;;g.textAlign=&#x27;right&#x27;;g.textBaseline=&#x27;top&#x27;;g.fillText(S.label,W-32,28);}
+if(!still)requestAnimationFrame(frame);}
+requestAnimationFrame(frame);
+const VV=[],NN=[],QQ=[],BASE=[150,162,180],LD=[-.42,.62,.66],HV=[-.24,.36,.9];
+function link(ox,flat){const nu=36,nv=12,b=VV.length;
+for(let i=0;i&lt;nu;i++){const u=i/nu*2*PI;for(let j=0;j&lt;nv;j++){const v=j/nv*2*PI,cr=1+.23*Math.cos(v),p=[cr*Math.cos(u),cr*Math.sin(u),.23*Math.sin(v)],n=[Math.cos(v)*Math.cos(u),Math.cos(v)*Math.sin(u),Math.sin(v)];
+VV.push(flat?[p[0]+ox,p[1],p[2]]:[p[0]+ox,p[2],p[1]]);NN.push(flat?n:[n[0],n[2],n[1]]);}}
+for(let i=0;i&lt;nu;i++)for(let j=0;j&lt;nv;j++){const i2=(i+1)%nu,j2=(j+1)%nv;QQ.push([b+i*nv+j,b+i2*nv+j,b+i2*nv+j2,b+i*nv+j2]);}}
+link(-1.45,1);link(0,0);link(1.45,1);
+const k=1/2.75;VV.forEach(p=&gt;{p[0]*=k;p[1]*=k;p[2]*=k;});
+function rx(p,s){const c=Math.cos(s),n=Math.sin(s);return [p[0],p[1]*c-p[2]*n,p[1]*n+p[2]*c];}
+function draw(t){const s=S.a0+t*S.spin,a=.3*Math.sin(t*.25),T=VV.map(p=&gt;rot(rx(p,s),a,S.pitch,S.tilt)),N2=NN.map(n=&gt;rot(rx(n,s),a,S.pitch,S.tilt)),P2=T.map(pj),L=[];
+QQ.forEach(q=&gt;{let nx=N2[q[0]][0]+N2[q[2]][0],ny=N2[q[0]][1]+N2[q[2]][1],nz=N2[q[0]][2]+N2[q[2]][2];const nl=Math.hypot(nx,ny,nz)||1;nx/=nl;ny/=nl;nz/=nl;
+if(nz&lt;-.2)return;L.push([(T[q[0]][2]+T[q[1]][2]+T[q[2]][2]+T[q[3]][2])/4,q,nx,ny,nz]);});
+L.sort((u,v)=&gt;u[0]-v[0]);g.lineWidth=.8;
+L.forEach(it=&gt;{const q=it[1],lam=Math.max(0,it[2]*LD[0]+it[3]*LD[1]+it[4]*LD[2]),sp=Math.pow(Math.max(0,it[2]*HV[0]+it[3]*HV[1]+it[4]*HV[2]),28),F=(.62+.38*(it[0]+1)/2)*S.dim,
+col=&#x27;rgb(&#x27;+[0,1,2].map(c=&gt;Math.min(255,(BASE[c]*(.2+.8*lam)+255*sp*.6)*F|0)).join(&#x27;,&#x27;)+&#x27;)&#x27;;
+g.fillStyle=col;g.strokeStyle=col;g.beginPath();g.moveTo(P2[q[0]][0],P2[q[0]][1]);for(let m=1;m&lt;4;m++)g.lineTo(P2[q[m]][0],P2[q[m]][1]);g.closePath();g.fill();g.stroke();});}
+&lt;/script&gt;"></iframe>
+<div class="head">
+<p class="eyebrow">01 · ЩО ТАКЕ ЗАЛЕЖНІСТЬ</p>
+<h2>Звичка непомітно стає залежністю</h2>
+</div>
+<div class="body">
+<div class="panel p3d" style="--i:0">
+<p class="plabel">Українські підлітки, ЮНІСЕФ 2020</p>
+<p class="stat2 n">50%</p>
+<p class="cap">мають досвід куріння</p>
+<hr>
+<p class="stat2 n">86%</p>
+<p class="cap">пробували алкоголь</p>
+<hr>
+<p class="stat2 n">18%</p>
+<p class="cap">пробували наркотики</p>
+</div>
+<div class="pts">
+<div class="pt" style="--i:1"><p><b>Шкідлива звичка</b> — дія, яку людина повторює, хоча вона шкодить здоров’ю. З часом вона може стати залежністю.</p></div>
+<div class="pt" style="--i:2"><p><b>Хімічні залежності:</b> тютюн і вейпи, алкоголь, наркотики.</p></div>
+<div class="pt" style="--i:3"><p><b>Нехімічні залежності:</b> відеоігри, соцмережі, азартні ігри.</p></div>
+<div class="pt" style="--i:4"><p><b>Мозок дозріває приблизно до 25 років,</b> тому зараз шкода найбільша. Звичка курити найчастіше закріплюється в тих, хто почав до 18.</p></div>
+</div>
+</div>
+<p class="foot">Джерела: презентація «Шкідливі звички», с. 5 (дані ЮНІСЕФ, 2020) і с. 16 · <a href="https://www.cdc.gov/tobacco/e-cigarettes/health-effects.html">CDC — Health Effects of Vaping</a></p>
+<aside>Добрий день! Тема мого виступу — вплив шкідливих звичок на людину. Вейп за школою чи пляшка пива на вечірці здаються дрібницями. Але за цими «дрібницями» стоять цифри, які важко ігнорувати. Шкідлива звичка — це дія, яку людина повторює, хоча знає, що вона шкодить. Небезпека в тому, що звичка непомітно стає залежністю: спочатку ти керуєш нею, а потім вона — тобою. Залежності бувають хімічні — від нікотину, алкоголю, наркотиків — і нехімічні, коли людина не може зупинитися в іграх, соцмережах чи азартних іграх. Чому про це говорять саме з підлітками? За даними ЮНІСЕФ за 2020 рік, половина українських підлітків уже має досвід куріння, 86% пробували алкоголь, 18% — наркотики. До того ж наш мозок розвивається приблизно до 25 років, і нікотин у цьому віці може пошкодити зони, що відповідають за увагу, навчання, настрій і самоконтроль. А звичка курити найчастіше закріплюється в тих, хто почав до 18 років.</aside>
+</section>
+<section id="tobacco" data-transition="push">
+<div class="pbg"></div>
+<iframe class="bg3d emb" title="3D-модель" aria-hidden="true" tabindex="-1" sandbox="allow-scripts" style="position:absolute; left:128px; top:304px; width:560px; height:616px" srcdoc="&lt;style&gt;html,body{margin:0;height:100%;overflow:hidden;background:transparent}canvas{display:block;width:100%;height:100%}&lt;/style&gt;&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+const S={cx:.74,cy:.6,R:150,a0:.6,spin:.3,pitch:.3,tilt:.15,dim:.75,label:&#x27;Нікотин · C₁₀H₁₄N₂&#x27;};
+const A=[[&#x27;N&#x27;,-1.70,-0.80,-0.03],[&#x27;N&#x27;,2.30,-0.71,1.22],[&#x27;C&#x27;,-0.88,0.31,-0.57],[&#x27;C&#x27;,-1.50,1.58,0.04],[&#x27;C&#x27;,-2.69,1.10,0.86],[&#x27;C&#x27;,-3.03,-0.24,0.23],[&#x27;C&#x27;,0.59,0.15,-0.25],[&#x27;C&#x27;,-1.76,-1.95,-0.92],[&#x27;C&#x27;,1.56,0.70,-1.08],[&#x27;C&#x27;,1.00,-0.54,0.87],[&#x27;C&#x27;,2.90,0.55,-0.76],[&#x27;C&#x27;,3.22,-0.16,0.39],[&#x27;H&#x27;,-1.01,0.37,-1.66],[&#x27;H&#x27;,-1.85,2.25,-0.76],[&#x27;H&#x27;,-0.80,2.15,0.67],[&#x27;H&#x27;,-2.39,0.96,1.91],[&#x27;H&#x27;,-3.52,1.80,0.83],[&#x27;H&#x27;,-3.61,-0.87,0.92],[&#x27;H&#x27;,-3.60,-0.09,-0.69],[&#x27;H&#x27;,-2.36,-2.75,-0.47],[&#x27;H&#x27;,-0.76,-2.37,-1.09],[&#x27;H&#x27;,-2.20,-1.70,-1.90],[&#x27;H&#x27;,1.28,1.25,-1.97],[&#x27;H&#x27;,0.30,-0.98,1.58],[&#x27;H&#x27;,3.68,0.96,-1.39],[&#x27;H&#x27;,4.25,-0.31,0.68]];
+const B=[[1,3,1],[1,6,1],[1,8,1],[2,10,1],[2,12,2],[3,4,1],[3,7,1],[3,13,1],[4,5,1],[4,14,1],[4,15,1],[5,6,1],[5,16,1],[5,17,1],[6,18,1],[6,19,1],[7,9,1],[7,10,2],[8,20,1],[8,21,1],[8,22,1],[9,11,2],[9,23,1],[10,24,1],[11,12,1],[11,25,1],[12,26,1]];
+const cv=document.getElementById(&#x27;c&#x27;),g=cv.getContext(&#x27;2d&#x27;),PI=Math.PI,CAM=4;let W=560,H=616;
+function fit(){const d=window.devicePixelRatio||1;W=cv.clientWidth||560;H=cv.clientHeight||616;cv.width=Math.round(W*d);cv.height=Math.round(H*d);g.setTransform(d,0,0,d,0,0);}
+fit();addEventListener(&#x27;resize&#x27;,fit);
+function rr(x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();}
+function rgb(c,f){return &#x27;rgb(&#x27;+Math.min(255,c[0]*f|0)+&#x27;,&#x27;+Math.min(255,c[1]*f|0)+&#x27;,&#x27;+Math.min(255,c[2]*f|0)+&#x27;)&#x27;;}
+function rot(p,a,b,c){const x=p[0]*Math.cos(a)+p[2]*Math.sin(a),z=-p[0]*Math.sin(a)+p[2]*Math.cos(a),y=p[1]*Math.cos(b)-z*Math.sin(b),w=p[1]*Math.sin(b)+z*Math.cos(b);return [x*Math.cos(c)-y*Math.sin(c),x*Math.sin(c)+y*Math.cos(c),w];}
+function pj(p){const f=CAM/(CAM-p[2]);return [S.cx*W+p[0]*S.R*f,S.cy*H-p[1]*S.R*f,f];}
+const still=!!(window.matchMedia&amp;&amp;matchMedia(&#x27;(prefers-reduced-motion: reduce)&#x27;).matches);let t0=null;
+function frame(ts){if(t0===null)t0=ts;const t=(ts-t0)/1000;g.clearRect(0,0,W,H);g.save();rr(0,0,W,H,24);g.clip();
+const X=S.cx*W,Y=S.cy*H,q=g.createRadialGradient(X,Y,0,X,Y,S.R*1.6);q.addColorStop(0,&#x27;rgba(240,122,69,0.14)&#x27;);q.addColorStop(1,&#x27;rgba(240,122,69,0)&#x27;);g.fillStyle=q;g.fillRect(0,0,W,H);
+draw(t);g.restore();
+if(S.label){g.font=&#x27;24px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#7F8DA0&#x27;;g.textAlign=&#x27;right&#x27;;g.textBaseline=&#x27;top&#x27;;g.fillText(S.label,W-32,28);}
+if(!still)requestAnimationFrame(frame);}
+requestAnimationFrame(frame);
+const COL={C:[150,164,184],H:[222,229,237],N:[86,150,226],O:[232,104,84]},RAD={C:.38,H:.25,N:.36,O:.36};
+let mx=0,my=0,mz=0;A.forEach(e=&gt;{mx+=e[1];my+=e[2];mz+=e[3];});mx/=A.length;my/=A.length;mz/=A.length;
+let m=0;const P=A.map(e=&gt;{const p=[e[1]-mx,e[2]-my,e[3]-mz];m=Math.max(m,Math.hypot(p[0],p[1],p[2])+RAD[e[0]]);return p;});
+const k=1/m;P.forEach(p=&gt;{p[0]*=k;p[1]*=k;p[2]*=k;});
+function fog(z){return (.62+.38*(z+1)/2)*S.dim;}
+function draw(t){const a=S.a0+t*S.spin,b=S.pitch+.1*Math.sin(t*.5),Q=P.map(p=&gt;rot(p,a,b,S.tilt)),V=Q.map(pj),L=[];
+B.forEach(e=&gt;{const i=e[0]-1,j=e[1]-1;L.push([(Q[i][2]+Q[j][2])/2,0,i,j,e[2]]);});
+A.forEach((e,i)=&gt;L.push([Q[i][2]+.002,1,i]));L.sort((u,v)=&gt;u[0]-v[0]);g.lineCap=&#x27;round&#x27;;
+L.forEach(it=&gt;{const i=it[2];if(it[1]){const c=COL[A[i][0]],v=V[i],r=RAD[A[i][0]]*k*S.R*v[2],F=fog(Q[i][2]),q=g.createRadialGradient(v[0]-r*.35,v[1]-r*.4,r*.08,v[0],v[1],r);
+q.addColorStop(0,rgb(c,1.3*F));q.addColorStop(.55,rgb(c,.9*F));q.addColorStop(1,rgb(c,.42*F));g.fillStyle=q;g.beginPath();g.arc(v[0],v[1],r,0,2*PI);g.fill();return;}
+const j=it[3],o=it[4],p=V[i],s=V[j],w=.2*k*S.R*(p[2]+s[2])/2,F=fog(it[0]),dx=s[0]-p[0],dy=s[1]-p[1],l=Math.hypot(dx,dy)||1,nx=-dy/l,ny=dx/l,hx=(p[0]+s[0])/2,hy=(p[1]+s[1])/2;
+g.lineWidth=o&gt;1?w*.6:w;(o&gt;1?[-w*.6,w*.6]:[0]).forEach(d=&gt;{g.strokeStyle=rgb(COL[A[i][0]],.75*F);g.beginPath();g.moveTo(p[0]+nx*d,p[1]+ny*d);g.lineTo(hx+nx*d,hy+ny*d);g.stroke();
+g.strokeStyle=rgb(COL[A[j][0]],.75*F);g.beginPath();g.moveTo(hx+nx*d,hy+ny*d);g.lineTo(s[0]+nx*d,s[1]+ny*d);g.stroke();});});}
+&lt;/script&gt;"></iframe>
+<div class="head">
+<p class="eyebrow">02 · ТЮТЮН І ВЕЙПИ</p>
+<h2>Тютюн і вейпи шкодять серцю, легеням і мозку</h2>
+</div>
+<div class="body">
+<div class="panel p3d" style="--i:0">
+<p class="stat n">7 млн+</p>
+<p class="cap">людей щороку помирають через тютюн</p>
+<hr>
+<p class="stat2">1,6 млн+</p>
+<p class="cap">смертей на рік спричиняє пасивне куріння</p>
+</div>
+<div class="pts">
+<div class="pt" style="--i:1"><p><b>7000+ хімічних речовин</b> у тютюновому димі: щонайменше 250 шкідливі, а 69 можуть спричинити рак.</p></div>
+<div class="pt" style="--i:2"><p><b>У молодих курців</b> слабшають легені, пульс у спокої вищий на 2–3 удари за хвилину, раніше з’являються хвороби серця, а ризик інсульту вищий.</p></div>
+<div class="pt" style="--i:3"><p><b>Вейп — не «просто пара»:</b> він виділяє токсичні речовини, а нікотин порушує розвиток мозку. Тим, хто не курив, вейпи майже втричі підвищують шанс почати курити.</p></div>
+<div class="pt" style="--i:4"><p><b>15 млн+ дітей 13–15 років</b> у світі вейпують — у середньому в 9 разів частіше за дорослих. В Україні е-сигарети вживають 19,6% школярів, звичайні сигарети — 12,3%.</p></div>
+</div>
+</div>
+<p class="foot">Джерела: ВООЗ — <a href="https://www.who.int/health-topics/tobacco">тютюн</a>, <a href="https://www.who.int/news-room/questions-and-answers/item/tobacco-e-cigarettes">е-сигарети</a>, <a href="https://www.who.int/news/item/06-10-2025-who-tobacco-trends-report-1-in-5-adults-still-addicted-to-tobacco">звіт 2025</a> · <a href="https://www.cancer.gov/about-cancer/causes-prevention/risk/tobacco/cessation-fact-sheet">NCI</a> · <a href="https://suspilne.media/1031395-kozen-patij-pidlitok-v-ukraini-kurit-elektronni-sigareti-zvit-moz/">МОЗ, GYTS 2023</a> · презентація «Шкідливі звички», с. 10–13 · <a href="https://pubchem.ncbi.nlm.nih.gov/compound/89594">PubChem</a></p>
+<aside>Від тютюну щороку помирає понад 7 мільйонів людей. Пасивне куріння теж убиває — понад 1,6 мільйона людей на рік. У тютюновому димі понад 7000 хімічних речовин, і щонайменше 69 з них можуть спричинити рак. Молодий організм реагує швидко. У курців частіше хворіють дихальні шляхи, слабшають легені, а серце навіть у спокої б’ється частіше. Мозок, м’язи й кістки страждають від нестачі кисню, хвороби серця з’являються раніше, а ризик інсульту зростає. Багато хто вважає вейп безпечною заміною. ВООЗ із цим не згодна: е-сигарети виділяють токсичні речовини, а нікотин порушує розвиток мозку і може призвести до проблем із навчанням та тривожних розладів. Щоб привабити молодь, виробники пропонують щонайменше 16 тисяч смаків і рекламуються через соцмережі та інфлюенсерів. У результаті у світі вейпують щонайменше 15 мільйонів дітей 13–15 років, а в Україні — майже кожен п’ятий школяр. І вейп не замінює сигарету, а веде до неї: у тих, хто не курив, він майже втричі підвищує шанс почати.</aside>
+</section>
+<section id="alcohol" data-transition="push">
+<div class="pbg"></div>
+<iframe class="bg3d emb" title="3D-модель" aria-hidden="true" tabindex="-1" sandbox="allow-scripts" style="position:absolute; left:128px; top:304px; width:560px; height:616px" srcdoc="&lt;style&gt;html,body{margin:0;height:100%;overflow:hidden;background:transparent}canvas{display:block;width:100%;height:100%}&lt;/style&gt;&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+const S={cx:.74,cy:.6,R:110,a0:.5,spin:.3,pitch:.35,tilt:.2,dim:.8,label:&#x27;Етанол · C₂H₅OH&#x27;};
+const A=[[&#x27;O&#x27;,-1.17,0.30,0.00],[&#x27;C&#x27;,-0.05,-0.57,0.00],[&#x27;C&#x27;,1.22,0.27,0.00],[&#x27;H&#x27;,-0.10,-1.21,0.88],[&#x27;H&#x27;,-0.10,-1.19,-0.89],[&#x27;H&#x27;,2.10,-0.37,-0.02],[&#x27;H&#x27;,1.24,0.93,-0.87],[&#x27;H&#x27;,1.26,0.91,0.89],[&#x27;H&#x27;,-1.13,0.84,0.81]];
+const B=[[1,2,1],[1,9,1],[2,3,1],[2,4,1],[2,5,1],[3,6,1],[3,7,1],[3,8,1]];
+const cv=document.getElementById(&#x27;c&#x27;),g=cv.getContext(&#x27;2d&#x27;),PI=Math.PI,CAM=4;let W=560,H=616;
+function fit(){const d=window.devicePixelRatio||1;W=cv.clientWidth||560;H=cv.clientHeight||616;cv.width=Math.round(W*d);cv.height=Math.round(H*d);g.setTransform(d,0,0,d,0,0);}
+fit();addEventListener(&#x27;resize&#x27;,fit);
+function rr(x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();}
+function rgb(c,f){return &#x27;rgb(&#x27;+Math.min(255,c[0]*f|0)+&#x27;,&#x27;+Math.min(255,c[1]*f|0)+&#x27;,&#x27;+Math.min(255,c[2]*f|0)+&#x27;)&#x27;;}
+function rot(p,a,b,c){const x=p[0]*Math.cos(a)+p[2]*Math.sin(a),z=-p[0]*Math.sin(a)+p[2]*Math.cos(a),y=p[1]*Math.cos(b)-z*Math.sin(b),w=p[1]*Math.sin(b)+z*Math.cos(b);return [x*Math.cos(c)-y*Math.sin(c),x*Math.sin(c)+y*Math.cos(c),w];}
+function pj(p){const f=CAM/(CAM-p[2]);return [S.cx*W+p[0]*S.R*f,S.cy*H-p[1]*S.R*f,f];}
+const still=!!(window.matchMedia&amp;&amp;matchMedia(&#x27;(prefers-reduced-motion: reduce)&#x27;).matches);let t0=null;
+function frame(ts){if(t0===null)t0=ts;const t=(ts-t0)/1000;g.clearRect(0,0,W,H);g.save();rr(0,0,W,H,24);g.clip();
+const X=S.cx*W,Y=S.cy*H,q=g.createRadialGradient(X,Y,0,X,Y,S.R*1.6);q.addColorStop(0,&#x27;rgba(240,122,69,0.14)&#x27;);q.addColorStop(1,&#x27;rgba(240,122,69,0)&#x27;);g.fillStyle=q;g.fillRect(0,0,W,H);
+draw(t);g.restore();
+if(S.label){g.font=&#x27;24px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#7F8DA0&#x27;;g.textAlign=&#x27;right&#x27;;g.textBaseline=&#x27;top&#x27;;g.fillText(S.label,W-32,28);}
+if(!still)requestAnimationFrame(frame);}
+requestAnimationFrame(frame);
+const COL={C:[150,164,184],H:[222,229,237],N:[86,150,226],O:[232,104,84]},RAD={C:.38,H:.25,N:.36,O:.36};
+let mx=0,my=0,mz=0;A.forEach(e=&gt;{mx+=e[1];my+=e[2];mz+=e[3];});mx/=A.length;my/=A.length;mz/=A.length;
+let m=0;const P=A.map(e=&gt;{const p=[e[1]-mx,e[2]-my,e[3]-mz];m=Math.max(m,Math.hypot(p[0],p[1],p[2])+RAD[e[0]]);return p;});
+const k=1/m;P.forEach(p=&gt;{p[0]*=k;p[1]*=k;p[2]*=k;});
+function fog(z){return (.62+.38*(z+1)/2)*S.dim;}
+function draw(t){const a=S.a0+t*S.spin,b=S.pitch+.1*Math.sin(t*.5),Q=P.map(p=&gt;rot(p,a,b,S.tilt)),V=Q.map(pj),L=[];
+B.forEach(e=&gt;{const i=e[0]-1,j=e[1]-1;L.push([(Q[i][2]+Q[j][2])/2,0,i,j,e[2]]);});
+A.forEach((e,i)=&gt;L.push([Q[i][2]+.002,1,i]));L.sort((u,v)=&gt;u[0]-v[0]);g.lineCap=&#x27;round&#x27;;
+L.forEach(it=&gt;{const i=it[2];if(it[1]){const c=COL[A[i][0]],v=V[i],r=RAD[A[i][0]]*k*S.R*v[2],F=fog(Q[i][2]),q=g.createRadialGradient(v[0]-r*.35,v[1]-r*.4,r*.08,v[0],v[1],r);
+q.addColorStop(0,rgb(c,1.3*F));q.addColorStop(.55,rgb(c,.9*F));q.addColorStop(1,rgb(c,.42*F));g.fillStyle=q;g.beginPath();g.arc(v[0],v[1],r,0,2*PI);g.fill();return;}
+const j=it[3],o=it[4],p=V[i],s=V[j],w=.2*k*S.R*(p[2]+s[2])/2,F=fog(it[0]),dx=s[0]-p[0],dy=s[1]-p[1],l=Math.hypot(dx,dy)||1,nx=-dy/l,ny=dx/l,hx=(p[0]+s[0])/2,hy=(p[1]+s[1])/2;
+g.lineWidth=o&gt;1?w*.6:w;(o&gt;1?[-w*.6,w*.6]:[0]).forEach(d=&gt;{g.strokeStyle=rgb(COL[A[i][0]],.75*F);g.beginPath();g.moveTo(p[0]+nx*d,p[1]+ny*d);g.lineTo(hx+nx*d,hy+ny*d);g.stroke();
+g.strokeStyle=rgb(COL[A[j][0]],.75*F);g.beginPath();g.moveTo(hx+nx*d,hy+ny*d);g.lineTo(s[0]+nx*d,s[1]+ny*d);g.stroke();});});}
+&lt;/script&gt;"></iframe>
+<div class="head">
+<p class="eyebrow">03 · АЛКОГОЛЬ</p>
+<h2>Безпечної дози алкоголю не існує</h2>
+</div>
+<div class="body">
+<div class="panel p3d" style="--i:0">
+<p class="stat">2,6 млн</p>
+<p class="cap">смертей у світі за 2019 рік спричинив алкоголь</p>
+<hr>
+<p class="stat2 n">200+</p>
+<p class="cap">хвороб, травм та інших станів, до яких він причетний</p>
+</div>
+<div class="pts">
+<div class="pt" style="--i:1"><p><b>Ризик — з першої краплі.</b> Алкоголь — канцероген 1-ї групи: він спричиняє щонайменше 7 видів раку.</p></div>
+<div class="pt" style="--i:2"><p><b>Мозок підлітка:</b> зараз найбільше змінюються лобова частка й гіпокамп — зони мотивації, обробки інформації та самоконтролю. Алкоголь може порушити їхній розвиток.</p></div>
+<div class="pt" style="--i:3"><p><b>Ризиковані ситуації:</b> бійки, утоплення, передозування, самоушкодження, керування авто напідпитку, незахищений секс (ІПСШ, небажана вагітність).</p></div>
+<div class="pt" style="--i:4"><p><b>Серед 15-річних</b> хоча б раз пили алкоголь 79% хлопців і 87% дівчат.</p></div>
+</div>
+</div>
+<p class="foot">Джерела: <a href="https://www.who.int/news-room/fact-sheets/detail/alcohol">ВООЗ — Alcohol</a> · <a href="https://www.who.int/europe/news/item/04-01-2023-no-level-of-alcohol-consumption-is-safe-for-our-health">ВООЗ Європа, 2023</a> · презентація «Шкідливі звички», с. 19, 21–24 · <a href="https://pubchem.ncbi.nlm.nih.gov/compound/702">PubChem</a></p>
+<aside>Алкоголь часто вважають звичайною частиною свята. Але, за даними ВООЗ, лише за 2019 рік він спричинив 2,6 мільйона смертей. Безпечної дози не існує: ризик починається з першої краплі, а сам алкоголь — канцероген першої групи, що спричиняє щонайменше сім видів раку. Для підлітків є окрема небезпека. Саме в нашому віці найактивніше змінюються лобова частка мозку та гіпокамп, які відповідають за мотивацію, обробку інформації та контроль поведінки. Алкоголь може цей розвиток порушити. Чому ж підлітки п’ють? Найчастіші відповіді в опитуванні — щоб підбадьоритися, забути про проблеми або коли пригнічений чи нервуєш: по 17%. Ще 8% п’ють, щоб не почуватися осторонь. Тобто алкоголем намагаються «лікувати» настрій, але проблеми не зникають, а додаються нові: бійки, утоплення, передозування, самоушкодження, ДТП, незахищений секс. І важливо пам’ятати: якщо людина через алкоголь чи наркотики не може вільно дати згоду, секс із нею вважається злочином.</aside>
+</section>
+<section id="drugs" data-transition="push">
+<div class="pbg"></div>
+<iframe class="bg3d emb" title="3D-модель" aria-hidden="true" tabindex="-1" sandbox="allow-scripts" style="position:absolute; left:128px; top:304px; width:560px; height:616px" srcdoc="&lt;style&gt;html,body{margin:0;height:100%;overflow:hidden;background:transparent}canvas{display:block;width:100%;height:100%}&lt;/style&gt;&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+const S={cx:.66,cy:.6,R:195,a0:.4,spin:.25,pitch:.3,tilt:.45,dim:.72,label:&#x27;ТГК · C₂₁H₃₀O₂&#x27;};
+const A=[[&#x27;O&#x27;,-0.58,-1.99,0.50],[&#x27;O&#x27;,-0.40,2.70,-0.83],[&#x27;C&#x27;,-2.76,-0.93,0.17],[&#x27;C&#x27;,-2.12,0.32,-0.49],[&#x27;C&#x27;,-1.89,-2.18,-0.07],[&#x27;C&#x27;,-4.23,-1.04,-0.28],[&#x27;C&#x27;,-0.66,0.39,-0.08],[&#x27;C&#x27;,-5.02,0.18,0.19],[&#x27;C&#x27;,-2.97,1.54,-0.22],[&#x27;C&#x27;,-4.27,1.49,0.09],[&#x27;C&#x27;,0.00,-0.76,0.38],[&#x27;C&#x27;,-2.48,-3.49,0.47],[&#x27;C&#x27;,-1.63,-2.39,-1.58],[&#x27;C&#x27;,0.09,1.57,-0.23],[&#x27;C&#x27;,1.35,-0.70,0.75],[&#x27;C&#x27;,-5.08,2.73,0.36],[&#x27;C&#x27;,2.07,0.48,0.63],[&#x27;C&#x27;,1.44,1.62,0.14],[&#x27;C&#x27;,3.50,0.53,1.02],[&#x27;C&#x27;,4.48,0.18,-0.11],[&#x27;C&#x27;,5.94,0.18,0.34],[&#x27;C&#x27;,6.88,-0.20,-0.81],[&#x27;C&#x27;,8.33,-0.24,-0.35],[&#x27;H&#x27;,-2.77,-0.77,1.26],[&#x27;H&#x27;,-2.12,0.21,-1.59],[&#x27;H&#x27;,-4.70,-1.94,0.12],[&#x27;H&#x27;,-4.28,-1.10,-1.38],[&#x27;H&#x27;,-5.31,0.03,1.24],[&#x27;H&#x27;,-5.95,0.24,-0.39],[&#x27;H&#x27;,-2.54,2.53,-0.30],[&#x27;H&#x27;,-2.71,-3.39,1.54],[&#x27;H&#x27;,-3.39,-3.79,-0.05],[&#x27;H&#x27;,-1.75,-4.31,0.40],[&#x27;H&#x27;,-1.04,-3.30,-1.73],[&#x27;H&#x27;,-2.56,-2.50,-2.14],[&#x27;H&#x27;,-1.04,-1.60,-2.05],[&#x27;H&#x27;,1.84,-1.60,1.12],[&#x27;H&#x27;,-5.50,2.69,1.37],[&#x27;H&#x27;,-5.90,2.81,-0.36],[&#x27;H&#x27;,-4.48,3.64,0.29],[&#x27;H&#x27;,2.01,2.54,0.01],[&#x27;H&#x27;,3.74,1.53,1.41],[&#x27;H&#x27;,3.67,-0.15,1.87],[&#x27;H&#x27;,4.36,0.90,-0.93],[&#x27;H&#x27;,4.23,-0.80,-0.52],[&#x27;H&#x27;,0.29,3.39,-0.84],[&#x27;H&#x27;,6.21,1.17,0.73],[&#x27;H&#x27;,6.07,-0.53,1.17],[&#x27;H&#x27;,6.78,0.53,-1.62],[&#x27;H&#x27;,6.60,-1.18,-1.21],[&#x27;H&#x27;,8.47,-0.98,0.44],[&#x27;H&#x27;,8.98,-0.51,-1.19],[&#x27;H&#x27;,8.65,0.74,0.03]];
+const B=[[1,5,1],[1,11,1],[2,14,1],[2,46,1],[3,4,1],[3,5,1],[3,6,1],[3,24,1],[4,7,1],[4,9,1],[4,25,1],[5,12,1],[5,13,1],[6,8,1],[6,26,1],[6,27,1],[7,11,1],[7,14,2],[8,10,1],[8,28,1],[8,29,1],[9,10,2],[9,30,1],[10,16,1],[11,15,2],[12,31,1],[12,32,1],[12,33,1],[13,34,1],[13,35,1],[13,36,1],[14,18,1],[15,17,1],[15,37,1],[16,38,1],[16,39,1],[16,40,1],[17,18,2],[17,19,1],[18,41,1],[19,20,1],[19,42,1],[19,43,1],[20,21,1],[20,44,1],[20,45,1],[21,22,1],[21,47,1],[21,48,1],[22,23,1],[22,49,1],[22,50,1],[23,51,1],[23,52,1],[23,53,1]];
+const cv=document.getElementById(&#x27;c&#x27;),g=cv.getContext(&#x27;2d&#x27;),PI=Math.PI,CAM=4;let W=560,H=616;
+function fit(){const d=window.devicePixelRatio||1;W=cv.clientWidth||560;H=cv.clientHeight||616;cv.width=Math.round(W*d);cv.height=Math.round(H*d);g.setTransform(d,0,0,d,0,0);}
+fit();addEventListener(&#x27;resize&#x27;,fit);
+function rr(x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();}
+function rgb(c,f){return &#x27;rgb(&#x27;+Math.min(255,c[0]*f|0)+&#x27;,&#x27;+Math.min(255,c[1]*f|0)+&#x27;,&#x27;+Math.min(255,c[2]*f|0)+&#x27;)&#x27;;}
+function rot(p,a,b,c){const x=p[0]*Math.cos(a)+p[2]*Math.sin(a),z=-p[0]*Math.sin(a)+p[2]*Math.cos(a),y=p[1]*Math.cos(b)-z*Math.sin(b),w=p[1]*Math.sin(b)+z*Math.cos(b);return [x*Math.cos(c)-y*Math.sin(c),x*Math.sin(c)+y*Math.cos(c),w];}
+function pj(p){const f=CAM/(CAM-p[2]);return [S.cx*W+p[0]*S.R*f,S.cy*H-p[1]*S.R*f,f];}
+const still=!!(window.matchMedia&amp;&amp;matchMedia(&#x27;(prefers-reduced-motion: reduce)&#x27;).matches);let t0=null;
+function frame(ts){if(t0===null)t0=ts;const t=(ts-t0)/1000;g.clearRect(0,0,W,H);g.save();rr(0,0,W,H,24);g.clip();
+const X=S.cx*W,Y=S.cy*H,q=g.createRadialGradient(X,Y,0,X,Y,S.R*1.6);q.addColorStop(0,&#x27;rgba(240,122,69,0.14)&#x27;);q.addColorStop(1,&#x27;rgba(240,122,69,0)&#x27;);g.fillStyle=q;g.fillRect(0,0,W,H);
+draw(t);g.restore();
+if(S.label){g.font=&#x27;24px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#7F8DA0&#x27;;g.textAlign=&#x27;right&#x27;;g.textBaseline=&#x27;top&#x27;;g.fillText(S.label,W-32,28);}
+if(!still)requestAnimationFrame(frame);}
+requestAnimationFrame(frame);
+const COL={C:[150,164,184],H:[222,229,237],N:[86,150,226],O:[232,104,84]},RAD={C:.38,H:.25,N:.36,O:.36};
+let mx=0,my=0,mz=0;A.forEach(e=&gt;{mx+=e[1];my+=e[2];mz+=e[3];});mx/=A.length;my/=A.length;mz/=A.length;
+let m=0;const P=A.map(e=&gt;{const p=[e[1]-mx,e[2]-my,e[3]-mz];m=Math.max(m,Math.hypot(p[0],p[1],p[2])+RAD[e[0]]);return p;});
+const k=1/m;P.forEach(p=&gt;{p[0]*=k;p[1]*=k;p[2]*=k;});
+function fog(z){return (.62+.38*(z+1)/2)*S.dim;}
+function draw(t){const a=S.a0+t*S.spin,b=S.pitch+.1*Math.sin(t*.5),Q=P.map(p=&gt;rot(p,a,b,S.tilt)),V=Q.map(pj),L=[];
+B.forEach(e=&gt;{const i=e[0]-1,j=e[1]-1;L.push([(Q[i][2]+Q[j][2])/2,0,i,j,e[2]]);});
+A.forEach((e,i)=&gt;L.push([Q[i][2]+.002,1,i]));L.sort((u,v)=&gt;u[0]-v[0]);g.lineCap=&#x27;round&#x27;;
+L.forEach(it=&gt;{const i=it[2];if(it[1]){const c=COL[A[i][0]],v=V[i],r=RAD[A[i][0]]*k*S.R*v[2],F=fog(Q[i][2]),q=g.createRadialGradient(v[0]-r*.35,v[1]-r*.4,r*.08,v[0],v[1],r);
+q.addColorStop(0,rgb(c,1.3*F));q.addColorStop(.55,rgb(c,.9*F));q.addColorStop(1,rgb(c,.42*F));g.fillStyle=q;g.beginPath();g.arc(v[0],v[1],r,0,2*PI);g.fill();return;}
+const j=it[3],o=it[4],p=V[i],s=V[j],w=.2*k*S.R*(p[2]+s[2])/2,F=fog(it[0]),dx=s[0]-p[0],dy=s[1]-p[1],l=Math.hypot(dx,dy)||1,nx=-dy/l,ny=dx/l,hx=(p[0]+s[0])/2,hy=(p[1]+s[1])/2;
+g.lineWidth=o&gt;1?w*.6:w;(o&gt;1?[-w*.6,w*.6]:[0]).forEach(d=&gt;{g.strokeStyle=rgb(COL[A[i][0]],.75*F);g.beginPath();g.moveTo(p[0]+nx*d,p[1]+ny*d);g.lineTo(hx+nx*d,hy+ny*d);g.stroke();
+g.strokeStyle=rgb(COL[A[j][0]],.75*F);g.beginPath();g.moveTo(hx+nx*d,hy+ny*d);g.lineTo(s[0]+nx*d,s[1]+ny*d);g.stroke();});});}
+&lt;/script&gt;"></iframe>
+<div class="head">
+<p class="eyebrow">04 · НАРКОТИКИ</p>
+<h2>Наркотики змінюють роботу мозку</h2>
+</div>
+<div class="body">
+<div class="panel p3d" style="--i:0">
+<p class="stat n">316 млн</p>
+<p class="cap">людей у світі вживали наркотики у 2023 році — 6% людей віком 15–64 роки</p>
+<hr>
+<p class="stat2 n">244 млн</p>
+<p class="cap">споживачів канабісу — найпоширенішого наркотику</p>
+</div>
+<div class="pts">
+<div class="pt" style="--i:1"><p><b>Серед українських підлітків</b> 9% пробували марихуану, 4% — «нові речовини», що імітують дію наркотиків, ще 4% — кілька речовин разом.</p></div>
+<div class="pt" style="--i:2"><p><b>Звикання.</b> Від повторного вживання чутливість базальних ядер мозку падає: людина вживає вже не заради задоволення, а щоб позбутися дискомфорту.</p></div>
+<div class="pt" style="--i:3"><p><b>Ломка.</b> Без речовини мигдалеподібне тіло мозку дає роздратування й неспокій — це синдром відміни.</p></div>
+<div class="pt" style="--i:4"><p><b>Втрата контролю.</b> Страждає префронтальна кора — здатність думати, планувати, ухвалювати рішення й керувати своєю поведінкою.</p></div>
+</div>
+</div>
+<p class="foot">Джерела: <a href="https://www.drugsandalcohol.ie/43586">UNODC, World Drug Report 2025 (запис HRB)</a> · презентація «Шкідливі звички», с. 28–31 · <a href="https://pubchem.ncbi.nlm.nih.gov/compound/16078">PubChem</a></p>
+<aside>За даними Управління ООН з наркотиків і злочинності, у 2023 році наркотики вживали 316 мільйонів людей — 6% населення віком від 15 до 64 років. Десять років тому таких було 5,2%, тож проблема зростає. Найпоширеніший наркотик — канабіс: у нього 244 мільйони споживачів. Серед українських підлітків 18% хоча б раз пробували наркотики, 9% — марихуану, а 4% — так звані «нові речовини», які імітують дію наркотиків. Як формується залежність? Від повторного вживання мозок пристосовується: чутливість базальних ядер падає, і звичної дози вже не вистачає. Згодом людина вживає не заради задоволення, а щоб позбутися дискомфорту. Без речовини мигдалеподібне тіло мозку викликає роздратування й неспокій — це синдром відміни, або «ломка». Страждає й префронтальна кора, яка відповідає за мислення, планування та рішення. Тож людина поступово втрачає саме те, що допомогло б їй зупинитися.</aside>
+</section>
+<section id="screens" data-transition="push">
+<div class="pbg"></div>
+<iframe class="bg3d emb" title="3D-модель" aria-hidden="true" tabindex="-1" sandbox="allow-scripts" style="position:absolute; left:128px; top:304px; width:560px; height:616px" srcdoc="&lt;style&gt;html,body{margin:0;height:100%;overflow:hidden;background:transparent}canvas{display:block;width:100%;height:100%}&lt;/style&gt;&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+const S={cx:.77,cy:.5,R:205,a0:.35,pitch:.12,tilt:-.12,dim:.75,label:&#x27;&#x27;};
+const cv=document.getElementById(&#x27;c&#x27;),g=cv.getContext(&#x27;2d&#x27;),PI=Math.PI,CAM=4;let W=560,H=616;
+function fit(){const d=window.devicePixelRatio||1;W=cv.clientWidth||560;H=cv.clientHeight||616;cv.width=Math.round(W*d);cv.height=Math.round(H*d);g.setTransform(d,0,0,d,0,0);}
+fit();addEventListener(&#x27;resize&#x27;,fit);
+function rr(x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();}
+function rgb(c,f){return &#x27;rgb(&#x27;+Math.min(255,c[0]*f|0)+&#x27;,&#x27;+Math.min(255,c[1]*f|0)+&#x27;,&#x27;+Math.min(255,c[2]*f|0)+&#x27;)&#x27;;}
+function rot(p,a,b,c){const x=p[0]*Math.cos(a)+p[2]*Math.sin(a),z=-p[0]*Math.sin(a)+p[2]*Math.cos(a),y=p[1]*Math.cos(b)-z*Math.sin(b),w=p[1]*Math.sin(b)+z*Math.cos(b);return [x*Math.cos(c)-y*Math.sin(c),x*Math.sin(c)+y*Math.cos(c),w];}
+function pj(p){const f=CAM/(CAM-p[2]);return [S.cx*W+p[0]*S.R*f,S.cy*H-p[1]*S.R*f,f];}
+const still=!!(window.matchMedia&amp;&amp;matchMedia(&#x27;(prefers-reduced-motion: reduce)&#x27;).matches);let t0=null;
+function frame(ts){if(t0===null)t0=ts;const t=(ts-t0)/1000;g.clearRect(0,0,W,H);g.save();rr(0,0,W,H,24);g.clip();
+const X=S.cx*W,Y=S.cy*H,q=g.createRadialGradient(X,Y,0,X,Y,S.R*1.6);q.addColorStop(0,&#x27;rgba(240,122,69,0.14)&#x27;);q.addColorStop(1,&#x27;rgba(240,122,69,0)&#x27;);g.fillStyle=q;g.fillRect(0,0,W,H);
+draw(t);g.restore();
+if(S.label){g.font=&#x27;24px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#7F8DA0&#x27;;g.textAlign=&#x27;right&#x27;;g.textBaseline=&#x27;top&#x27;;g.fillText(S.label,W-32,28);}
+if(!still)requestAnimationFrame(frame);}
+requestAnimationFrame(frame);
+function rp(w,h,r,n){const o=[],c=[[w/2-r,h/2-r,0],[-w/2+r,h/2-r,PI/2],[-w/2+r,-h/2+r,PI],[w/2-r,-h/2+r,1.5*PI]];c.forEach(e=&gt;{for(let i=0;i&lt;=n;i++){const a=e[2]+i/n*PI/2;o.push([e[0]+r*Math.cos(a),e[1]+r*Math.sin(a)]);}});return o;}
+const D=.12,O=rp(1,2.04,.17,6),FS=[],DC=[],LD=[-.42,.62,.66],k=1/1.12;
+FS.push({p:O.map(q=&gt;[q[0],q[1],D/2]),n:[0,0,1],c:[26,33,46],front:1});
+FS.push({p:O.slice().reverse().map(q=&gt;[q[0],q[1],-D/2]),n:[0,0,-1],c:[60,70,88]});
+O.forEach((a,i)=&gt;{const b=O[(i+1)%O.length],ex=b[0]-a[0],ey=b[1]-a[1],l=Math.hypot(ex,ey)||1;FS.push({p:[[a[0],a[1],D/2],[b[0],b[1],D/2],[b[0],b[1],-D/2],[a[0],a[1],-D/2]],n:[ey/l,-ex/l,0],c:[118,130,148]});});
+function dec(w,h,r,x,y,c,z){DC.push({p:rp(w,h,r,4).map(q=&gt;[q[0]+x,q[1]+y,D/2+z]),c:c});}
+dec(.9,1.9,.12,0,0,[36,52,78],.002);
+[.62,.4,.18].forEach((y,i)=&gt;{dec(.74,.17,.05,0,y,[58,78,108],.004);dec(.07,.07,.035,-.27,y,i?[96,160,224]:[240,122,69],.006);dec(.36,.035,.017,.05,y+.03,[150,166,190],.006);dec(.24,.03,.015,-.01,y-.035,[110,126,150],.006);});
+const IC=[[240,122,69],[96,160,224],[120,200,160],[200,140,220]];
+[-.38,-.6].forEach((y,r)=&gt;[-.3,-.1,.1,.3].forEach((x,i)=&gt;dec(.14,.14,.04,x,y,IC[(i+2*r)%4],.004)));
+dec(.3,.025,.012,0,-.88,[150,166,190],.004);dec(.06,.06,.03,0,.9,[12,16,24],.004);
+function poly(P){g.beginPath();g.moveTo(P[0][0],P[0][1]);for(let i=1;i&lt;P.length;i++)g.lineTo(P[i][0],P[i][1]);g.closePath();g.fill();g.stroke();}
+function draw(t){const a=S.a0+.5*Math.sin(t*.45),b=S.pitch+.06*Math.sin(t*.33),fy=.04*Math.sin(t*.8),tr=q=&gt;pj(rot([q[0]*k,(q[1]+fy)*k,q[2]*k],a,b,S.tilt));let front=false;g.lineWidth=.8;
+FS.forEach(f=&gt;{const n=rot(f.n,a,b,S.tilt);if(n[2]&lt;=0)return;if(f.front)front=true;const lam=Math.max(0,n[0]*LD[0]+n[1]*LD[1]+n[2]*LD[2]);g.fillStyle=rgb(f.c,(.4+.75*lam)*S.dim);g.strokeStyle=g.fillStyle;poly(f.p.map(tr));});
+if(front){g.lineWidth=.5;DC.forEach(d=&gt;{g.fillStyle=rgb(d.c,S.dim);g.strokeStyle=g.fillStyle;poly(d.p.map(tr));});}}
+&lt;/script&gt;"></iframe>
+<div class="head">
+<p class="eyebrow">05 · ІГРИ ТА СОЦМЕРЕЖІ</p>
+<h2>Залежність буває і без речовин</h2>
+</div>
+<div class="body">
+<div class="panel p3d" style="--i:0">
+<p class="stat n">11%</p>
+<p class="cap">підлітків мали ознаки проблемного користування соцмережами у 2022 році (у 2018-му — 7%)</p>
+<hr>
+<p class="stat2 n">12%</p>
+<p class="cap">мають ризик проблемної гри</p>
+<p class="note">Дослідження ВООЗ: майже 280 тис. підлітків з 44 країн і регіонів Європи, Центральної Азії та Канади</p>
+</div>
+<div class="pts">
+<div class="pt" style="--i:1"><p><b>Ігровий розлад — діагноз ВООЗ (МКХ-11):</b> втрата контролю над грою, гра понад усе, гра попри шкоду. Зазвичай це триває щонайменше 12 місяців.</p></div>
+<div class="pt" style="--i:2"><p><b>Хто частіше:</b> у соцмережах — дівчата (13% проти 9% у хлопців), в іграх — хлопці (16% проти 7% у дівчат).</p></div>
+<div class="pt" style="--i:3"><p><b>Як це виглядає:</b> не можеш зупинитися, без телефона накриває роздратування, кидаєш інші справи.</p></div>
+<div class="pt" style="--i:4"><p><b>З чим це пов’язано:</b> менше сну, гірше навчання, тривожність, гірше самопочуття, частіше вживання алкоголю та інших речовин.</p></div>
+</div>
+</div>
+<p class="foot">Джерела: <a href="https://www.who.int/news-room/questions-and-answers/item/addictive-behaviours-gaming-disorder">ВООЗ — Gaming disorder</a> · <a href="https://www.who.int/europe/news/item/25-09-2024-teens--screens-and-mental-health">ВООЗ Європа — Teens, screens and mental health (HBSC), 2024</a></p>
+<aside>Залежність буває і без речовин. ВООЗ внесла ігровий розлад до Міжнародної класифікації хвороб. Його ознаки — втрата контролю над грою, гра понад усе і продовження гри попри наслідки. Водночас такий розлад має лише невелика частина геймерів: проблема не в самих іграх, а у втраті контролю. У дослідженні ВООЗ взяли участь майже 280 тисяч підлітків 11, 13 і 15 років із 44 країн і регіонів. Проблемне користування соцмережами за чотири роки зросло з 7% до 11%. Ще 12% підлітків мають ризик проблемної гри, причому хлопці — більш ніж удвічі частіше за дівчат. Як це виглядає? Людина не може вчасно зупинитися, без телефона її накриває роздратування, вона кидає інші справи. У таких підлітків частіше бувають проблеми зі сном, навчанням і самопочуттям.</aside>
+</section>
+<section id="help" class="dark" data-transition="push">
+<div class="head">
+<p class="eyebrow">06 · ЗАХИСТ І ДОПОМОГА</p>
+<h2>Відмовитися можна, і є куди звернутися</h2>
+</div>
+<div class="body">
+<div class="tips">
+<div class="tip" style="--i:0"><p><b>Знай факти.</b> «Вейп — це просто пара», «один раз — не страшно», «пиво — не алкоголь» — неправда.</p></div>
+<div class="tip" style="--i:1"><p><b>Кажи «ні».</b> Коротко й упевнено, без виправдань. Запропонуй іншу справу або просто піди.</p></div>
+<div class="tip" style="--i:2"><p><b>Заміни шкідливе.</b> Спорт, хобі, живе спілкування, сон. Фізична та соціальна активність — головна профілактика алкоголізму.</p></div>
+<div class="tip" style="--i:3"><p><b>Тверезий розум.</b> Відмова від шкідливих звичок захищає від ІПСШ. Якщо людина через сп’яніння не може дати згоду, секс із нею — злочин.</p></div>
+</div>
+<div class="help" style="--i:4">
+<h3>Не залишайся наодинці</h3>
+<p class="hs">Батьки, шкільний психолог, лікар — або Національна гаряча лінія для дітей та молоді:</p>
+<p class="hnum">116 111</p>
+<p class="hs">з мобільного</p>
+<p class="hnum">0 800 500 225</p>
+<p class="hs">з мобільного чи стаціонарного, анонімно й конфіденційно</p>
+<hr>
+<p class="hs"><b>Отруєння чи передозування — одразу 103 або 112</b></p>
+</div>
+</div>
+<p class="foot">Джерела: презентації «Шкідливі звички», с. 23, 25, і «Безпека та статева культура», с. 11 · <a href="https://la-strada.org.ua/garyachi-liniyi">«Ла Страда-Україна»</a></p>
+<aside>Що ж робити? Перше — знати факти й не вірити міфам. «Вейп — це просто пара», «один раз — не страшно», «пиво — не алкоголь» — ви вже бачили, що це не так. Друге — вміти сказати «ні». Виправдовуватися не потрібно, достатньо спокійного «Ні, дякую, не хочу». Можна змінити тему, запропонувати іншу справу або просто піти. Справжні друзі приймуть таке рішення. Третє — шукати енергію в іншому. Головна профілактика алкоголізму — фізична та соціальна активність: спорт, хобі, живе спілкування, нормальний сон. А ще відмова від шкідливих звичок захищає у стосунках: це один із способів профілактики інфекцій, що передаються статевим шляхом. Четверте — не залишатися з проблемою наодинці. Поговоріть із батьками, шкільним психологом чи лікарем. Можна анонімно зателефонувати на Національну гарячу лінію для дітей та молоді: 116 111 з мобільного або 0 800 500 225. Якщо хтось отруївся чи втратив свідомість, одразу телефонуйте 103 або 112. Кожен із нас робить свій власний вибір. Шкідливі звички не забирають здоров’я за один день — вони роблять це тихо й поступово. Тому найкраще сказати «ні» ще до першої спроби. Дякую за увагу!</aside>
+</section>
+</div></div>
+<div id="notes" aria-live="polite"></div>
+<div id="hud"></div>
+<script>
+(function(){
+'use strict';
+const stage=document.getElementById('stage');
+if(/[?&]thumb\b/.test(location.search))document.body.classList.add('thumb');
+function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform='scale('+s+')';}
+addEventListener('resize',fit);fit();
+
+const slides=Array.from(stage.querySelectorAll(':scope > section'));
+const hud=document.getElementById('hud'),bar=document.getElementById('bar'),notes=document.getElementById('notes');
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches||document.body.classList.contains('thumb');
+let cur=0,busy=false;
+
+stage.querySelectorAll('.foot a').forEach(a=>{a.target='_blank';a.rel='noopener';});
+
+/* numbers count up when a slide arrives */
+stage.querySelectorAll('.n').forEach(el=>{el.dataset.full=el.textContent;});
+function countUp(sec){
+  sec.querySelectorAll('.n').forEach(el=>{
+    const full=el.dataset.full,m=full.match(/\d+/);
+    if(!m||reduce){el.textContent=full;return;}
+    const target=parseInt(m[0],10),pre=full.slice(0,m.index),post=full.slice(m.index+m[0].length),t0=performance.now(),dur=1200;
+    (function step(now){const p=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-p,3);el.textContent=pre+Math.round(target*e)+post;if(p<1)requestAnimationFrame(step);})(t0);
+  });
+}
+
+function update(){
+  hud.textContent=(cur+1)+' / '+slides.length+'   ·   ← → гортати   ·   F повний екран   ·   N текст виступу';
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  const a=slides[cur].querySelector('aside');
+  notes.innerHTML='<b>Текст виступу · слайд '+(cur+1)+'</b>';
+  notes.appendChild(document.createTextNode(a?a.textContent:''));
+  history.replaceState(null,'','#'+(cur+1));
+}
+
+function show(i,dir){
+  if(busy||i<0||i>=slides.length||i===cur)return;
+  busy=true;
+  const from=slides[cur],to=slides[i];
+  from.classList.remove('active');
+  from.classList.add('leaving',dir>0?'out-fwd':'out-back');
+  to.classList.add('active',dir>0?'in-fwd':'in-back');
+  cur=i;update();countUp(to);
+  setTimeout(()=>{from.classList.remove('leaving','out-fwd','out-back');to.classList.remove('in-fwd','in-back');busy=false;},reduce?0:560);
+}
+
+cur=Math.min(slides.length-1,Math.max(0,(parseInt(location.hash.slice(1),10)||1)-1));
+slides[cur].classList.add('active');update();countUp(slides[cur]);
+
+const next=()=>show(cur+1,1),prev=()=>show(cur-1,-1);
+document.addEventListener('keydown',e=>{
+  const k=e.key;
+  if(['ArrowRight','ArrowDown','PageDown',' ','Enter'].includes(k)){e.preventDefault();next();}
+  else if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(k)){e.preventDefault();prev();}
+  else if(k==='Home')show(0,-1);
+  else if(k==='End')show(slides.length-1,1);
+  else if(['f','F','а','А'].includes(k))toggleFS();
+  else if(['n','N','т','Т'].includes(k))document.body.classList.toggle('notes');
+});
+document.getElementById('viewport').addEventListener('click',e=>{
+  if(e.target.closest('a'))return;
+  if(e.clientX<innerWidth*0.25)prev();else next();
+});
+let tx=null;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
+document.addEventListener('touchend',e=>{
+  if(tx===null)return;
+  const dx=e.changedTouches[0].clientX-tx;tx=null;
+  if(Math.abs(dx)>50)(dx<0?next:prev)();
+});
+function toggleFS(){try{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}catch(_){}}
+let ht;
+function showHud(){document.body.classList.add('show-hud');clearTimeout(ht);ht=setTimeout(()=>document.body.classList.remove('show-hud'),2200);}
+document.addEventListener('mousemove',showHud);showHud();
+})();
+</script>
+</body>
+</html>

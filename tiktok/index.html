@@ -54,7 +54,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'In
 
 /* ---------- curtains ---------- */
 #theatre{position:fixed;inset:0;z-index:50;pointer-events:none}
-.curtain{position:absolute;top:0;bottom:0;width:50.5%;pointer-events:auto;
+.curtain{position:absolute;top:0;bottom:0;width:50.5%;pointer-events:auto;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;
   background:
     linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 18%,rgba(0,0,0,0) 80%,rgba(0,0,0,.55) 100%),
     repeating-linear-gradient(90deg,#4a0710 0px,#8e1222 22px,#c81e33 46px,#8e1222 70px,#4a0710 92px);
@@ -78,6 +78,10 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:'In
   text-shadow:0 0 18px rgba(245,215,122,.55),0 4px 0 #6b4b10}
 #marquee .t2{margin-top:2vh;font-family:'Space Grotesk',Arial,sans-serif;font-size:clamp(16px,1.6vw,28px);letter-spacing:.35em;
   text-transform:uppercase;color:#f3e3b5;opacity:.85}
+#marquee .t3{display:none;margin-top:4vh;font-family:'Space Grotesk',Arial,sans-serif;font-size:clamp(14px,1.4vw,24px);letter-spacing:.25em;
+  text-transform:uppercase;color:#f5d77a;animation:tapHint 1.6s ease-in-out infinite alternate}
+@keyframes tapHint{from{opacity:.35}to{opacity:1}}
+@media (hover:none) and (pointer:coarse){#marquee .t3{display:block}}
 #theatre.open #marquee{opacity:0}
 #spot{position:absolute;inset:0;z-index:2;pointer-events:none;
   background:radial-gradient(ellipse 28% 40% at 50% 46%,rgba(255,230,160,.22),transparent 70%);
@@ -379,6 +383,7 @@ UA: Дякуємо за увагу! Чи є у вас запитання?</aside
   <div id="marquee">
     <div class="t1">Ladies and gentlemen…</div>
     <div class="t2">the show is about to begin</div>
+    <div class="t3">tap to open</div>
   </div>
 </div>
 <div id="hud"></div>
@@ -516,6 +521,7 @@ function openCurtains(){
 }
 
 /* ---------- keyboard / click / touch ---------- */
+theatre.addEventListener('click', openCurtains);
 document.addEventListener('keydown', (e)=>{
   const k = e.key;
   if(!started){

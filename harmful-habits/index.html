@@ -95,6 +95,10 @@ h2 { font-family: 'Oswald', Arial, sans-serif; font-size: 72px; line-height: 1.1
 .pt p { font-size: 30px; line-height: 1.35; color: #C9CED8; }
 .pt b { font-weight: 600; color: #FFFFFF; }
 
+.fig { width: 420px; flex-shrink: 0; display: flex; flex-direction: column; gap: 16px; }
+.figframe { width: 420px; height: 423px; box-sizing: border-box; border-radius: 20px; overflow: hidden; border: 2px solid rgba(37,244,238,.45); box-shadow: 0 0 30px rgba(37,244,238,.2); }
+.figcap { font-size: 24px; line-height: 1.3; color: #8A90A0; }
+
 .tips { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
 .tip { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.10); border-radius: 20px; padding: 32px; }
 .tip p { font-size: 30px; line-height: 1.35; color: #D5DCE4; }
@@ -122,7 +126,7 @@ h2 { font-family: 'Oswald', Arial, sans-serif; font-size: 72px; line-height: 1.1
 .head { animation: headin 500ms ease-out both; }
 .pbg, .bg3d { animation: fadein 500ms ease-out both; }
 .panel { animation: rise 500ms ease-out both; animation-delay: 100ms; }
-.pt, .tip { animation: slidein 450ms ease-out both; animation-delay: calc(var(--i) * 100ms + 50ms); }
+.pt, .tip, .fig { animation: slidein 450ms ease-out both; animation-delay: calc(var(--i) * 100ms + 50ms); }
 .help { animation: rise 500ms ease-out both; animation-delay: 450ms; }
 
 
@@ -133,7 +137,7 @@ h2 { font-family: 'Oswald', Arial, sans-serif; font-size: 72px; line-height: 1.1
 @keyframes s-pop{0%{opacity:0;transform:scale(.85)}60%{opacity:1;transform:scale(1.03)}100%{opacity:1;transform:scale(1)}}
 #stage .head{animation:s-head .7s cubic-bezier(.2,.8,.2,1) .15s both}
 #stage .panel{animation:s-rise .75s cubic-bezier(.2,.8,.2,1) .25s both}
-#stage .pt,#stage .tip{animation:s-slide .7s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 130ms + 300ms)}
+#stage .pt,#stage .tip,#stage .fig{animation:s-slide .7s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 130ms + 300ms)}
 #stage .help{animation:s-pop .8s cubic-bezier(.2,.8,.2,1) .75s both}
 #stage .pbg,#stage .bg3d{animation:fadein .6s ease-out both}
 </style>
@@ -258,6 +262,66 @@ g.strokeStyle=rgb(COL[A[j][0]],.75*F);g.beginPath();g.moveTo(hx+nx*d,hy+ny*d);g.
 <p class="foot">Джерела: ВООЗ — <a href="https://www.who.int/health-topics/tobacco">тютюн</a>, <a href="https://www.who.int/news-room/questions-and-answers/item/tobacco-e-cigarettes">е-сигарети</a>, <a href="https://www.who.int/news/item/06-10-2025-who-tobacco-trends-report-1-in-5-adults-still-addicted-to-tobacco">звіт 2025</a> · <a href="https://www.cancer.gov/about-cancer/causes-prevention/risk/tobacco/cessation-fact-sheet">NCI</a> · <a href="https://suspilne.media/1031395-kozen-patij-pidlitok-v-ukraini-kurit-elektronni-sigareti-zvit-moz/">МОЗ, GYTS 2023</a> · презентація «Шкідливі звички», с. 10–13 · <a href="https://pubchem.ncbi.nlm.nih.gov/compound/89594">PubChem</a></p>
 <aside>Від тютюну щороку помирає понад 7 мільйонів людей. Пасивне куріння теж убиває — понад 1,6 мільйона людей на рік. У тютюновому димі понад 7000 хімічних речовин, і щонайменше 69 з них можуть спричинити рак. Молодий організм реагує швидко. У курців частіше хворіють дихальні шляхи, слабшають легені, а серце навіть у спокої б’ється частіше. Мозок, м’язи й кістки страждають від нестачі кисню, хвороби серця з’являються раніше, а ризик інсульту зростає. Багато хто вважає вейп безпечною заміною. ВООЗ із цим не згодна: е-сигарети виділяють токсичні речовини, а нікотин порушує розвиток мозку і може призвести до проблем із навчанням та тривожних розладів. Щоб привабити молодь, виробники пропонують щонайменше 16 тисяч смаків і рекламуються через соцмережі та інфлюенсерів. У результаті у світі вейпують щонайменше 15 мільйонів дітей 13–15 років, а в Україні — майже кожен п’ятий школяр. І вейп не замінює сигарету, а веде до неї: у тих, хто не курив, він майже втричі підвищує шанс почати.</aside>
 </section>
+<section id="popcorn" class="g-purple" data-transition="push">
+<div class="pbg"></div>
+<iframe class="bg3d emb" title="3D-модель" aria-hidden="true" tabindex="-1" sandbox="allow-scripts" style="position:absolute; left:128px; top:304px; width:560px; height:616px" data-srcdoc="&lt;style&gt;html,body{margin:0;height:100%;overflow:hidden;background:transparent}canvas{display:block;width:100%;height:100%}&lt;/style&gt;&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
+const S={cx:.74,cy:.6,R:115,a0:.5,spin:.3,pitch:.35,tilt:.2,dim:.8,label:&#x27;Діацетил · C₄H₆O₂&#x27;};
+const A=[[&#x27;O&#x27;,1.33,1.16,0.00],[&#x27;O&#x27;,-1.33,1.16,0.00],[&#x27;C&#x27;,0.76,0.08,0.00],[&#x27;C&#x27;,-0.76,0.08,0.00],[&#x27;C&#x27;,1.48,-1.24,0.00],[&#x27;C&#x27;,-1.47,-1.24,0.00],[&#x27;H&#x27;,1.22,-1.80,0.90],[&#x27;H&#x27;,2.55,-1.06,0.00],[&#x27;H&#x27;,1.22,-1.81,-0.90],[&#x27;H&#x27;,-1.22,-1.80,0.90],[&#x27;H&#x27;,-2.55,-1.06,0.00],[&#x27;H&#x27;,-1.22,-1.81,-0.90]];
+const B=[[1,3,2],[2,4,2],[3,4,1],[3,5,1],[4,6,1],[5,7,1],[5,8,1],[5,9,1],[6,10,1],[6,11,1],[6,12,1]];
+const cv=document.getElementById(&#x27;c&#x27;),g=cv.getContext(&#x27;2d&#x27;),PI=Math.PI,CAM=4;let W=560,H=616;
+function fit(){const d=window.devicePixelRatio||1;W=cv.clientWidth||560;H=cv.clientHeight||616;cv.width=Math.round(W*d);cv.height=Math.round(H*d);g.setTransform(d,0,0,d,0,0);}
+fit();addEventListener(&#x27;resize&#x27;,fit);
+function rr(x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();}
+function rgb(c,f){return &#x27;rgb(&#x27;+Math.min(255,c[0]*f|0)+&#x27;,&#x27;+Math.min(255,c[1]*f|0)+&#x27;,&#x27;+Math.min(255,c[2]*f|0)+&#x27;)&#x27;;}
+function rot(p,a,b,c){const x=p[0]*Math.cos(a)+p[2]*Math.sin(a),z=-p[0]*Math.sin(a)+p[2]*Math.cos(a),y=p[1]*Math.cos(b)-z*Math.sin(b),w=p[1]*Math.sin(b)+z*Math.cos(b);return [x*Math.cos(c)-y*Math.sin(c),x*Math.sin(c)+y*Math.cos(c),w];}
+function pj(p){const f=CAM/(CAM-p[2]);return [S.cx*W+p[0]*S.R*f,S.cy*H-p[1]*S.R*f,f];}
+const still=false;let t0=null;
+function frame(ts){if(t0===null)t0=ts;const t=(ts-t0)/1000*1.5;g.clearRect(0,0,W,H);g.save();rr(0,0,W,H,24);g.clip();
+const X=S.cx*W,Y=S.cy*H,q=g.createRadialGradient(X,Y,0,X,Y,S.R*1.6);q.addColorStop(0,&#x27;rgba(255,45,111,0.2)&#x27;);q.addColorStop(1,&#x27;rgba(255,45,111,0)&#x27;);g.fillStyle=q;g.fillRect(0,0,W,H);
+draw(t);g.restore();
+if(S.label){g.font=&#x27;24px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#7F8DA0&#x27;;g.textAlign=&#x27;right&#x27;;g.textBaseline=&#x27;top&#x27;;g.fillText(S.label,W-32,28);}
+if(!still)requestAnimationFrame(frame);}
+requestAnimationFrame(frame);
+const COL={C:[168,176,200],H:[236,240,248],N:[37,244,238],O:[255,45,111]},RAD={C:.38,H:.25,N:.36,O:.36};
+let mx=0,my=0,mz=0;A.forEach(e=&gt;{mx+=e[1];my+=e[2];mz+=e[3];});mx/=A.length;my/=A.length;mz/=A.length;
+let m=0;const P=A.map(e=&gt;{const p=[e[1]-mx,e[2]-my,e[3]-mz];m=Math.max(m,Math.hypot(p[0],p[1],p[2])+RAD[e[0]]);return p;});
+const k=1/m;P.forEach(p=&gt;{p[0]*=k;p[1]*=k;p[2]*=k;});
+function fog(z){return (.62+.38*(z+1)/2)*S.dim;}
+function draw(t){const a=S.a0+t*S.spin,b=S.pitch+.1*Math.sin(t*.5),Q=P.map(p=&gt;rot(p,a,b,S.tilt)),V=Q.map(pj),L=[];
+B.forEach(e=&gt;{const i=e[0]-1,j=e[1]-1;L.push([(Q[i][2]+Q[j][2])/2,0,i,j,e[2]]);});
+A.forEach((e,i)=&gt;L.push([Q[i][2]+.002,1,i]));L.sort((u,v)=&gt;u[0]-v[0]);g.lineCap=&#x27;round&#x27;;
+L.forEach(it=&gt;{const i=it[2];if(it[1]){const c=COL[A[i][0]],v=V[i],r=RAD[A[i][0]]*k*S.R*v[2],F=fog(Q[i][2]),q=g.createRadialGradient(v[0]-r*.35,v[1]-r*.4,r*.08,v[0],v[1],r);
+q.addColorStop(0,rgb(c,1.3*F));q.addColorStop(.55,rgb(c,.9*F));q.addColorStop(1,rgb(c,.42*F));g.fillStyle=q;g.beginPath();g.arc(v[0],v[1],r,0,2*PI);g.fill();return;}
+const j=it[3],o=it[4],p=V[i],s=V[j],w=.2*k*S.R*(p[2]+s[2])/2,F=fog(it[0]),dx=s[0]-p[0],dy=s[1]-p[1],l=Math.hypot(dx,dy)||1,nx=-dy/l,ny=dx/l,hx=(p[0]+s[0])/2,hy=(p[1]+s[1])/2;
+g.lineWidth=o&gt;1?w*.6:w;(o&gt;1?[-w*.6,w*.6]:[0]).forEach(d=&gt;{g.strokeStyle=rgb(COL[A[i][0]],.75*F);g.beginPath();g.moveTo(p[0]+nx*d,p[1]+ny*d);g.lineTo(hx+nx*d,hy+ny*d);g.stroke();
+g.strokeStyle=rgb(COL[A[j][0]],.75*F);g.beginPath();g.moveTo(hx+nx*d,hy+ny*d);g.lineTo(s[0]+nx*d,s[1]+ny*d);g.stroke();});});}
+&lt;/script&gt;"></iframe>
+<div class="head">
+<p class="eyebrow">03 · ПОПКОРНОВА ХВОРОБА</p>
+<h2>Попкорнова хвороба залишає шрами в легенях</h2>
+</div>
+<div class="body">
+<div class="panel p3d" style="--i:0">
+<p class="stat n">39 з 51</p>
+<p class="cap">перевірених рідин для вейпів зі смаками містили діацетил — речовину, що спричиняє цю хворобу</p>
+<hr>
+<p class="stat2">незворотна</p>
+<p class="cap">хворобу можна лікувати, але вилікувати не можна</p>
+</div>
+<div class="pts">
+<div class="pt" style="--i:1"><p><b>Що це:</b> облітеруючий бронхіоліт — рубці в легенях звужують дихальні шляхи.</p></div>
+<div class="pt" style="--i:2"><p><b>Назва:</b> так захворіли працівники фабрики попкорну, які вдихали ароматизатор діацетил.</p></div>
+<div class="pt" style="--i:3"><p><b>Вейпи:</b> діацетил є в багатьох рідинах зі смаками.</p></div>
+<div class="pt" style="--i:4"><p><b>Симптоми:</b> кашель, свистяче дихання, задишка.</p></div>
+</div>
+<div class="fig" style="--i:5">
+<div class="figframe"><img src="ct-lungs.jpg" alt="КТ грудної клітки, стрілками позначено уражені ділянки легень" style="width:416px;height:419px;object-fit:cover"></div>
+<p class="figcap">КТ легень: стрілками позначено уражені ділянки</p>
+</div>
+</div>
+<p class="foot">Джерела: <a href="https://www.lung.org/blog/popcorn-lung-risk-ecigs">Американська асоціація легень — Popcorn Lung (з даними дослідження Гарварду)</a> · <a href="https://pubchem.ncbi.nlm.nih.gov/compound/650">PubChem</a></p>
+<aside>Окремо хочу розповісти про попкорнову хворобу. Її медична назва — облітеруючий бронхіоліт: у легенях з’являються рубці, через які дихальні шляхи потовщуються і звужуються. Хворобу можна лікувати, але вилікувати не можна. Свою назву вона отримала через працівників фабрики мікрохвильового попкорну, які вдихали масляний ароматизатор діацетил. І саме діацетил додають у багато рідин для вейпів зі смаками: дослідники з Гарварду знайшли його у 39 з 51 перевірених рідин. Якщо його вдихати, він спричиняє цю хворобу. Симптоми — кашель, свистяче дихання й задишка.</aside>
+</section>
 <section id="alcohol" class="g-teal" data-transition="push">
 <div class="pbg"></div>
 <iframe class="bg3d emb" title="3D-модель" aria-hidden="true" tabindex="-1" sandbox="allow-scripts" style="position:absolute; left:128px; top:304px; width:560px; height:616px" data-srcdoc="&lt;style&gt;html,body{margin:0;height:100%;overflow:hidden;background:transparent}canvas{display:block;width:100%;height:100%}&lt;/style&gt;&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;&lt;script&gt;
@@ -293,7 +357,7 @@ g.lineWidth=o&gt;1?w*.6:w;(o&gt;1?[-w*.6,w*.6]:[0]).forEach(d=&gt;{g.strokeStyle
 g.strokeStyle=rgb(COL[A[j][0]],.75*F);g.beginPath();g.moveTo(hx+nx*d,hy+ny*d);g.lineTo(s[0]+nx*d,s[1]+ny*d);g.stroke();});});}
 &lt;/script&gt;"></iframe>
 <div class="head">
-<p class="eyebrow">03 · АЛКОГОЛЬ</p>
+<p class="eyebrow">04 · АЛКОГОЛЬ</p>
 <h2>Безпечної дози алкоголю не існує</h2>
 </div>
 <div class="body">
@@ -349,7 +413,7 @@ g.lineWidth=o&gt;1?w*.6:w;(o&gt;1?[-w*.6,w*.6]:[0]).forEach(d=&gt;{g.strokeStyle
 g.strokeStyle=rgb(COL[A[j][0]],.75*F);g.beginPath();g.moveTo(hx+nx*d,hy+ny*d);g.lineTo(s[0]+nx*d,s[1]+ny*d);g.stroke();});});}
 &lt;/script&gt;"></iframe>
 <div class="head">
-<p class="eyebrow">04 · НАРКОТИКИ</p>
+<p class="eyebrow">05 · НАРКОТИКИ</p>
 <h2>Наркотики змінюють роботу мозку</h2>
 </div>
 <div class="body">
@@ -405,7 +469,7 @@ FS.forEach(f=&gt;{const n=rot(f.n,a,b,S.tilt);if(n[2]&lt;=0)return;if(f.front)fr
 if(front){g.lineWidth=.5;DC.forEach(d=&gt;{g.fillStyle=rgb(d.c,S.dim);g.strokeStyle=g.fillStyle;poly(d.p.map(tr));});}}
 &lt;/script&gt;"></iframe>
 <div class="head">
-<p class="eyebrow">05 · ІГРИ ТА СОЦМЕРЕЖІ</p>
+<p class="eyebrow">06 · ІГРИ ТА СОЦМЕРЕЖІ</p>
 <h2>Залежність буває і без речовин</h2>
 </div>
 <div class="body">
@@ -429,7 +493,7 @@ if(front){g.lineWidth=.5;DC.forEach(d=&gt;{g.fillStyle=rgb(d.c,S.dim);g.strokeSt
 </section>
 <section id="help" class="dark" data-transition="push">
 <div class="head">
-<p class="eyebrow">06 · ЗАХИСТ І ДОПОМОГА</p>
+<p class="eyebrow">07 · ЗАХИСТ І ДОПОМОГА</p>
 <h2>Відмовитися можна, і є куди звернутися</h2>
 </div>
 <div class="body">

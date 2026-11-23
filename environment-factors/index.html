@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Чинники навколишнього середовища на організм людини</title>
+<meta name="description" content="Презентація з біології: абіотичні, біотичні й антропогенні чинники та їх вплив на організм людини. 5 слайдів з джерелами і текстом виступу.">
+<meta property="og:title" content="Чинники навколишнього середовища на організм людини">
+<meta property="og:description" content="5 слайдів з джерелами і текстом виступу.">
+<meta property="og:image" content="https://shavik16.github.io/site_mega/thumbs/environment-factors.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400..700&family=Rubik:wght@400..700&display=swap">
+<style>
+/* ---------- presenter ---------- */
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;background:#050508;overflow:hidden}
+#viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#stage{position:relative;width:1920px;height:1080px;flex:none;transform-origin:center center;overflow:hidden;background:#0B0B10}
+#stage > section{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;isolation:isolate;display:none}
+#stage > section.active,#stage > section.leaving{display:flex}
+#stage section aside{display:none}
+/* tag defaults at zero specificity, so the deck's own rules (h2 72px, .help h3 30px) win */
+:where(#stage) :is(p,h1,h2,h3){margin:0}
+:where(#stage) h1{font-size:96px;font-weight:600}
+:where(#stage) h2{font-size:64px;font-weight:600}
+:where(#stage) h3{font-size:44px;font-weight:600}
+#stage .pbg,#stage iframe.emb{z-index:-1}
+#stage iframe.emb{border:0;background:transparent}
+#stage .body{min-height:0}
+
+@keyframes pushInFwd{from{transform:translateX(100%)}to{transform:translateX(0)}}
+@keyframes pushOutFwd{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+@keyframes pushInBack{from{transform:translateX(-100%)}to{transform:translateX(0)}}
+@keyframes pushOutBack{from{transform:translateX(0)}to{transform:translateX(100%)}}
+#stage > section.in-fwd{animation:pushInFwd .55s cubic-bezier(.7,0,.25,1) both}
+#stage > section.out-fwd{animation:pushOutFwd .55s cubic-bezier(.7,0,.25,1) both}
+#stage > section.in-back{animation:pushInBack .55s cubic-bezier(.7,0,.25,1) both}
+#stage > section.out-back{animation:pushOutBack .55s cubic-bezier(.7,0,.25,1) both}
+
+#bar{position:fixed;left:0;top:0;height:4px;width:0;background:#FF2D6F;box-shadow:0 0 12px #FF2D6F;transition:width .4s ease;z-index:30}
+#hud{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:40;color:rgba(255,255,255,.8);font:500 13px Rubik,Arial,sans-serif;
+  background:rgba(10,14,20,.65);padding:7px 14px;border-radius:999px;opacity:0;transition:opacity .4s;pointer-events:none;white-space:nowrap}
+#back{position:fixed;left:14px;top:14px;z-index:40;color:#fff;font:500 14px Rubik,Arial,sans-serif;text-decoration:none;
+  background:rgba(10,14,20,.65);padding:8px 14px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .4s}
+body.show-hud #hud{opacity:1}
+body.show-hud #back{opacity:1;pointer-events:auto}
+#notes{position:fixed;left:50%;bottom:56px;transform:translateX(-50%);width:min(900px,92vw);max-height:38vh;overflow:auto;z-index:45;
+  background:rgba(10,14,20,.93);color:#E8EDF2;font:400 17px/1.55 Rubik,Arial,sans-serif;padding:18px 22px;border-radius:14px;
+  box-shadow:0 10px 40px rgba(0,0,0,.4);display:none}
+#notes b{display:block;margin-bottom:6px;color:#25F4EE;font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+body.notes #notes{display:block}
+body.thumb #bar,body.thumb #hud,body.thumb #back{display:none!important}
+body.thumb #stage *,body.still #stage *,body.still #stage > section{animation:none!important}
+</style>
+<style>
+/* ---------- deck styles ---------- */
+body { font-family: 'Rubik', Arial, sans-serif; color: #C9CED8; }
+
+section {
+  padding: 128px 128px 160px;
+  background: radial-gradient(circle at 85% 10%, #2B1238 0%, #0B0B10 60%);
+  color: #C9CED8;
+  font-family: 'Rubik', Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  box-sizing: border-box;
+}
+section.g-magenta { background: radial-gradient(circle at 50% 0%, #4A1027 0%, #0B0B10 55%); }
+section.g-teal { background: radial-gradient(circle at 90% 0%, #123A3C 0%, #0B0B10 55%); }
+section.g-purple { background: radial-gradient(circle at 10% 100%, #24143A 0%, #0B0B10 55%); }
+section.dark { background: radial-gradient(circle at 80% 100%, #0F4244 0%, #0B0B10 55%); color: #C9CED8; }
+
+.head { display: flex; flex-direction: column; gap: 12px; }
+.eyebrow { font-size: 24px; line-height: 1.2; font-weight: 600; letter-spacing: 3px; color: #25F4EE; }
+.dark .eyebrow { color: #25F4EE; }
+h2 { font-family: 'Oswald', Arial, sans-serif; font-size: 72px; line-height: 1.1; font-weight: 600; color: #FFFFFF; text-shadow: 0 0 28px rgba(255,45,111,.55), 0 0 2px rgba(255,255,255,.45); }
+.dark h2 { color: #FFFFFF; }
+
+.body { flex: 1; display: flex; flex-direction: row; gap: 64px; }
+
+.panel { width: 560px; flex-shrink: 0; box-sizing: border-box; padding: 48px; border-radius: 24px; background: #13131C; display: flex; flex-direction: column; justify-content: center; gap: 8px; }
+.panel.p3d { background: transparent; }
+.pbg { position: absolute; left: 128px; top: 304px; width: 560px; height: 616px; box-sizing: border-box; border-radius: 24px; background: #12121A; border: 2px solid rgba(37,244,238,.45); box-shadow: 0 0 36px rgba(37,244,238,.22), 0 0 90px rgba(255,45,111,.12); }
+.plabel { font-size: 24px; line-height: 1.3; font-weight: 600; color: #25F4EE; }
+.stat { font-family: 'Oswald', Arial, sans-serif; font-size: 120px; line-height: 1; font-weight: 600; color: #FF2D6F; text-shadow: 0 0 26px rgba(255,45,111,.7); }
+.stat2 { font-family: 'Oswald', Arial, sans-serif; font-size: 72px; line-height: 1; font-weight: 600; color: #25F4EE; text-shadow: 0 0 20px rgba(37,244,238,.55); }
+.cap { font-size: 24px; line-height: 1.3; color: #D5DCE4; }
+.note { font-size: 24px; line-height: 1.3; color: #9AA7B6; }
+.panel hr { border: none; border-top: 2px solid rgba(255,255,255,.14); margin: 16px 0; }
+
+.pts { flex: 1; display: flex; flex-direction: column; gap: 32px; }
+.pt { border-left: 6px solid #FF2D6F; padding-left: 28px; box-shadow: -10px 0 18px -12px rgba(255,45,111,.9); }
+.pt p { font-size: 30px; line-height: 1.35; color: #C9CED8; }
+.pt b { font-weight: 600; color: #FFFFFF; }
+
+.fig { width: 420px; flex-shrink: 0; display: flex; flex-direction: column; gap: 16px; }
+.figframe { width: 420px; height: 423px; box-sizing: border-box; border-radius: 20px; overflow: hidden; border: 2px solid rgba(37,244,238,.45); box-shadow: 0 0 30px rgba(37,244,238,.2); }
+.figcap { font-size: 24px; line-height: 1.3; color: #8A90A0; }
+
+.tips { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.tip { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.10); border-radius: 20px; padding: 32px; }
+.tip p { font-size: 30px; line-height: 1.35; color: #D5DCE4; }
+.tip b { font-weight: 600; color: #25F4EE; }
+
+.help { width: 560px; flex-shrink: 0; box-sizing: border-box; padding: 40px; border-radius: 24px; background: linear-gradient(135deg, #25F4EE 0%, #19C9C3 100%); box-shadow: 0 0 40px rgba(37,244,238,.35); display: flex; flex-direction: column; justify-content: center; gap: 8px; }
+.help h3 { font-size: 30px; line-height: 1.2; font-weight: 700; color: #0B0B10; }
+.help .hs { font-size: 24px; line-height: 1.3; color: #0B0B10; }
+.help .hnum { font-family: 'Oswald', Arial, sans-serif; font-size: 72px; line-height: 1.05; font-weight: 600; color: #0B0B10; }
+.help hr { border: none; border-top: 2px solid #0B0B10; margin: 12px 0; }
+
+.foot { position: absolute; left: 128px; bottom: 64px; width: 1664px; font-size: 24px; line-height: 1.2; color: #8A90A0; white-space: nowrap; }
+.foot a { color: #8A90A0; text-decoration: underline; }
+.dark .foot { color: #9AA7B6; }
+.dark .foot a { color: #9AA7B6; }
+
+@property --n { syntax: '<integer>'; inherits: false; initial-value: 0 }
+@keyframes count { from { --n: 0 } }
+.n { animation: count 1.2s ease-out both }
+
+@keyframes headin { from { opacity: 0; transform: translateX(-40px); } }
+@keyframes rise { from { opacity: 0; transform: translateY(32px); } }
+@keyframes slidein { from { opacity: 0; transform: translateX(56px); } }
+@keyframes fadein { from { opacity: 0; } }
+.head { animation: headin 500ms ease-out both; }
+.pbg, .bg3d { animation: fadein 500ms ease-out both; }
+.panel { animation: rise 500ms ease-out both; animation-delay: 100ms; }
+.pt, .tip, .fig { animation: slidein 450ms ease-out both; animation-delay: calc(var(--i) * 100ms + 50ms); }
+.help { animation: rise 500ms ease-out both; animation-delay: 450ms; }
+
+
+/* ---------- site: bolder arrivals than the deck file ---------- */
+@keyframes s-head{from{opacity:0;transform:translateX(-90px)}}
+@keyframes s-rise{from{opacity:0;transform:translateY(70px)}}
+@keyframes s-slide{from{opacity:0;transform:translateX(130px)}}
+@keyframes s-pop{0%{opacity:0;transform:scale(.85)}60%{opacity:1;transform:scale(1.03)}100%{opacity:1;transform:scale(1)}}
+#stage .head{animation:s-head .7s cubic-bezier(.2,.8,.2,1) .15s both}
+#stage .panel{animation:s-rise .75s cubic-bezier(.2,.8,.2,1) .25s both}
+#stage .pt,#stage .tip,#stage .fig{animation:s-slide .7s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 130ms + 300ms)}
+#stage .help{animation:s-pop .8s cubic-bezier(.2,.8,.2,1) .75s both}
+#stage .pbg,#stage .bg3d{animation:fadein .6s ease-out both}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<a id="back" href="../">← Усі презентації</a>
+<div id="viewport"><div id="stage">
+
+<section id="factors" data-transition="push">
+<div class="head">
+<p class="eyebrow">01 · ЩО ТАКЕ ЧИННИКИ СЕРЕДОВИЩА</p>
+<h2>Організм постійно взаємодіє з довкіллям</h2>
+</div>
+<div class="body">
+<div class="panel" style="--i:0">
+<p class="plabel">Три групи чинників</p>
+<p class="stat2">Абіотичні</p>
+<p class="cap">чинники неживої природи</p>
+<hr>
+<p class="stat2">Біотичні</p>
+<p class="cap">чинники живої природи</p>
+<hr>
+<p class="stat2">Антропогенні</p>
+<p class="cap">наслідки діяльності людини</p>
+</div>
+<div class="pts">
+<div class="pt" style="--i:1"><p><b>Екологічний чинник</b> — будь-який елемент середовища, що діє на живий організм.</p></div>
+<div class="pt" style="--i:2"><p><b>Сила дії має значення:</b> у межах норми організм пристосовується до змін.</p></div>
+<div class="pt" style="--i:3"><p><b>Гомеостаз</b> — здатність організму підтримувати сталість свого внутрішнього середовища.</p></div>
+<div class="pt" style="--i:4"><p><b>Надмірна або тривала дія</b> чинників порушує гомеостаз і спричиняє хвороби.</p></div>
+</div>
+</div>
+<p class="foot">Джерело: шкільний курс біології та екології</p>
+<aside>Добрий день! Тема мого виступу — чинники навколишнього середовища та їх вплив на організм людини. Людина не існує окремо від довкілля: ми дихаємо повітрям, п’ємо воду, харчуємося, спілкуємося з іншими людьми. Усе, що діє на організм із зовнішнього середовища, називають екологічними чинниками. Їх поділяють на три групи: абіотичні — чинники неживої природи, біотичні — чинники живої природи, і антропогенні — ті, що з’явилися внаслідок діяльності людини. Поки сила дії чинника не виходить за межі норми, організм пристосовується і зберігає сталість свого внутрішнього середовища — це називають гомеостазом. Але якщо дія надто сильна або тривала, гомеостаз порушується і виникають захворювання.</aside>
+</section>
+<section id="abiotic" class="g-teal" data-transition="push">
+<div class="head">
+<p class="eyebrow">02 · АБІОТИЧНІ ЧИННИКИ</p>
+<h2>Фізика і хімія довкілля</h2>
+</div>
+<div class="body">
+<div class="tips">
+<div class="tip" style="--i:0"><p><b>Температура.</b> Спека — перегрів і зневоднення, сильний холод — переохолодження й обмороження.</p></div>
+<div class="tip" style="--i:1"><p><b>Світло й ультрафіолет.</b> Потрібні для вітаміну D і біоритмів, але надлишок УФ — опіки й ризик раку шкіри.</p></div>
+<div class="tip" style="--i:2"><p><b>Вологість і тиск.</b> У горах повітря розріджене, кисню менше — з’являються задишка й слабкість.</p></div>
+<div class="tip" style="--i:3"><p><b>Повітря, вода, ґрунт, радіація.</b> Чисті повітря та вода — основа здоров’я, а радіація пошкоджує клітини.</p></div>
+</div>
+</div>
+<p class="foot">Джерело: шкільний курс біології та екології</p>
+<aside>Перша група — абіотичні чинники, тобто чинники неживої природи. Температура: у спеку організм перегрівається і втрачає воду, а на сильному морозі виникає переохолодження й обмороження. Світло: сонячне проміння потрібне для утворення вітаміну D і для біологічних ритмів, але надлишок ультрафіолету спричиняє опіки й підвищує ризик раку шкіри. Вологість і атмосферний тиск: у горах повітря розріджене, кисню менше, тому людина швидше втомлюється й відчуває задишку. І нарешті склад повітря, води та ґрунту, а також радіація: чисті повітря й вода — основа здоров’я, а радіація пошкоджує клітини організму.</aside>
+</section>
+<section id="biotic" class="g-purple" data-transition="push">
+<div class="head">
+<p class="eyebrow">03 · БІОТИЧНІ ЧИННИКИ</p>
+<h2>Вплив живих організмів</h2>
+</div>
+<div class="body">
+<div class="panel" style="--i:0">
+<p class="plabel">Приклади</p>
+<p class="stat2">Інфекції</p>
+<p class="cap">віруси, бактерії, гриби, паразити</p>
+<hr>
+<p class="stat2">Харчування</p>
+<p class="cap">рослини й тварини як їжа</p>
+<hr>
+<p class="stat2">Люди</p>
+<p class="cap">спілкування, підтримка, стрес</p>
+</div>
+<div class="pts">
+<div class="pt" style="--i:1"><p><b>Збудники хвороб:</b> віруси грипу, бактерії ангіни, кишкові інфекції, гельмінти.</p></div>
+<div class="pt" style="--i:2"><p><b>Алергени живого походження:</b> пилок рослин, шерсть тварин, цвіль.</p></div>
+<div class="pt" style="--i:3"><p><b>Корисні мікроорганізми:</b> мікрофлора кишківника допомагає травленню й підтримує імунітет.</p></div>
+<div class="pt" style="--i:4"><p><b>Інші люди:</b> підтримка зміцнює психіку, а постійний стрес послаблює імунітет.</p></div>
+</div>
+</div>
+<p class="foot">Джерело: шкільний курс біології та екології</p>
+<aside>Друга група — біотичні чинники, тобто вплив живих організмів. Найвідоміші з них — збудники хвороб: віруси грипу, бактерії, гриби та паразити. Крім того, живі організми можуть бути алергенами: пилок рослин, шерсть тварин чи цвіль. Але не всі мікроорганізми шкідливі. Мікрофлора кишківника допомагає травленню й підтримує імунітет. Окрема група впливів — це інші люди: підтримка близьких і спілкування зміцнюють психіку, а постійний стрес послаблює імунітет. Крім того, рослини й тварини є джерелом нашого харчування.</aside>
+</section>
+<section id="anthropogenic" class="g-magenta" data-transition="push">
+<div class="head">
+<p class="eyebrow">04 · АНТРОПОГЕННІ ЧИННИКИ</p>
+<h2>Те, що створила діяльність людини</h2>
+</div>
+<div class="body">
+<div class="panel" style="--i:0">
+<p class="stat n">99%</p>
+<p class="cap">людей у світі дихають повітрям, що не відповідає нормам ВООЗ (оцінка 2022 року)</p>
+<hr>
+<p class="stat2 n">7 млн</p>
+<p class="cap">передчасних смертей щороку пов’язують із забрудненням повітря (ВООЗ)</p>
+</div>
+<div class="pts">
+<div class="pt" style="--i:1"><p><b>Забруднення повітря:</b> викиди транспорту й заводів спричиняють хвороби дихальних шляхів і серця, алергії.</p></div>
+<div class="pt" style="--i:2"><p><b>Забруднення води й ґрунту:</b> важкі метали, пестициди, нітрати потрапляють у воду та їжу.</p></div>
+<div class="pt" style="--i:3"><p><b>Шум і штучне світло:</b> постійний шум підвищує тиск і стрес, порушує сон.</p></div>
+<div class="pt" style="--i:4"><p><b>Урбанізація та спосіб життя:</b> мало руху, багато стресу й екранного часу.</p></div>
+</div>
+</div>
+<p class="foot">Джерело: <a href="https://www.who.int/news-room/fact-sheets/detail/ambient-(outdoor)-air-quality-and-health">ВООЗ — Ambient (outdoor) air quality and health</a></p>
+<aside>Третя група — антропогенні чинники, тобто наслідки діяльності людини. Найбільша проблема — забруднення повітря. За оцінкою ВООЗ 2022 року, майже всі люди у світі, 99%, дихають повітрям, яке не відповідає нормам організації. А з забрудненням повітря пов’язують близько 7 мільйонів передчасних смертей щороку. Викиди транспорту й заводів спричиняють хвороби дихальних шляхів і серця та алергії. Забруднені вода й ґрунт містять важкі метали, пестициди й нітрати, які потрапляють в організм з їжею та питвом. Постійний шум підвищує тиск і стрес та порушує сон. До цього додаються сидячий спосіб життя й тривалий екранний час у великих містах.</aside>
+</section>
+<section id="protect" class="dark" data-transition="push">
+<div class="head">
+<p class="eyebrow">05 · ВИСНОВОК</p>
+<h2>Як зменшити шкідливу дію чинників</h2>
+</div>
+<div class="body">
+<div class="tips">
+<div class="tip" style="--i:0"><p><b>Чисте повітря.</b> Провітрюй приміщення, гуляй у парках, менше часу проводь біля жвавих доріг.</p></div>
+<div class="tip" style="--i:1"><p><b>Рух і загартування.</b> Спорт і прогулянки зміцнюють імунітет та допомагають пристосовуватися до змін погоди.</p></div>
+<div class="tip" style="--i:2"><p><b>Їжа, вода, сон.</b> Різноманітне харчування, чиста питна вода й повноцінний сон.</p></div>
+<div class="tip" style="--i:3"><p><b>Захист.</b> Сонцезахисний крем і одяг за погодою, гігієна рук, щеплення, обмеження шуму.</p></div>
+</div>
+<div class="help" style="--i:4">
+<h3>Головне</h3>
+<p class="hs">Організм пристосовується до чинників лише в певних межах.</p>
+<hr>
+<p class="hs">Надмірна чи тривала дія, особливо антропогенних чинників, порушує гомеостаз і викликає хвороби.</p>
+<hr>
+<p class="hs"><b>Бережемо довкілля — бережемо себе.</b></p>
+</div>
+</div>
+<p class="foot">Джерело: шкільний курс біології та екології</p>
+<aside>Отже, чинники навколишнього середовища — абіотичні, біотичні й антропогенні — постійно діють на наш організм. До певної межі він пристосовується й підтримує гомеостаз. Але надмірна або тривала дія, особливо антропогенних чинників, призводить до хвороб. Що ж можна зробити? Дихати чистішим повітрям: провітрювати приміщення, гуляти в парках. Більше рухатися й загартовуватися. Харчуватися різноманітно, пити чисту воду й висипатися. Захищатися від шкідливих впливів: користуватися сонцезахисним кремом, одягатися за погодою, мити руки, робити щеплення. І головне: бережемо довкілля — бережемо себе. Дякую за увагу!</aside>
+</section>
+</div></div>
+<div id="notes" aria-live="polite"></div>
+<div id="hud"></div>
+<script>
+(function(){
+'use strict';
+const stage=document.getElementById('stage');
+if(/[?&]thumb\b/.test(location.search))document.body.classList.add('thumb');
+if(/[?&]still\b/.test(location.search))document.body.classList.add('still');
+function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform='scale('+s+')';}
+addEventListener('resize',fit);fit();
+
+const slides=Array.from(stage.querySelectorAll(':scope > section'));
+const hud=document.getElementById('hud'),bar=document.getElementById('bar'),notes=document.getElementById('notes');
+/* motion is on even when Windows "animation effects" are off; ?still turns it off */
+const reduce=document.body.classList.contains('thumb')||document.body.classList.contains('still');
+let cur=0,busy=false;
+
+stage.querySelectorAll('.foot a').forEach(a=>{a.target='_blank';a.rel='noopener';});
+
+/* numbers count up when a slide arrives */
+stage.querySelectorAll('.n').forEach(el=>{el.dataset.full=el.textContent;});
+function countUp(sec){
+  sec.querySelectorAll('.n').forEach(el=>{
+    const full=el.dataset.full,m=full.match(/\d+/);
+    if(!m||reduce){el.textContent=full;return;}
+    const target=parseInt(m[0],10),pre=full.slice(0,m.index),post=full.slice(m.index+m[0].length),t0=performance.now(),dur=1200;
+    (function step(now){const p=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-p,3);el.textContent=pre+Math.round(target*e)+post;if(p<1)requestAnimationFrame(step);})(t0);
+  });
+}
+
+/* 3D canvases start only while their slide is on screen (a canvas loaded inside a hidden slide never starts) */
+function wake(sec){sec.querySelectorAll('iframe.emb').forEach(f=>{f.srcdoc=f.dataset.srcdoc;});}
+function sleep(sec){sec.querySelectorAll('iframe.emb').forEach(f=>{f.removeAttribute('srcdoc');});}
+
+function update(){
+  hud.textContent=(cur+1)+' / '+slides.length+'   ·   ← → гортати   ·   F повний екран   ·   N текст виступу';
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  const a=slides[cur].querySelector('aside');
+  notes.innerHTML='<b>Текст виступу · слайд '+(cur+1)+'</b>';
+  notes.appendChild(document.createTextNode(a?a.textContent:''));
+  history.replaceState(null,'','#'+(cur+1));
+}
+
+function show(i,dir){
+  if(busy||i<0||i>=slides.length||i===cur)return;
+  busy=true;
+  const from=slides[cur],to=slides[i];
+  from.classList.remove('active');
+  from.classList.add('leaving',dir>0?'out-fwd':'out-back');
+  to.classList.add('active',dir>0?'in-fwd':'in-back');
+  cur=i;update();countUp(to);wake(to);
+  setTimeout(()=>{from.classList.remove('leaving','out-fwd','out-back');to.classList.remove('in-fwd','in-back');sleep(from);busy=false;},reduce?0:560);
+}
+
+cur=Math.min(slides.length-1,Math.max(0,(parseInt(location.hash.slice(1),10)||1)-1));
+slides[cur].classList.add('active');update();countUp(slides[cur]);wake(slides[cur]);
+
+const next=()=>show(cur+1,1),prev=()=>show(cur-1,-1);
+document.addEventListener('keydown',e=>{
+  const k=e.key;
+  if(['ArrowRight','ArrowDown','PageDown',' ','Enter'].includes(k)){e.preventDefault();next();}
+  else if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(k)){e.preventDefault();prev();}
+  else if(k==='Home')show(0,-1);
+  else if(k==='End')show(slides.length-1,1);
+  else if(['f','F','а','А'].includes(k))toggleFS();
+  else if(['n','N','т','Т'].includes(k))document.body.classList.toggle('notes');
+});
+document.getElementById('viewport').addEventListener('click',e=>{
+  if(e.target.closest('a'))return;
+  if(e.clientX<innerWidth*0.25)prev();else next();
+});
+let tx=null;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
+document.addEventListener('touchend',e=>{
+  if(tx===null)return;
+  const dx=e.changedTouches[0].clientX-tx;tx=null;
+  if(Math.abs(dx)>50)(dx<0?next:prev)();
+});
+function toggleFS(){try{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}catch(_){}}
+let ht;
+function showHud(){document.body.classList.add('show-hud');clearTimeout(ht);ht=setTimeout(()=>document.body.classList.remove('show-hud'),2200);}
+document.addEventListener('mousemove',showHud);showHud();
+})();
+</script>
+</body>
+</html>

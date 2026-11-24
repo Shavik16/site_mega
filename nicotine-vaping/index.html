@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Вейпінг і нікотин: як хімія повернула молодь у залежність</title>
+<meta name="description" content="Презентація-кейс: сольовий нікотин, швидкість всмоктування, ап-регуляція рецепторів, дані GATS/GYTS і екологія вейпів. 11 слайдів із 3D-сценами, джерелами і текстом виступу.">
+<meta property="og:title" content="Вейпінг і нікотин: як хімія повернула молодь у залежність">
+<meta property="og:description" content="11 слайдів із 3D-сценами, джерелами і текстом виступу.">
+<meta property="og:image" content="https://shavik16.github.io/site_mega/thumbs/nicotine-vaping.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400..700&family=Rubik:wght@400..700&display=swap">
+<style>
+/* ---------- presenter ---------- */
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;background:#050508;overflow:hidden}
+#viewport{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#stage{position:relative;width:1920px;height:1080px;flex:none;transform-origin:center center;overflow:hidden;background:#0B0B10}
+#stage > section{position:absolute;inset:0;width:1920px;height:1080px;overflow:hidden;isolation:isolate;display:none}
+#stage > section.active,#stage > section.leaving{display:flex}
+#stage section aside{display:none}
+/* tag defaults at zero specificity, so the deck's own rules (h2 72px, .help h3 30px) win */
+:where(#stage) :is(p,h1,h2,h3){margin:0}
+:where(#stage) h1{font-size:96px;font-weight:600}
+:where(#stage) h2{font-size:64px;font-weight:600}
+:where(#stage) h3{font-size:44px;font-weight:600}
+#stage .pbg,#stage iframe.emb{z-index:-1}
+#stage iframe.emb{border:0;background:transparent}
+#stage .body{min-height:0}
+
+@keyframes pushInFwd{from{transform:translateX(100%)}to{transform:translateX(0)}}
+@keyframes pushOutFwd{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+@keyframes pushInBack{from{transform:translateX(-100%)}to{transform:translateX(0)}}
+@keyframes pushOutBack{from{transform:translateX(0)}to{transform:translateX(100%)}}
+#stage > section.in-fwd{animation:pushInFwd .55s cubic-bezier(.7,0,.25,1) both}
+#stage > section.out-fwd{animation:pushOutFwd .55s cubic-bezier(.7,0,.25,1) both}
+#stage > section.in-back{animation:pushInBack .55s cubic-bezier(.7,0,.25,1) both}
+#stage > section.out-back{animation:pushOutBack .55s cubic-bezier(.7,0,.25,1) both}
+
+#bar{position:fixed;left:0;top:0;height:4px;width:0;background:#FF2D6F;box-shadow:0 0 12px #FF2D6F;transition:width .4s ease;z-index:30}
+#hud{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:40;color:rgba(255,255,255,.8);font:500 13px Rubik,Arial,sans-serif;
+  background:rgba(10,14,20,.65);padding:7px 14px;border-radius:999px;opacity:0;transition:opacity .4s;pointer-events:none;white-space:nowrap}
+#back{position:fixed;left:14px;top:14px;z-index:40;color:#fff;font:500 14px Rubik,Arial,sans-serif;text-decoration:none;
+  background:rgba(10,14,20,.65);padding:8px 14px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .4s}
+body.show-hud #hud{opacity:1}
+body.show-hud #back{opacity:1;pointer-events:auto}
+#notes{position:fixed;left:50%;bottom:56px;transform:translateX(-50%);width:min(900px,92vw);max-height:38vh;overflow:auto;z-index:45;
+  background:rgba(10,14,20,.93);color:#E8EDF2;font:400 17px/1.55 Rubik,Arial,sans-serif;padding:18px 22px;border-radius:14px;
+  box-shadow:0 10px 40px rgba(0,0,0,.4);display:none}
+#notes b{display:block;margin-bottom:6px;color:#25F4EE;font-weight:600;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+body.notes #notes{display:block}
+body.thumb #bar,body.thumb #hud,body.thumb #back{display:none!important}
+body.thumb #stage *,body.still #stage *,body.still #stage > section{animation:none!important}
+</style>
+<style>
+/* ---------- deck styles ---------- */
+body { font-family: 'Rubik', Arial, sans-serif; color: #C9CED8; }
+
+section {
+  padding: 128px 128px 160px;
+  background: radial-gradient(circle at 85% 10%, #2B1238 0%, #0B0B10 60%);
+  color: #C9CED8;
+  font-family: 'Rubik', Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  box-sizing: border-box;
+}
+section.g-magenta { background: radial-gradient(circle at 50% 0%, #4A1027 0%, #0B0B10 55%); }
+section.g-teal { background: radial-gradient(circle at 90% 0%, #123A3C 0%, #0B0B10 55%); }
+section.g-purple { background: radial-gradient(circle at 10% 100%, #24143A 0%, #0B0B10 55%); }
+section.dark { background: radial-gradient(circle at 80% 100%, #0F4244 0%, #0B0B10 55%); color: #C9CED8; }
+
+.head { display: flex; flex-direction: column; gap: 12px; }
+.eyebrow { font-size: 24px; line-height: 1.2; font-weight: 600; letter-spacing: 3px; color: #25F4EE; }
+.dark .eyebrow { color: #25F4EE; }
+h2 { font-family: 'Oswald', Arial, sans-serif; font-size: 72px; line-height: 1.1; font-weight: 600; color: #FFFFFF; text-shadow: 0 0 28px rgba(255,45,111,.55), 0 0 2px rgba(255,255,255,.45); }
+.dark h2 { color: #FFFFFF; }
+
+.body { flex: 1; display: flex; flex-direction: row; gap: 64px; }
+
+.panel { width: 560px; flex-shrink: 0; box-sizing: border-box; padding: 48px; border-radius: 24px; background: #13131C; display: flex; flex-direction: column; justify-content: center; gap: 8px; }
+.panel.p3d { background: transparent; }
+.pbg { position: absolute; left: 128px; top: 304px; width: 560px; height: 616px; box-sizing: border-box; border-radius: 24px; background: #12121A; border: 2px solid rgba(37,244,238,.45); box-shadow: 0 0 36px rgba(37,244,238,.22), 0 0 90px rgba(255,45,111,.12); }
+.plabel { font-size: 24px; line-height: 1.3; font-weight: 600; color: #25F4EE; }
+.stat { font-family: 'Oswald', Arial, sans-serif; font-size: 120px; line-height: 1; font-weight: 600; color: #FF2D6F; text-shadow: 0 0 26px rgba(255,45,111,.7); }
+.stat2 { font-family: 'Oswald', Arial, sans-serif; font-size: 72px; line-height: 1; font-weight: 600; color: #25F4EE; text-shadow: 0 0 20px rgba(37,244,238,.55); }
+.cap { font-size: 24px; line-height: 1.3; color: #D5DCE4; }
+.note { font-size: 24px; line-height: 1.3; color: #9AA7B6; }
+.panel hr { border: none; border-top: 2px solid rgba(255,255,255,.14); margin: 16px 0; }
+
+.pts { flex: 1; display: flex; flex-direction: column; gap: 32px; }
+.pt { border-left: 6px solid #FF2D6F; padding-left: 28px; box-shadow: -10px 0 18px -12px rgba(255,45,111,.9); }
+.pt p { font-size: 30px; line-height: 1.35; color: #C9CED8; }
+.pt b { font-weight: 600; color: #FFFFFF; }
+
+.fig { width: 420px; flex-shrink: 0; display: flex; flex-direction: column; gap: 16px; }
+.figframe { width: 420px; height: 423px; box-sizing: border-box; border-radius: 20px; overflow: hidden; border: 2px solid rgba(37,244,238,.45); box-shadow: 0 0 30px rgba(37,244,238,.2); }
+.figcap { font-size: 24px; line-height: 1.3; color: #8A90A0; }
+
+.tips { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.tip { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.10); border-radius: 20px; padding: 32px; }
+.tip p { font-size: 30px; line-height: 1.35; color: #D5DCE4; }
+.tip b { font-weight: 600; color: #25F4EE; }
+
+.help { width: 560px; flex-shrink: 0; box-sizing: border-box; padding: 40px; border-radius: 24px; background: linear-gradient(135deg, #25F4EE 0%, #19C9C3 100%); box-shadow: 0 0 40px rgba(37,244,238,.35); display: flex; flex-direction: column; justify-content: center; gap: 8px; }
+.help h3 { font-size: 30px; line-height: 1.2; font-weight: 700; color: #0B0B10; }
+.help .hs { font-size: 24px; line-height: 1.3; color: #0B0B10; }
+.help .hnum { font-family: 'Oswald', Arial, sans-serif; font-size: 72px; line-height: 1.05; font-weight: 600; color: #0B0B10; }
+.help hr { border: none; border-top: 2px solid #0B0B10; margin: 12px 0; }
+
+.foot { position: absolute; left: 128px; bottom: 64px; width: 1664px; font-size: 24px; line-height: 1.2; color: #8A90A0; white-space: nowrap; }
+.foot a { color: #8A90A0; text-decoration: underline; }
+.dark .foot { color: #9AA7B6; }
+.dark .foot a { color: #9AA7B6; }
+
+@property --n { syntax: '<integer>'; inherits: false; initial-value: 0 }
+@keyframes count { from { --n: 0 } }
+.n { animation: count 1.2s ease-out both }
+
+@keyframes headin { from { opacity: 0; transform: translateX(-40px); } }
+@keyframes rise { from { opacity: 0; transform: translateY(32px); } }
+@keyframes slidein { from { opacity: 0; transform: translateX(56px); } }
+@keyframes fadein { from { opacity: 0; } }
+.head { animation: headin 500ms ease-out both; }
+.pbg, .bg3d { animation: fadein 500ms ease-out both; }
+.panel { animation: rise 500ms ease-out both; animation-delay: 100ms; }
+.pt, .tip, .fig { animation: slidein 450ms ease-out both; animation-delay: calc(var(--i) * 100ms + 50ms); }
+.help { animation: rise 500ms ease-out both; animation-delay: 450ms; }
+
+
+/* ---------- site: bolder arrivals than the deck file ---------- */
+@keyframes s-head{from{opacity:0;transform:translateX(-90px)}}
+@keyframes s-rise{from{opacity:0;transform:translateY(70px)}}
+@keyframes s-slide{from{opacity:0;transform:translateX(130px)}}
+@keyframes s-pop{0%{opacity:0;transform:scale(.85)}60%{opacity:1;transform:scale(1.03)}100%{opacity:1;transform:scale(1)}}
+#stage .head{animation:s-head .7s cubic-bezier(.2,.8,.2,1) .15s both}
+#stage .panel{animation:s-rise .75s cubic-bezier(.2,.8,.2,1) .25s both}
+#stage .pt,#stage .tip,#stage .fig{animation:s-slide .7s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 130ms + 300ms)}
+#stage .help{animation:s-pop .8s cubic-bezier(.2,.8,.2,1) .75s both}
+#stage .pbg,#stage .bg3d{animation:fadein .6s ease-out both}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<a id="back" href="../">← Усі презентації</a>
+<div id="viewport"><div id="stage">
+<section id="title" class="g-magenta" data-transition="push">
+<iframe class="bg3d emb" title="3D-модель" aria-hidden="true" tabindex="-1" sandbox="allow-scripts" style="position:absolute; left:0px; top:0px; width:1920px; height:1080px" data-srcdoc="&lt;style&gt;html,body{margin:0;height:100%;overflow:hidden;background:transparent}canvas{display:block;width:100%;height:100%}&lt;/style&gt;&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;&lt;script&gt;const cv=document.getElementById(&#x27;c&#x27;),g=cv.getContext(&#x27;2d&#x27;),PI=Math.PI,TAU=PI*2;
+let W=600,H=600;
+function fit(){const d=Math.min(window.devicePixelRatio||1,2);W=cv.clientWidth||600;H=cv.clientHeight||600;cv.width=Math.round(W*d);cv.height=Math.round(H*d);g.setTransform(d,0,0,d,0,0);}
+fit();addEventListener(&#x27;resize&#x27;,fit);
+const V={cx:.5,cy:.5,R:200,cam:6,yaw:0,pitch:.2,roll:0};
+const COL={teal:[37,244,238],mag:[255,45,111],pur:[150,110,255],steel:[168,176,200],white:[236,240,248],amber:[255,176,60],lime:[150,230,90],dark:[44,50,78],navy:[30,34,58]};
+const clamp=(x,a,b)=&gt;Math.max(a,Math.min(b,x)),sm=(a,b,x)=&gt;{x=clamp((x-a)/(b-a),0,1);return x*x*(3-2*x)},lerp=(a,b,t)=&gt;a+(b-a)*t;
+const rnd=i=&gt;{const x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)};
+function T(p){let x=p[0],y=p[1],z=p[2];
+ let c=Math.cos(V.yaw),s=Math.sin(V.yaw);const x1=x*c+z*s,z1=-x*s+z*c;
+ c=Math.cos(V.pitch);s=Math.sin(V.pitch);const y1=y*c-z1*s,z2=y*s+z1*c;
+ c=Math.cos(V.roll);s=Math.sin(V.roll);return [x1*c-y1*s,x1*s+y1*c,z2];}
+function PJ(q){const f=V.cam/(V.cam-q[2]);return [V.cx*W+q[0]*V.R*f,V.cy*H-q[1]*V.R*f,f];}
+let items=[];
+const LD=(()=&gt;{const l=[-.4,.6,.7],m=Math.hypot(l[0],l[1],l[2]);return l.map(v=&gt;v/m)})();
+function rgb(c,f,a){f=f==null?1:f;return &#x27;rgba(&#x27;+Math.min(255,c[0]*f|0)+&#x27;,&#x27;+Math.min(255,c[1]*f|0)+&#x27;,&#x27;+Math.min(255,c[2]*f|0)+&#x27;,&#x27;+(a==null?1:a)+&#x27;)&#x27;;}
+function face(pts,col,o){o=o||{};const q=pts.map(T);
+ const ax=q[1][0]-q[0][0],ay=q[1][1]-q[0][1],az=q[1][2]-q[0][2],bx=q[2][0]-q[0][0],by=q[2][1]-q[0][1],bz=q[2][2]-q[0][2];
+ let nx=ay*bz-az*by,ny=az*bx-ax*bz,nz=ax*by-ay*bx;const m=Math.hypot(nx,ny,nz)||1;nx/=m;ny/=m;nz/=m;if(nz&lt;0){nx=-nx;ny=-ny;nz=-nz;}
+ const sh=o.flat?1:.3+.7*Math.max(0,nx*LD[0]+ny*LD[1]+nz*LD[2]);
+ let z=0;q.forEach(v=&gt;z+=v[2]);z/=q.length;const p=q.map(PJ);
+ items.push({z:z+(o.bias||0),d(){g.beginPath();p.forEach((v,i)=&gt;i?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1]));g.closePath();
+  g.fillStyle=rgb(col,sh,o.a);g.fill();g.lineWidth=1;g.strokeStyle=rgb(col,sh*.8,o.a);g.stroke();
+  if(o.edge){g.strokeStyle=o.edge;g.lineWidth=o.ew||1.5;g.stroke();}}});}
+function box(c,s,col,o){const x=c[0],y=c[1],z=c[2],a=s[0]/2,b=s[1]/2,d=s[2]/2;
+ const v=[[x-a,y-b,z-d],[x+a,y-b,z-d],[x+a,y+b,z-d],[x-a,y+b,z-d],[x-a,y-b,z+d],[x+a,y-b,z+d],[x+a,y+b,z+d],[x-a,y+b,z+d]];
+ [[0,1,2,3],[4,5,6,7],[0,1,5,4],[3,2,6,7],[0,3,7,4],[1,2,6,5]].forEach(f=&gt;face(f.map(i=&gt;v[i]),col,o));}
+function cyl(c,r,h,col,o){o=o||{};const n=o.seg||22,x=c[0],y=c[1],z=c[2],top=[],bot=[];
+ for(let i=0;i&lt;n;i++){const a=i/n*TAU;top.push([x+Math.cos(a)*r,y+h/2,z+Math.sin(a)*r]);bot.push([x+Math.cos(a)*r,y-h/2,z+Math.sin(a)*r]);}
+ for(let i=0;i&lt;n;i++){const j=(i+1)%n;face([bot[i],bot[j],top[j],top[i]],col,o);}
+ if(!o.open){face(top,col,Object.assign({},o,{bias:(o.bias||0)+.02}));face(bot,col,o);}}
+function sph(c,r,col,o){o=o||{};const q=T(c),p=PJ(q),rr=r*V.R*p[2];
+ items.push({z:q[2]+(o.bias||0),d(){const gr=g.createRadialGradient(p[0]-rr*.35,p[1]-rr*.4,rr*.08,p[0],p[1],rr),F=o.f||1;
+  gr.addColorStop(0,rgb(col,1.25*F,o.a));gr.addColorStop(.55,rgb(col,.85*F,o.a));gr.addColorStop(1,rgb(col,.38*F,o.a));
+  g.fillStyle=gr;g.beginPath();g.arc(p[0],p[1],rr,0,TAU);g.fill();}});}
+function glow(c,r,col,a){const q=T(c),p=PJ(q),rr=r*V.R*p[2];
+ items.push({z:q[2]+.001,d(){const gr=g.createRadialGradient(p[0],p[1],0,p[0],p[1],rr);gr.addColorStop(0,rgb(col,1,a));gr.addColorStop(1,rgb(col,1,0));g.fillStyle=gr;g.beginPath();g.arc(p[0],p[1],rr,0,TAU);g.fill();}});}
+function line(a,b,w,col,o){o=o||{};const qa=T(a),qb=T(b),pa=PJ(qa),pb=PJ(qb);
+ items.push({z:(qa[2]+qb[2])/2+(o.bias||0),d(){const f=(pa[2]+pb[2])/2,ww=Math.max(1,w*V.R*f),dx=pb[0]-pa[0],dy=pb[1]-pa[1],l=Math.hypot(dx,dy)||1,nx=-dy/l,ny=dx/l;
+  g.lineCap=&#x27;round&#x27;;(o.dbl?[-ww*.55,ww*.55]:[0]).forEach(d=&gt;{g.lineWidth=o.dbl?ww*.6:ww;g.strokeStyle=rgb(col,o.f||1,o.a);g.beginPath();g.moveTo(pa[0]+nx*d,pa[1]+ny*d);g.lineTo(pb[0]+nx*d,pb[1]+ny*d);g.stroke();});}});}
+function txt(p,s,col,size,align,bias){const q=T(p),pp=PJ(q);
+ items.push({z:q[2]+(bias==null?10:bias),d(){g.font=&#x27;600 &#x27;+size+&#x27;px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.textAlign=align||&#x27;center&#x27;;g.textBaseline=&#x27;middle&#x27;;g.fillStyle=col;g.fillText(s,pp[0],pp[1]);}});}
+function hud(fn){items.push({z:1e6,d:fn});}
+function ring(c,r,col,w,o,n){n=n||36;const pts=[];for(let i=0;i&lt;=n;i++){const a=i/n*TAU;pts.push([c[0]+Math.cos(a)*r,c[1],c[2]+Math.sin(a)*r]);}for(let i=0;i&lt;n;i++)line(pts[i],pts[i+1],w,col,o);}
+function render(){g.clearRect(0,0,W,H);items.sort((a,b)=&gt;a.z-b.z);for(const it of items)it.d();items=[];}
+function loop(scene){let t0=null;function fr(ts){if(t0===null)t0=ts;if(cv.clientWidth&amp;&amp;(cv.clientWidth!==W||cv.clientHeight!==H))fit();items=[];scene((ts-t0)/1000);render();requestAnimationFrame(fr);}requestAnimationFrame(fr);}
+/* molecules */
+const COLA={C:[168,176,200],H:[236,240,248],N:[37,244,238],O:[255,45,111]},RADA={C:.38,H:.25,N:.36,O:.36};
+function mkMol(A,B){let mx=0,my=0,mz=0;A.forEach(e=&gt;{mx+=e[1];my+=e[2];mz+=e[3]});mx/=A.length;my/=A.length;mz/=A.length;let m=0;
+ const P=A.map(e=&gt;{const p=[e[1]-mx,e[2]-my,e[3]-mz];m=Math.max(m,Math.hypot(p[0],p[1],p[2])+RADA[e[0]]);return p});
+ const k=1/m;P.forEach(p=&gt;{p[0]*=k;p[1]*=k;p[2]*=k});return {A,B,P,k};}
+function drawMol(M,c,sc,a,b,o){o=o||{};
+ const Q=M.P.map(p=&gt;{const x=p[0]*Math.cos(a)+p[2]*Math.sin(a),z=-p[0]*Math.sin(a)+p[2]*Math.cos(a),y=p[1]*Math.cos(b)-z*Math.sin(b),w=p[1]*Math.sin(b)+z*Math.cos(b);return [c[0]+x*sc,c[1]+y*sc,c[2]+w*sc];});
+ M.B.forEach(e=&gt;{const i=e[0]-1,j=e[1]-1,p=Q[i],s=Q[j],mid=[(p[0]+s[0])/2,(p[1]+s[1])/2,(p[2]+s[2])/2],w=.2*M.k*sc,dbl=e[2]&gt;1;
+  line(p,mid,w,COLA[M.A[i][0]],{dbl,f:.8,a:o.a,bias:o.bias});line(mid,s,w,COLA[M.A[j][0]],{dbl,f:.8,a:o.a,bias:o.bias});});
+ M.A.forEach((e,i)=&gt;sph(Q[i],RADA[e[0]]*M.k*sc,COLA[e[0]],{a:o.a,bias:o.bias}));}
+/* vape pod */
+function vape(c,o){o=o||{};const x=c[0],y=c[1],z=c[2];
+ box([x,y,z],[1.0,2.5,.52],COL.dark);
+ box([x,y,z+.265],[.84,2.1,.03],COL.navy);
+ box([x,y-.35,z],[1.03,.14,.55],COL.mag);
+ box([x,y+1.42,z],[.62,.38,.36],[70,78,120]);
+ box([x,y+1.62,z],[.46,.05,.22],[20,22,36]);
+ const pulse=.5+.5*Math.sin((o.t||0)*3);
+ sph([x,y-.95,z+.3],.07,COL.teal,{bias:.05});glow([x,y-.95,z+.3],.5,COL.teal,.45+.3*pulse);
+ line([x-.25,y+.55,z+.28],[x+.25,y+.55,z+.28],.018,COL.teal,{a:.7,bias:.05});
+ line([x-.25,y+.38,z+.28],[x+.1,y+.38,z+.28],.018,COL.teal,{a:.5,bias:.05});}
+function floorGrid(y,n,s,col,a){for(let i=-n;i&lt;=n;i++){line([-n*s,y,i*s],[n*s,y,i*s],.005,col,{a});line([i*s,y,-n*s],[i*s,y,n*s],.005,col,{a});}}
+
+const NA=[[&#x27;N&#x27;,-1.70,-0.80,-0.03],[&#x27;N&#x27;,2.30,-0.71,1.22],[&#x27;C&#x27;,-0.88,0.31,-0.57],[&#x27;C&#x27;,-1.50,1.58,0.04],[&#x27;C&#x27;,-2.69,1.10,0.86],[&#x27;C&#x27;,-3.03,-0.24,0.23],[&#x27;C&#x27;,0.59,0.15,-0.25],[&#x27;C&#x27;,-1.76,-1.95,-0.92],[&#x27;C&#x27;,1.56,0.70,-1.08],[&#x27;C&#x27;,1.00,-0.54,0.87],[&#x27;C&#x27;,2.90,0.55,-0.76],[&#x27;C&#x27;,3.22,-0.16,0.39],[&#x27;H&#x27;,-1.01,0.37,-1.66],[&#x27;H&#x27;,-1.85,2.25,-0.76],[&#x27;H&#x27;,-0.80,2.15,0.67],[&#x27;H&#x27;,-2.39,0.96,1.91],[&#x27;H&#x27;,-3.52,1.80,0.83],[&#x27;H&#x27;,-3.61,-0.87,0.92],[&#x27;H&#x27;,-3.60,-0.09,-0.69],[&#x27;H&#x27;,-2.36,-2.75,-0.47],[&#x27;H&#x27;,-0.76,-2.37,-1.09],[&#x27;H&#x27;,-2.20,-1.70,-1.90],[&#x27;H&#x27;,1.28,1.25,-1.97],[&#x27;H&#x27;,0.30,-0.98,1.58],[&#x27;H&#x27;,3.68,0.96,-1.39],[&#x27;H&#x27;,4.25,-0.31,0.68]];const NB=[[1,3,1],[1,6,1],[1,8,1],[2,10,1],[2,12,2],[3,4,1],[3,7,1],[3,13,1],[4,5,1],[4,14,1],[4,15,1],[5,6,1],[5,16,1],[5,17,1],[6,18,1],[6,19,1],[7,9,1],[7,10,2],[8,20,1],[8,21,1],[8,22,1],[9,11,2],[9,23,1],[10,24,1],[11,12,1],[11,25,1],[12,26,1]];
+const N=mkMol(NA,NB);
+V.cx=.72;V.cy=.54;V.R=190;V.cam=7;V.pitch=.2;
+loop(t=&gt;{V.yaw=.45*Math.sin(t*.33)+.15;
+ floorGrid(-1.45,6,.9,COL.teal,.16);
+ glow([0,-1.45,0],3.2,COL.mag,.16);
+ for(let i=0;i&lt;34;i++){const y=((rnd(i+50)*5+t*.12)%5)-2.2;glow([(rnd(i)-.5)*9,y,(rnd(i+90)-.5)*6],.16,COL.teal,.45);}
+ vape([0,0,0],{t});
+ for(let i=0;i&lt;60;i++){const l=((t*.2+rnd(i))%1),y=1.75+l*1.05,x=Math.sin(l*6+i)*.35*l,z=Math.cos(l*5+i*2)*.35*l,r=.1+.28*l,a=.32*(1-l)*Math.min(1,l*14);glow([x,y,z],r*1.5,i%3?COL.teal:COL.mag,a);}
+ const a=t*.5;drawMol(N,[Math.cos(a)*2.45,.5+.25*Math.sin(t*.8),Math.sin(a)*2.45],.75,t*.9,.3);
+});
+&lt;/script&gt;"></iframe>
+<div class="head" style="margin-top:210px;max-width:1000px;gap:26px">
+<p class="eyebrow">КЕЙС 02 · АНАТОМІЯ СУЧАСНИХ ЗАГРОЗ</p>
+<h2 style="font-size:150px;line-height:1.0">Вейпінг<br>і нікотин</h2>
+<p style="font-size:42px;line-height:1.3;color:#D5DCE4;max-width:900px;margin:10px 0 0">Як хімічна модифікація та поведінкова психологія повернули молодь у залежність</p>
+<p style="display:flex;gap:16px;margin:18px 0 0">
+<span style="font-size:24px;font-weight:600;color:#25F4EE;border:2px solid rgba(37,244,238,.5);border-radius:999px;padding:8px 22px">Хімія</span>
+<span style="font-size:24px;font-weight:600;color:#25F4EE;border:2px solid rgba(37,244,238,.5);border-radius:999px;padding:8px 22px">Мозок</span>
+<span style="font-size:24px;font-weight:600;color:#25F4EE;border:2px solid rgba(37,244,238,.5);border-radius:999px;padding:8px 22px">Статистика</span>
+<span style="font-size:24px;font-weight:600;color:#25F4EE;border:2px solid rgba(37,244,238,.5);border-radius:999px;padding:8px 22px">Екологія</span>
+</p>
+</div>
+<p class="foot">Джерело: матеріали кейсу «Анатомія сучасних загроз», Кейс 02 · Біохімія, нейробіологія та економіка руйнівних звичок</p>
+<aside>Добрий день! Мій кейс — про нікотин і вейпінг. Починається він із парадокса: продажі звичайних сигарет у 2000-х падають, а залежність серед молоді стрімко зростає. Звідки вона береться? Я покажу це в чотирьох кроках: хімія сольового нікотину, що відбувається в мозку, що кажуть цифри про школярів і яку ціну за це платить довкілля. Наприкінці розберемо маркетингові маніпуляції та міф «палю вейп, щоб кинути».</aside>
+</section>
+<section id="paradox" class="g-purple" data-transition="push">
+<div class="pbg" style="left:128px;top:304px;width:560px;height:616px"></div><iframe class="bg3d emb" title="3D-модель" aria-hidden="true" tabindex="-1" sandbox="allow-scripts" style="position:absolute; left:128px; top:304px; width:560px; height:616px" data-srcdoc="&lt;style&gt;html,body{margin:0;height:100%;overflow:hidden;background:transparent}canvas{display:block;width:100%;height:100%}&lt;/style&gt;&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;&lt;script&gt;const cv=document.getElementById(&#x27;c&#x27;),g=cv.getContext(&#x27;2d&#x27;),PI=Math.PI,TAU=PI*2;
+let W=600,H=600;
+function fit(){const d=Math.min(window.devicePixelRatio||1,2);W=cv.clientWidth||600;H=cv.clientHeight||600;cv.width=Math.round(W*d);cv.height=Math.round(H*d);g.setTransform(d,0,0,d,0,0);}
+fit();addEventListener(&#x27;resize&#x27;,fit);
+const V={cx:.5,cy:.5,R:200,cam:6,yaw:0,pitch:.2,roll:0};
+const COL={teal:[37,244,238],mag:[255,45,111],pur:[150,110,255],steel:[168,176,200],white:[236,240,248],amber:[255,176,60],lime:[150,230,90],dark:[44,50,78],navy:[30,34,58]};
+const clamp=(x,a,b)=&gt;Math.max(a,Math.min(b,x)),sm=(a,b,x)=&gt;{x=clamp((x-a)/(b-a),0,1);return x*x*(3-2*x)},lerp=(a,b,t)=&gt;a+(b-a)*t;
+const rnd=i=&gt;{const x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)};
+function T(p){let x=p[0],y=p[1],z=p[2];
+ let c=Math.cos(V.yaw),s=Math.sin(V.yaw);const x1=x*c+z*s,z1=-x*s+z*c;
+ c=Math.cos(V.pitch);s=Math.sin(V.pitch);const y1=y*c-z1*s,z2=y*s+z1*c;
+ c=Math.cos(V.roll);s=Math.sin(V.roll);return [x1*c-y1*s,x1*s+y1*c,z2];}
+function PJ(q){const f=V.cam/(V.cam-q[2]);return [V.cx*W+q[0]*V.R*f,V.cy*H-q[1]*V.R*f,f];}
+let items=[];
+const LD=(()=&gt;{const l=[-.4,.6,.7],m=Math.hypot(l[0],l[1],l[2]);return l.map(v=&gt;v/m)})();
+function rgb(c,f,a){f=f==null?1:f;return &#x27;rgba(&#x27;+Math.min(255,c[0]*f|0)+&#x27;,&#x27;+Math.min(255,c[1]*f|0)+&#x27;,&#x27;+Math.min(255,c[2]*f|0)+&#x27;,&#x27;+(a==null?1:a)+&#x27;)&#x27;;}
+function face(pts,col,o){o=o||{};const q=pts.map(T);
+ const ax=q[1][0]-q[0][0],ay=q[1][1]-q[0][1],az=q[1][2]-q[0][2],bx=q[2][0]-q[0][0],by=q[2][1]-q[0][1],bz=q[2][2]-q[0][2];
+ let nx=ay*bz-az*by,ny=az*bx-ax*bz,nz=ax*by-ay*bx;const m=Math.hypot(nx,ny,nz)||1;nx/=m;ny/=m;nz/=m;if(nz&lt;0){nx=-nx;ny=-ny;nz=-nz;}
+ const sh=o.flat?1:.3+.7*Math.max(0,nx*LD[0]+ny*LD[1]+nz*LD[2]);
+ let z=0;q.forEach(v=&gt;z+=v[2]);z/=q.length;const p=q.map(PJ);
+ items.push({z:z+(o.bias||0),d(){g.beginPath();p.forEach((v,i)=&gt;i?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1]));g.closePath();
+  g.fillStyle=rgb(col,sh,o.a);g.fill();g.lineWidth=1;g.strokeStyle=rgb(col,sh*.8,o.a);g.stroke();
+  if(o.edge){g.strokeStyle=o.edge;g.lineWidth=o.ew||1.5;g.stroke();}}});}
+function box(c,s,col,o){const x=c[0],y=c[1],z=c[2],a=s[0]/2,b=s[1]/2,d=s[2]/2;
+ const v=[[x-a,y-b,z-d],[x+a,y-b,z-d],[x+a,y+b,z-d],[x-a,y+b,z-d],[x-a,y-b,z+d],[x+a,y-b,z+d],[x+a,y+b,z+d],[x-a,y+b,z+d]];
+ [[0,1,2,3],[4,5,6,7],[0,1,5,4],[3,2,6,7],[0,3,7,4],[1,2,6,5]].forEach(f=&gt;face(f.map(i=&gt;v[i]),col,o));}
+function cyl(c,r,h,col,o){o=o||{};const n=o.seg||22,x=c[0],y=c[1],z=c[2],top=[],bot=[];
+ for(let i=0;i&lt;n;i++){const a=i/n*TAU;top.push([x+Math.cos(a)*r,y+h/2,z+Math.sin(a)*r]);bot.push([x+Math.cos(a)*r,y-h/2,z+Math.sin(a)*r]);}
+ for(let i=0;i&lt;n;i++){const j=(i+1)%n;face([bot[i],bot[j],top[j],top[i]],col,o);}
+ if(!o.open){face(top,col,Object.assign({},o,{bias:(o.bias||0)+.02}));face(bot,col,o);}}
+function sph(c,r,col,o){o=o||{};const q=T(c),p=PJ(q),rr=r*V.R*p[2];
+ items.push({z:q[2]+(o.bias||0),d(){const gr=g.createRadialGradient(p[0]-rr*.35,p[1]-rr*.4,rr*.08,p[0],p[1],rr),F=o.f||1;
+  gr.addColorStop(0,rgb(col,1.25*F,o.a));gr.addColorStop(.55,rgb(col,.85*F,o.a));gr.addColorStop(1,rgb(col,.38*F,o.a));
+  g.fillStyle=gr;g.beginPath();g.arc(p[0],p[1],rr,0,TAU);g.fill();}});}
+function glow(c,r,col,a){const q=T(c),p=PJ(q),rr=r*V.R*p[2];
+ items.push({z:q[2]+.001,d(){const gr=g.createRadialGradient(p[0],p[1],0,p[0],p[1],rr);gr.addColorStop(0,rgb(col,1,a));gr.addColorStop(1,rgb(col,1,0));g.fillStyle=gr;g.beginPath();g.arc(p[0],p[1],rr,0,TAU);g.fill();}});}
+function line(a,b,w,col,o){o=o||{};const qa=T(a),qb=T(b),pa=PJ(qa),pb=PJ(qb);
+ items.push({z:(qa[2]+qb[2])/2+(o.bias||0),d(){const f=(pa[2]+pb[2])/2,ww=Math.max(1,w*V.R*f),dx=pb[0]-pa[0],dy=pb[1]-pa[1],l=Math.hypot(dx,dy)||1,nx=-dy/l,ny=dx/l;
+  g.lineCap=&#x27;round&#x27;;(o.dbl?[-ww*.55,ww*.55]:[0]).forEach(d=&gt;{g.lineWidth=o.dbl?ww*.6:ww;g.strokeStyle=rgb(col,o.f||1,o.a);g.beginPath();g.moveTo(pa[0]+nx*d,pa[1]+ny*d);g.lineTo(pb[0]+nx*d,pb[1]+ny*d);g.stroke();});}});}
+function txt(p,s,col,size,align,bias){const q=T(p),pp=PJ(q);
+ items.push({z:q[2]+(bias==null?10:bias),d(){g.font=&#x27;600 &#x27;+size+&#x27;px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.textAlign=align||&#x27;center&#x27;;g.textBaseline=&#x27;middle&#x27;;g.fillStyle=col;g.fillText(s,pp[0],pp[1]);}});}
+function hud(fn){items.push({z:1e6,d:fn});}
+function ring(c,r,col,w,o,n){n=n||36;const pts=[];for(let i=0;i&lt;=n;i++){const a=i/n*TAU;pts.push([c[0]+Math.cos(a)*r,c[1],c[2]+Math.sin(a)*r]);}for(let i=0;i&lt;n;i++)line(pts[i],pts[i+1],w,col,o);}
+function render(){g.clearRect(0,0,W,H);items.sort((a,b)=&gt;a.z-b.z);for(const it of items)it.d();items=[];}
+function loop(scene){let t0=null;function fr(ts){if(t0===null)t0=ts;if(cv.clientWidth&amp;&amp;(cv.clientWidth!==W||cv.clientHeight!==H))fit();items=[];scene((ts-t0)/1000);render();requestAnimationFrame(fr);}requestAnimationFrame(fr);}
+/* molecules */
+const COLA={C:[168,176,200],H:[236,240,248],N:[37,244,238],O:[255,45,111]},RADA={C:.38,H:.25,N:.36,O:.36};
+function mkMol(A,B){let mx=0,my=0,mz=0;A.forEach(e=&gt;{mx+=e[1];my+=e[2];mz+=e[3]});mx/=A.length;my/=A.length;mz/=A.length;let m=0;
+ const P=A.map(e=&gt;{const p=[e[1]-mx,e[2]-my,e[3]-mz];m=Math.max(m,Math.hypot(p[0],p[1],p[2])+RADA[e[0]]);return p});
+ const k=1/m;P.forEach(p=&gt;{p[0]*=k;p[1]*=k;p[2]*=k});return {A,B,P,k};}
+function drawMol(M,c,sc,a,b,o){o=o||{};
+ const Q=M.P.map(p=&gt;{const x=p[0]*Math.cos(a)+p[2]*Math.sin(a),z=-p[0]*Math.sin(a)+p[2]*Math.cos(a),y=p[1]*Math.cos(b)-z*Math.sin(b),w=p[1]*Math.sin(b)+z*Math.cos(b);return [c[0]+x*sc,c[1]+y*sc,c[2]+w*sc];});
+ M.B.forEach(e=&gt;{const i=e[0]-1,j=e[1]-1,p=Q[i],s=Q[j],mid=[(p[0]+s[0])/2,(p[1]+s[1])/2,(p[2]+s[2])/2],w=.2*M.k*sc,dbl=e[2]&gt;1;
+  line(p,mid,w,COLA[M.A[i][0]],{dbl,f:.8,a:o.a,bias:o.bias});line(mid,s,w,COLA[M.A[j][0]],{dbl,f:.8,a:o.a,bias:o.bias});});
+ M.A.forEach((e,i)=&gt;sph(Q[i],RADA[e[0]]*M.k*sc,COLA[e[0]],{a:o.a,bias:o.bias}));}
+/* vape pod */
+function vape(c,o){o=o||{};const x=c[0],y=c[1],z=c[2];
+ box([x,y,z],[1.0,2.5,.52],COL.dark);
+ box([x,y,z+.265],[.84,2.1,.03],COL.navy);
+ box([x,y-.35,z],[1.03,.14,.55],COL.mag);
+ box([x,y+1.42,z],[.62,.38,.36],[70,78,120]);
+ box([x,y+1.62,z],[.46,.05,.22],[20,22,36]);
+ const pulse=.5+.5*Math.sin((o.t||0)*3);
+ sph([x,y-.95,z+.3],.07,COL.teal,{bias:.05});glow([x,y-.95,z+.3],.5,COL.teal,.45+.3*pulse);
+ line([x-.25,y+.55,z+.28],[x+.25,y+.55,z+.28],.018,COL.teal,{a:.7,bias:.05});
+ line([x-.25,y+.38,z+.28],[x+.1,y+.38,z+.28],.018,COL.teal,{a:.5,bias:.05});}
+function floorGrid(y,n,s,col,a){for(let i=-n;i&lt;=n;i++){line([-n*s,y,i*s],[n*s,y,i*s],.005,col,{a});line([i*s,y,-n*s],[i*s,y,n*s],.005,col,{a});}}
+
+const NA=[[&#x27;N&#x27;,-1.70,-0.80,-0.03],[&#x27;N&#x27;,2.30,-0.71,1.22],[&#x27;C&#x27;,-0.88,0.31,-0.57],[&#x27;C&#x27;,-1.50,1.58,0.04],[&#x27;C&#x27;,-2.69,1.10,0.86],[&#x27;C&#x27;,-3.03,-0.24,0.23],[&#x27;C&#x27;,0.59,0.15,-0.25],[&#x27;C&#x27;,-1.76,-1.95,-0.92],[&#x27;C&#x27;,1.56,0.70,-1.08],[&#x27;C&#x27;,1.00,-0.54,0.87],[&#x27;C&#x27;,2.90,0.55,-0.76],[&#x27;C&#x27;,3.22,-0.16,0.39],[&#x27;H&#x27;,-1.01,0.37,-1.66],[&#x27;H&#x27;,-1.85,2.25,-0.76],[&#x27;H&#x27;,-0.80,2.15,0.67],[&#x27;H&#x27;,-2.39,0.96,1.91],[&#x27;H&#x27;,-3.52,1.80,0.83],[&#x27;H&#x27;,-3.61,-0.87,0.92],[&#x27;H&#x27;,-3.60,-0.09,-0.69],[&#x27;H&#x27;,-2.36,-2.75,-0.47],[&#x27;H&#x27;,-0.76,-2.37,-1.09],[&#x27;H&#x27;,-2.20,-1.70,-1.90],[&#x27;H&#x27;,1.28,1.25,-1.97],[&#x27;H&#x27;,0.30,-0.98,1.58],[&#x27;H&#x27;,3.68,0.96,-1.39],[&#x27;H&#x27;,4.25,-0.31,0.68]];const NB=[[1,3,1],[1,6,1],[1,8,1],[2,10,1],[2,12,2],[3,4,1],[3,7,1],[3,13,1],[4,5,1],[4,14,1],[4,15,1],[5,6,1],[5,16,1],[5,17,1],[6,18,1],[6,19,1],[7,9,1],[7,10,2],[8,20,1],[8,21,1],[8,22,1],[9,11,2],[9,23,1],[10,24,1],[11,12,1],[11,25,1],[12,26,1]];
+const N=mkMol(NA,NB);
+V.cx=.5;V.cy=.76;V.R=128;V.cam=6;V.pitch=.3;
+loop(t=&gt;{V.yaw=0;
+ glow([0,0,0],1.9,COL.mag,.22);
+ drawMol(N,[0,0,0],1.05,.6+t*.4,.3+.1*Math.sin(t*.5));
+ for(let i=0;i&lt;5;i++){const a=t*.8+i*TAU/5;sph([Math.cos(a)*1.8,.3*Math.sin(a*2),Math.sin(a)*1.8],.07,COL.mag,{});}
+ hud(()=&gt;{g.font=&#x27;600 22px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#7F8DA0&#x27;;g.textAlign=&#x27;right&#x27;;g.textBaseline=&#x27;top&#x27;;g.fillText(&#x27;Нікотин · C₁₀H₁₄N₂&#x27;,W-28,H-44);});
+});
+&lt;/script&gt;"></iframe><div class="head">
+<p class="eyebrow">01 · ПАРАДОКС</p>
+<h2>Сигарет продають менше — залежних більше</h2>
+</div>
+<div class="body">
+<div class="panel p3d" style="--i:0;justify-content:flex-start">
+<p class="plabel">ПРОБЛЕМНЕ ПИТАННЯ</p>
+<p class="cap">Як хімічна модифікація та поведінкова психологія повернули молодь у залежність?</p>
+</div>
+<div class="pts">
+<div class="pt" style="--i:1"><p><b>Падіння продажів сигарет у 2000-х</b> виглядає як перемога над тютюном.</p></div>
+<div class="pt" style="--i:2"><p><b>Водночас стрімко зростає залежність</b> — через компактні POD-системи, які легко приховати й приємно вдихати.</p></div>
+<div class="pt" style="--i:3"><p><b>Нікотин нікуди не зник</b> — змінилася його форма: з диму й кашлю в «сольову» рідину зі смаком.</p></div>
+<div class="pt" style="--i:4"><p><b>Шукаємо відповідь у двох місцях:</b> у хімії самого нікотину та в тому, що він робить із мозком.</p></div>
+</div>
+</div>
+<p class="foot">Джерела: матеріали кейсу «Анатомія сучасних загроз», Кейс 02 · <a href="https://www.who.int/health-topics/tobacco">ВООЗ — тютюн</a> · <a href="https://pubchem.ncbi.nlm.nih.gov/compound/89594">PubChem: нікотин</a></p>
+<aside>Головне питання кейсу: як хімічна модифікація та поведінкова психологія повернули молодь у залежність? Падіння продажів сигарет — це не перемога над нікотином: він просто змінив упаковку. Замість диму й кашлю — POD-системи: компактні, зі смаками й м’яким вдихом. Далі розберемо, що змінили в хімії, що це робить із мозком і які цифри ми бачимо у школярів.</aside>
+</section>
+<section id="chemistry" class="g-magenta" data-transition="push">
+<div class="pbg" style="left:128px;top:304px;width:960px;height:616px"></div><iframe class="bg3d emb" title="3D-модель" aria-hidden="true" tabindex="-1" sandbox="allow-scripts" style="position:absolute; left:128px; top:304px; width:960px; height:616px" data-srcdoc="&lt;style&gt;html,body{margin:0;height:100%;overflow:hidden;background:transparent}canvas{display:block;width:100%;height:100%}&lt;/style&gt;&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;&lt;script&gt;const cv=document.getElementById(&#x27;c&#x27;),g=cv.getContext(&#x27;2d&#x27;),PI=Math.PI,TAU=PI*2;
+let W=600,H=600;
+function fit(){const d=Math.min(window.devicePixelRatio||1,2);W=cv.clientWidth||600;H=cv.clientHeight||600;cv.width=Math.round(W*d);cv.height=Math.round(H*d);g.setTransform(d,0,0,d,0,0);}
+fit();addEventListener(&#x27;resize&#x27;,fit);
+const V={cx:.5,cy:.5,R:200,cam:6,yaw:0,pitch:.2,roll:0};
+const COL={teal:[37,244,238],mag:[255,45,111],pur:[150,110,255],steel:[168,176,200],white:[236,240,248],amber:[255,176,60],lime:[150,230,90],dark:[44,50,78],navy:[30,34,58]};
+const clamp=(x,a,b)=&gt;Math.max(a,Math.min(b,x)),sm=(a,b,x)=&gt;{x=clamp((x-a)/(b-a),0,1);return x*x*(3-2*x)},lerp=(a,b,t)=&gt;a+(b-a)*t;
+const rnd=i=&gt;{const x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)};
+function T(p){let x=p[0],y=p[1],z=p[2];
+ let c=Math.cos(V.yaw),s=Math.sin(V.yaw);const x1=x*c+z*s,z1=-x*s+z*c;
+ c=Math.cos(V.pitch);s=Math.sin(V.pitch);const y1=y*c-z1*s,z2=y*s+z1*c;
+ c=Math.cos(V.roll);s=Math.sin(V.roll);return [x1*c-y1*s,x1*s+y1*c,z2];}
+function PJ(q){const f=V.cam/(V.cam-q[2]);return [V.cx*W+q[0]*V.R*f,V.cy*H-q[1]*V.R*f,f];}
+let items=[];
+const LD=(()=&gt;{const l=[-.4,.6,.7],m=Math.hypot(l[0],l[1],l[2]);return l.map(v=&gt;v/m)})();
+function rgb(c,f,a){f=f==null?1:f;return &#x27;rgba(&#x27;+Math.min(255,c[0]*f|0)+&#x27;,&#x27;+Math.min(255,c[1]*f|0)+&#x27;,&#x27;+Math.min(255,c[2]*f|0)+&#x27;,&#x27;+(a==null?1:a)+&#x27;)&#x27;;}
+function face(pts,col,o){o=o||{};const q=pts.map(T);
+ const ax=q[1][0]-q[0][0],ay=q[1][1]-q[0][1],az=q[1][2]-q[0][2],bx=q[2][0]-q[0][0],by=q[2][1]-q[0][1],bz=q[2][2]-q[0][2];
+ let nx=ay*bz-az*by,ny=az*bx-ax*bz,nz=ax*by-ay*bx;const m=Math.hypot(nx,ny,nz)||1;nx/=m;ny/=m;nz/=m;if(nz&lt;0){nx=-nx;ny=-ny;nz=-nz;}
+ const sh=o.flat?1:.3+.7*Math.max(0,nx*LD[0]+ny*LD[1]+nz*LD[2]);
+ let z=0;q.forEach(v=&gt;z+=v[2]);z/=q.length;const p=q.map(PJ);
+ items.push({z:z+(o.bias||0),d(){g.beginPath();p.forEach((v,i)=&gt;i?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1]));g.closePath();
+  g.fillStyle=rgb(col,sh,o.a);g.fill();g.lineWidth=1;g.strokeStyle=rgb(col,sh*.8,o.a);g.stroke();
+  if(o.edge){g.strokeStyle=o.edge;g.lineWidth=o.ew||1.5;g.stroke();}}});}
+function box(c,s,col,o){const x=c[0],y=c[1],z=c[2],a=s[0]/2,b=s[1]/2,d=s[2]/2;
+ const v=[[x-a,y-b,z-d],[x+a,y-b,z-d],[x+a,y+b,z-d],[x-a,y+b,z-d],[x-a,y-b,z+d],[x+a,y-b,z+d],[x+a,y+b,z+d],[x-a,y+b,z+d]];
+ [[0,1,2,3],[4,5,6,7],[0,1,5,4],[3,2,6,7],[0,3,7,4],[1,2,6,5]].forEach(f=&gt;face(f.map(i=&gt;v[i]),col,o));}
+function cyl(c,r,h,col,o){o=o||{};const n=o.seg||22,x=c[0],y=c[1],z=c[2],top=[],bot=[];
+ for(let i=0;i&lt;n;i++){const a=i/n*TAU;top.push([x+Math.cos(a)*r,y+h/2,z+Math.sin(a)*r]);bot.push([x+Math.cos(a)*r,y-h/2,z+Math.sin(a)*r]);}
+ for(let i=0;i&lt;n;i++){const j=(i+1)%n;face([bot[i],bot[j],top[j],top[i]],col,o);}
+ if(!o.open){face(top,col,Object.assign({},o,{bias:(o.bias||0)+.02}));face(bot,col,o);}}
+function sph(c,r,col,o){o=o||{};const q=T(c),p=PJ(q),rr=r*V.R*p[2];
+ items.push({z:q[2]+(o.bias||0),d(){const gr=g.createRadialGradient(p[0]-rr*.35,p[1]-rr*.4,rr*.08,p[0],p[1],rr),F=o.f||1;
+  gr.addColorStop(0,rgb(col,1.25*F,o.a));gr.addColorStop(.55,rgb(col,.85*F,o.a));gr.addColorStop(1,rgb(col,.38*F,o.a));
+  g.fillStyle=gr;g.beginPath();g.arc(p[0],p[1],rr,0,TAU);g.fill();}});}
+function glow(c,r,col,a){const q=T(c),p=PJ(q),rr=r*V.R*p[2];
+ items.push({z:q[2]+.001,d(){const gr=g.createRadialGradient(p[0],p[1],0,p[0],p[1],rr);gr.addColorStop(0,rgb(col,1,a));gr.addColorStop(1,rgb(col,1,0));g.fillStyle=gr;g.beginPath();g.arc(p[0],p[1],rr,0,TAU);g.fill();}});}
+function line(a,b,w,col,o){o=o||{};const qa=T(a),qb=T(b),pa=PJ(qa),pb=PJ(qb);
+ items.push({z:(qa[2]+qb[2])/2+(o.bias||0),d(){const f=(pa[2]+pb[2])/2,ww=Math.max(1,w*V.R*f),dx=pb[0]-pa[0],dy=pb[1]-pa[1],l=Math.hypot(dx,dy)||1,nx=-dy/l,ny=dx/l;
+  g.lineCap=&#x27;round&#x27;;(o.dbl?[-ww*.55,ww*.55]:[0]).forEach(d=&gt;{g.lineWidth=o.dbl?ww*.6:ww;g.strokeStyle=rgb(col,o.f||1,o.a);g.beginPath();g.moveTo(pa[0]+nx*d,pa[1]+ny*d);g.lineTo(pb[0]+nx*d,pb[1]+ny*d);g.stroke();});}});}
+function txt(p,s,col,size,align,bias){const q=T(p),pp=PJ(q);
+ items.push({z:q[2]+(bias==null?10:bias),d(){g.font=&#x27;600 &#x27;+size+&#x27;px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.textAlign=align||&#x27;center&#x27;;g.textBaseline=&#x27;middle&#x27;;g.fillStyle=col;g.fillText(s,pp[0],pp[1]);}});}
+function hud(fn){items.push({z:1e6,d:fn});}
+function ring(c,r,col,w,o,n){n=n||36;const pts=[];for(let i=0;i&lt;=n;i++){const a=i/n*TAU;pts.push([c[0]+Math.cos(a)*r,c[1],c[2]+Math.sin(a)*r]);}for(let i=0;i&lt;n;i++)line(pts[i],pts[i+1],w,col,o);}
+function render(){g.clearRect(0,0,W,H);items.sort((a,b)=&gt;a.z-b.z);for(const it of items)it.d();items=[];}
+function loop(scene){let t0=null;function fr(ts){if(t0===null)t0=ts;if(cv.clientWidth&amp;&amp;(cv.clientWidth!==W||cv.clientHeight!==H))fit();items=[];scene((ts-t0)/1000);render();requestAnimationFrame(fr);}requestAnimationFrame(fr);}
+/* molecules */
+const COLA={C:[168,176,200],H:[236,240,248],N:[37,244,238],O:[255,45,111]},RADA={C:.38,H:.25,N:.36,O:.36};
+function mkMol(A,B){let mx=0,my=0,mz=0;A.forEach(e=&gt;{mx+=e[1];my+=e[2];mz+=e[3]});mx/=A.length;my/=A.length;mz/=A.length;let m=0;
+ const P=A.map(e=&gt;{const p=[e[1]-mx,e[2]-my,e[3]-mz];m=Math.max(m,Math.hypot(p[0],p[1],p[2])+RADA[e[0]]);return p});
+ const k=1/m;P.forEach(p=&gt;{p[0]*=k;p[1]*=k;p[2]*=k});return {A,B,P,k};}
+function drawMol(M,c,sc,a,b,o){o=o||{};
+ const Q=M.P.map(p=&gt;{const x=p[0]*Math.cos(a)+p[2]*Math.sin(a),z=-p[0]*Math.sin(a)+p[2]*Math.cos(a),y=p[1]*Math.cos(b)-z*Math.sin(b),w=p[1]*Math.sin(b)+z*Math.cos(b);return [c[0]+x*sc,c[1]+y*sc,c[2]+w*sc];});
+ M.B.forEach(e=&gt;{const i=e[0]-1,j=e[1]-1,p=Q[i],s=Q[j],mid=[(p[0]+s[0])/2,(p[1]+s[1])/2,(p[2]+s[2])/2],w=.2*M.k*sc,dbl=e[2]&gt;1;
+  line(p,mid,w,COLA[M.A[i][0]],{dbl,f:.8,a:o.a,bias:o.bias});line(mid,s,w,COLA[M.A[j][0]],{dbl,f:.8,a:o.a,bias:o.bias});});
+ M.A.forEach((e,i)=&gt;sph(Q[i],RADA[e[0]]*M.k*sc,COLA[e[0]],{a:o.a,bias:o.bias}));}
+/* vape pod */
+function vape(c,o){o=o||{};const x=c[0],y=c[1],z=c[2];
+ box([x,y,z],[1.0,2.5,.52],COL.dark);
+ box([x,y,z+.265],[.84,2.1,.03],COL.navy);
+ box([x,y-.35,z],[1.03,.14,.55],COL.mag);
+ box([x,y+1.42,z],[.62,.38,.36],[70,78,120]);
+ box([x,y+1.62,z],[.46,.05,.22],[20,22,36]);
+ const pulse=.5+.5*Math.sin((o.t||0)*3);
+ sph([x,y-.95,z+.3],.07,COL.teal,{bias:.05});glow([x,y-.95,z+.3],.5,COL.teal,.45+.3*pulse);
+ line([x-.25,y+.55,z+.28],[x+.25,y+.55,z+.28],.018,COL.teal,{a:.7,bias:.05});
+ line([x-.25,y+.38,z+.28],[x+.1,y+.38,z+.28],.018,COL.teal,{a:.5,bias:.05});}
+function floorGrid(y,n,s,col,a){for(let i=-n;i&lt;=n;i++){line([-n*s,y,i*s],[n*s,y,i*s],.005,col,{a});line([i*s,y,-n*s],[i*s,y,n*s],.005,col,{a});}}
+
+const NA=[[&#x27;N&#x27;,-1.70,-0.80,-0.03],[&#x27;N&#x27;,2.30,-0.71,1.22],[&#x27;C&#x27;,-0.88,0.31,-0.57],[&#x27;C&#x27;,-1.50,1.58,0.04],[&#x27;C&#x27;,-2.69,1.10,0.86],[&#x27;C&#x27;,-3.03,-0.24,0.23],[&#x27;C&#x27;,0.59,0.15,-0.25],[&#x27;C&#x27;,-1.76,-1.95,-0.92],[&#x27;C&#x27;,1.56,0.70,-1.08],[&#x27;C&#x27;,1.00,-0.54,0.87],[&#x27;C&#x27;,2.90,0.55,-0.76],[&#x27;C&#x27;,3.22,-0.16,0.39],[&#x27;H&#x27;,-1.01,0.37,-1.66],[&#x27;H&#x27;,-1.85,2.25,-0.76],[&#x27;H&#x27;,-0.80,2.15,0.67],[&#x27;H&#x27;,-2.39,0.96,1.91],[&#x27;H&#x27;,-3.52,1.80,0.83],[&#x27;H&#x27;,-3.61,-0.87,0.92],[&#x27;H&#x27;,-3.60,-0.09,-0.69],[&#x27;H&#x27;,-2.36,-2.75,-0.47],[&#x27;H&#x27;,-0.76,-2.37,-1.09],[&#x27;H&#x27;,-2.20,-1.70,-1.90],[&#x27;H&#x27;,1.28,1.25,-1.97],[&#x27;H&#x27;,0.30,-0.98,1.58],[&#x27;H&#x27;,3.68,0.96,-1.39],[&#x27;H&#x27;,4.25,-0.31,0.68]];const NB=[[1,3,1],[1,6,1],[1,8,1],[2,10,1],[2,12,2],[3,4,1],[3,7,1],[3,13,1],[4,5,1],[4,14,1],[4,15,1],[5,6,1],[5,16,1],[5,17,1],[6,18,1],[6,19,1],[7,9,1],[7,10,2],[8,20,1],[8,21,1],[8,22,1],[9,11,2],[9,23,1],[10,24,1],[11,12,1],[11,25,1],[12,26,1]];
+const NIC=mkMol(NA,NB);
+const BA=[[&#x27;C&#x27;,1.40,0,0],[&#x27;C&#x27;,.70,1.212,0],[&#x27;C&#x27;,-.70,1.212,0],[&#x27;C&#x27;,-1.40,0,0],[&#x27;C&#x27;,-.70,-1.212,0],[&#x27;C&#x27;,.70,-1.212,0],[&#x27;C&#x27;,2.90,0,0],[&#x27;O&#x27;,3.55,1.10,0],[&#x27;O&#x27;,3.60,-1.12,0],[&#x27;H&#x27;,4.50,-1.0,0],[&#x27;H&#x27;,1.24,2.148,0],[&#x27;H&#x27;,-1.24,2.148,0],[&#x27;H&#x27;,-2.48,0,0],[&#x27;H&#x27;,-1.24,-2.148,0],[&#x27;H&#x27;,1.24,-2.148,0]];
+const BB=[[1,2,2],[2,3,1],[3,4,2],[4,5,1],[5,6,2],[6,1,1],[1,7,1],[7,8,2],[7,9,1],[9,10,1],[2,11,1],[3,12,1],[4,13,1],[5,14,1],[6,15,1]];
+const BZ=mkMol(BA,BB);
+V.cx=.5;V.cy=.44;V.R=120;V.cam=7;V.pitch=.28;
+loop(t=&gt;{V.yaw=.28*Math.sin(t*.35);
+ const tt=t%10,s=sm(2.6,4.8,tt)-sm(9.2,9.8,tt),irr=1-s,pulse=.6+.4*Math.sin(t*7);
+ const nx=-1.55,bx=lerp(5.2,1.55,s);
+ glow([nx,0,0],2.3,COL.mag,.34*irr*pulse);glow([nx,0,0],2.3,COL.teal,.3*s);
+ drawMol(NIC,[nx,0,0],1.35,t*.5,.3);
+ drawMol(BZ,[bx,0,0],1.1,.9+t*.3*(1-s),.35);
+ glow([bx,0,0],1.9,COL.amber,.14);
+ if(s&gt;.6){const k=(s-.6)/.4;line([nx+1.1,0,0],[bx-1.0,0,0],.045,COL.teal,{a:.7*k});glow([(nx+bx)/2,0,0],1.6,COL.teal,.25*k);}
+ for(let i=0;i&lt;8;i++){const a=t*6+i*TAU/8;if(irr&gt;.3)line([nx+Math.cos(a)*1.55,Math.sin(a)*1.55,0],[nx+Math.cos(a)*1.85,Math.sin(a)*1.85,0],.03,COL.mag,{a:.8*irr*pulse});}
+ txt([bx,-1.55,0],&#x27;Бензойна кислота&#x27;,s&gt;.05?&#x27;#F5C27A&#x27;:&#x27;rgba(245,194,122,.0)&#x27;,22,&#x27;center&#x27;);
+ txt([nx,-1.75,0],&#x27;Нікотин&#x27;,&#x27;#25F4EE&#x27;,22,&#x27;center&#x27;);
+ hud(()=&gt;{
+  g.textAlign=&#x27;left&#x27;;g.textBaseline=&#x27;top&#x27;;
+  g.font=&#x27;700 28px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=s&lt;.5?&#x27;#FF6B95&#x27;:&#x27;#25F4EE&#x27;;
+  g.fillText(s&lt;.5?&#x27;Звичайний нікотин (тютюн): високий pH&#x27;:&#x27;Сольовий нікотин: низький pH&#x27;,30,24);
+  g.font=&#x27;500 23px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#9AA7B6&#x27;;
+  g.fillText(s&lt;.5?&#x27;Спазм і кашель — захисний рефлекс організму&#x27;:&#x27;Гладке вдихання навіть при 20–50 мг/мл&#x27;,30,62);
+  const bw=W-60,by=H-44;g.fillStyle=&#x27;rgba(255,255,255,.09)&#x27;;g.fillRect(30,by,bw,18);
+  const gr=g.createLinearGradient(30,0,30+bw,0);gr.addColorStop(0,&#x27;#25F4EE&#x27;);gr.addColorStop(.5,&#x27;#FFB03C&#x27;);gr.addColorStop(1,&#x27;#FF2D6F&#x27;);
+  g.fillStyle=gr;g.fillRect(30,by,bw*(.06+.94*irr),18);
+  g.font=&#x27;600 21px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#C9CED8&#x27;;g.fillText(&#x27;Подразнення горла&#x27;,30,by-30);
+  g.textAlign=&#x27;right&#x27;;g.fillStyle=&#x27;#8A90A0&#x27;;g.fillText(irr&gt;.5?&#x27;високе&#x27;:&#x27;мінімальне&#x27;,W-30,by-30);
+ });
+});
+&lt;/script&gt;"></iframe><div class="head">
+<p class="eyebrow">02 · ХІМІЯ</p>
+<h2>Сольовий нікотин: хімія без кашлю</h2>
+</div>
+<div class="body">
+<div style="width:960px;flex:none"></div>
+<div class="pts">
+<div class="pt" style="--i:0"><p><b>Тютюновий нікотин</b> має високий pH. Для горла це подразник: спазм і кашель — захисний рефлекс.</p></div>
+<div class="pt" style="--i:1"><p><b>+ бензойна кислота</b> знижує pH — утворюється сольовий нікотин, і подразнення зникає.</p></div>
+<div class="pt" style="--i:2"><p><b>20–50 мг/мл</b> можна вдихати без дискомфорту. Організм втрачає природний сигнал «стоп».</p></div>
+</div>
+</div>
+<p class="foot">Джерела: матеріали кейсу «Анатомія сучасних загроз», Кейс 02 · <a href="https://www.who.int/news-room/questions-and-answers/item/tobacco-e-cigarettes">ВООЗ — е-сигарети</a> · <a href="https://pubchem.ncbi.nlm.nih.gov/compound/243">PubChem: бензойна кислота</a></p>
+<aside>Звичайний нікотин із тютюну має високий pH — це лужне середовище. Для горла це подразник: спазм і кашель, захисний рефлекс. Виробники додали бензойну кислоту. Вона знижує pH, і утворюється сольовий нікотин. Горло більше не «протестує», тож можна вдихати високі концентрації — від 20 до 50 міліграмів на мілілітр — без дискомфорту. Тобто організм втрачає природний сигнал «стоп». Це і є головна хімічна зміна.</aside>
+</section>
+<section id="speed" class="g-teal" data-transition="push">
+<div class="pbg" style="left:128px;top:304px;width:1664px;height:352px"></div><iframe class="bg3d emb" title="3D-модель" aria-hidden="true" tabindex="-1" sandbox="allow-scripts" style="position:absolute; left:128px; top:304px; width:1664px; height:352px" data-srcdoc="&lt;style&gt;html,body{margin:0;height:100%;overflow:hidden;background:transparent}canvas{display:block;width:100%;height:100%}&lt;/style&gt;&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;&lt;script&gt;const cv=document.getElementById(&#x27;c&#x27;),g=cv.getContext(&#x27;2d&#x27;),PI=Math.PI,TAU=PI*2;
+let W=600,H=600;
+function fit(){const d=Math.min(window.devicePixelRatio||1,2);W=cv.clientWidth||600;H=cv.clientHeight||600;cv.width=Math.round(W*d);cv.height=Math.round(H*d);g.setTransform(d,0,0,d,0,0);}
+fit();addEventListener(&#x27;resize&#x27;,fit);
+const V={cx:.5,cy:.5,R:200,cam:6,yaw:0,pitch:.2,roll:0};
+const COL={teal:[37,244,238],mag:[255,45,111],pur:[150,110,255],steel:[168,176,200],white:[236,240,248],amber:[255,176,60],lime:[150,230,90],dark:[44,50,78],navy:[30,34,58]};
+const clamp=(x,a,b)=&gt;Math.max(a,Math.min(b,x)),sm=(a,b,x)=&gt;{x=clamp((x-a)/(b-a),0,1);return x*x*(3-2*x)},lerp=(a,b,t)=&gt;a+(b-a)*t;
+const rnd=i=&gt;{const x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)};
+function T(p){let x=p[0],y=p[1],z=p[2];
+ let c=Math.cos(V.yaw),s=Math.sin(V.yaw);const x1=x*c+z*s,z1=-x*s+z*c;
+ c=Math.cos(V.pitch);s=Math.sin(V.pitch);const y1=y*c-z1*s,z2=y*s+z1*c;
+ c=Math.cos(V.roll);s=Math.sin(V.roll);return [x1*c-y1*s,x1*s+y1*c,z2];}
+function PJ(q){const f=V.cam/(V.cam-q[2]);return [V.cx*W+q[0]*V.R*f,V.cy*H-q[1]*V.R*f,f];}
+let items=[];
+const LD=(()=&gt;{const l=[-.4,.6,.7],m=Math.hypot(l[0],l[1],l[2]);return l.map(v=&gt;v/m)})();
+function rgb(c,f,a){f=f==null?1:f;return &#x27;rgba(&#x27;+Math.min(255,c[0]*f|0)+&#x27;,&#x27;+Math.min(255,c[1]*f|0)+&#x27;,&#x27;+Math.min(255,c[2]*f|0)+&#x27;,&#x27;+(a==null?1:a)+&#x27;)&#x27;;}
+function face(pts,col,o){o=o||{};const q=pts.map(T);
+ const ax=q[1][0]-q[0][0],ay=q[1][1]-q[0][1],az=q[1][2]-q[0][2],bx=q[2][0]-q[0][0],by=q[2][1]-q[0][1],bz=q[2][2]-q[0][2];
+ let nx=ay*bz-az*by,ny=az*bx-ax*bz,nz=ax*by-ay*bx;const m=Math.hypot(nx,ny,nz)||1;nx/=m;ny/=m;nz/=m;if(nz&lt;0){nx=-nx;ny=-ny;nz=-nz;}
+ const sh=o.flat?1:.3+.7*Math.max(0,nx*LD[0]+ny*LD[1]+nz*LD[2]);
+ let z=0;q.forEach(v=&gt;z+=v[2]);z/=q.length;const p=q.map(PJ);
+ items.push({z:z+(o.bias||0),d(){g.beginPath();p.forEach((v,i)=&gt;i?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1]));g.closePath();
+  g.fillStyle=rgb(col,sh,o.a);g.fill();g.lineWidth=1;g.strokeStyle=rgb(col,sh*.8,o.a);g.stroke();
+  if(o.edge){g.strokeStyle=o.edge;g.lineWidth=o.ew||1.5;g.stroke();}}});}
+function box(c,s,col,o){const x=c[0],y=c[1],z=c[2],a=s[0]/2,b=s[1]/2,d=s[2]/2;
+ const v=[[x-a,y-b,z-d],[x+a,y-b,z-d],[x+a,y+b,z-d],[x-a,y+b,z-d],[x-a,y-b,z+d],[x+a,y-b,z+d],[x+a,y+b,z+d],[x-a,y+b,z+d]];
+ [[0,1,2,3],[4,5,6,7],[0,1,5,4],[3,2,6,7],[0,3,7,4],[1,2,6,5]].forEach(f=&gt;face(f.map(i=&gt;v[i]),col,o));}
+function cyl(c,r,h,col,o){o=o||{};const n=o.seg||22,x=c[0],y=c[1],z=c[2],top=[],bot=[];
+ for(let i=0;i&lt;n;i++){const a=i/n*TAU;top.push([x+Math.cos(a)*r,y+h/2,z+Math.sin(a)*r]);bot.push([x+Math.cos(a)*r,y-h/2,z+Math.sin(a)*r]);}
+ for(let i=0;i&lt;n;i++){const j=(i+1)%n;face([bot[i],bot[j],top[j],top[i]],col,o);}
+ if(!o.open){face(top,col,Object.assign({},o,{bias:(o.bias||0)+.02}));face(bot,col,o);}}
+function sph(c,r,col,o){o=o||{};const q=T(c),p=PJ(q),rr=r*V.R*p[2];
+ items.push({z:q[2]+(o.bias||0),d(){const gr=g.createRadialGradient(p[0]-rr*.35,p[1]-rr*.4,rr*.08,p[0],p[1],rr),F=o.f||1;
+  gr.addColorStop(0,rgb(col,1.25*F,o.a));gr.addColorStop(.55,rgb(col,.85*F,o.a));gr.addColorStop(1,rgb(col,.38*F,o.a));
+  g.fillStyle=gr;g.beginPath();g.arc(p[0],p[1],rr,0,TAU);g.fill();}});}
+function glow(c,r,col,a){const q=T(c),p=PJ(q),rr=r*V.R*p[2];
+ items.push({z:q[2]+.001,d(){const gr=g.createRadialGradient(p[0],p[1],0,p[0],p[1],rr);gr.addColorStop(0,rgb(col,1,a));gr.addColorStop(1,rgb(col,1,0));g.fillStyle=gr;g.beginPath();g.arc(p[0],p[1],rr,0,TAU);g.fill();}});}
+function line(a,b,w,col,o){o=o||{};const qa=T(a),qb=T(b),pa=PJ(qa),pb=PJ(qb);
+ items.push({z:(qa[2]+qb[2])/2+(o.bias||0),d(){const f=(pa[2]+pb[2])/2,ww=Math.max(1,w*V.R*f),dx=pb[0]-pa[0],dy=pb[1]-pa[1],l=Math.hypot(dx,dy)||1,nx=-dy/l,ny=dx/l;
+  g.lineCap=&#x27;round&#x27;;(o.dbl?[-ww*.55,ww*.55]:[0]).forEach(d=&gt;{g.lineWidth=o.dbl?ww*.6:ww;g.strokeStyle=rgb(col,o.f||1,o.a);g.beginPath();g.moveTo(pa[0]+nx*d,pa[1]+ny*d);g.lineTo(pb[0]+nx*d,pb[1]+ny*d);g.stroke();});}});}
+function txt(p,s,col,size,align,bias){const q=T(p),pp=PJ(q);
+ items.push({z:q[2]+(bias==null?10:bias),d(){g.font=&#x27;600 &#x27;+size+&#x27;px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.textAlign=align||&#x27;center&#x27;;g.textBaseline=&#x27;middle&#x27;;g.fillStyle=col;g.fillText(s,pp[0],pp[1]);}});}
+function hud(fn){items.push({z:1e6,d:fn});}
+function ring(c,r,col,w,o,n){n=n||36;const pts=[];for(let i=0;i&lt;=n;i++){const a=i/n*TAU;pts.push([c[0]+Math.cos(a)*r,c[1],c[2]+Math.sin(a)*r]);}for(let i=0;i&lt;n;i++)line(pts[i],pts[i+1],w,col,o);}
+function render(){g.clearRect(0,0,W,H);items.sort((a,b)=&gt;a.z-b.z);for(const it of items)it.d();items=[];}
+function loop(scene){let t0=null;function fr(ts){if(t0===null)t0=ts;if(cv.clientWidth&amp;&amp;(cv.clientWidth!==W||cv.clientHeight!==H))fit();items=[];scene((ts-t0)/1000);render();requestAnimationFrame(fr);}requestAnimationFrame(fr);}
+/* molecules */
+const COLA={C:[168,176,200],H:[236,240,248],N:[37,244,238],O:[255,45,111]},RADA={C:.38,H:.25,N:.36,O:.36};
+function mkMol(A,B){let mx=0,my=0,mz=0;A.forEach(e=&gt;{mx+=e[1];my+=e[2];mz+=e[3]});mx/=A.length;my/=A.length;mz/=A.length;let m=0;
+ const P=A.map(e=&gt;{const p=[e[1]-mx,e[2]-my,e[3]-mz];m=Math.max(m,Math.hypot(p[0],p[1],p[2])+RADA[e[0]]);return p});
+ const k=1/m;P.forEach(p=&gt;{p[0]*=k;p[1]*=k;p[2]*=k});return {A,B,P,k};}
+function drawMol(M,c,sc,a,b,o){o=o||{};
+ const Q=M.P.map(p=&gt;{const x=p[0]*Math.cos(a)+p[2]*Math.sin(a),z=-p[0]*Math.sin(a)+p[2]*Math.cos(a),y=p[1]*Math.cos(b)-z*Math.sin(b),w=p[1]*Math.sin(b)+z*Math.cos(b);return [c[0]+x*sc,c[1]+y*sc,c[2]+w*sc];});
+ M.B.forEach(e=&gt;{const i=e[0]-1,j=e[1]-1,p=Q[i],s=Q[j],mid=[(p[0]+s[0])/2,(p[1]+s[1])/2,(p[2]+s[2])/2],w=.2*M.k*sc,dbl=e[2]&gt;1;
+  line(p,mid,w,COLA[M.A[i][0]],{dbl,f:.8,a:o.a,bias:o.bias});line(mid,s,w,COLA[M.A[j][0]],{dbl,f:.8,a:o.a,bias:o.bias});});
+ M.A.forEach((e,i)=&gt;sph(Q[i],RADA[e[0]]*M.k*sc,COLA[e[0]],{a:o.a,bias:o.bias}));}
+/* vape pod */
+function vape(c,o){o=o||{};const x=c[0],y=c[1],z=c[2];
+ box([x,y,z],[1.0,2.5,.52],COL.dark);
+ box([x,y,z+.265],[.84,2.1,.03],COL.navy);
+ box([x,y-.35,z],[1.03,.14,.55],COL.mag);
+ box([x,y+1.42,z],[.62,.38,.36],[70,78,120]);
+ box([x,y+1.62,z],[.46,.05,.22],[20,22,36]);
+ const pulse=.5+.5*Math.sin((o.t||0)*3);
+ sph([x,y-.95,z+.3],.07,COL.teal,{bias:.05});glow([x,y-.95,z+.3],.5,COL.teal,.45+.3*pulse);
+ line([x-.25,y+.55,z+.28],[x+.25,y+.55,z+.28],.018,COL.teal,{a:.7,bias:.05});
+ line([x-.25,y+.38,z+.28],[x+.1,y+.38,z+.28],.018,COL.teal,{a:.5,bias:.05});}
+function floorGrid(y,n,s,col,a){for(let i=-n;i&lt;=n;i++){line([-n*s,y,i*s],[n*s,y,i*s],.005,col,{a});line([i*s,y,-n*s],[i*s,y,n*s],.005,col,{a});}}
+
+V.cx=.5;V.cy=.5;V.R=165;V.cam=8;V.pitch=.2;
+const NODES=[[-3.9,-.3,0],[-1.3,.6,.5],[1.4,-.45,-.4],[3.9,.4,0]],NAMES=[&#x27;Вдих&#x27;,&#x27;Легені&#x27;,&#x27;Кров&#x27;,&#x27;Мозок&#x27;];
+function cr(p0,p1,p2,p3,t){const t2=t*t,t3=t2*t;return [0,1,2].map(k=&gt;.5*((2*p1[k])+(-p0[k]+p2[k])*t+(2*p0[k]-5*p1[k]+4*p2[k]-p3[k])*t2+(-p0[k]+3*p1[k]-3*p2[k]+p3[k])*t3));}
+const PTS=[],ext=[NODES[0],...NODES,NODES[3]];
+for(let s=0;s&lt;3;s++)for(let k=0;k&lt;30;k++)PTS.push(cr(ext[s],ext[s+1],ext[s+2],ext[s+3],k/30));PTS.push(NODES[3]);
+const at=u=&gt;PTS[Math.round(clamp(u,0,1)*(PTS.length-1))];
+loop(t=&gt;{V.yaw=.3*Math.sin(t*.3);
+ const tt=t%10,u=clamp(tt/6.5,0,1);
+ floorGrid(-1.5,9,.9,COL.teal,.1);
+ for(let i=0;i&lt;PTS.length-1;i++){const lit=i/(PTS.length-1)&lt;u;line(PTS[i],PTS[i+1],lit?.03:.014,lit?COL.teal:COL.steel,{a:lit?.95:.35});}
+ for(let k=0;k&lt;24;k++){const p=at(u-k*.012);glow(p,.34*(1-k/24),COL.teal,.5*(1-k/24));}
+ sph(at(u),.14,COL.white,{});glow(at(u),.6,COL.teal,.7);
+ NODES.forEach((p,i)=&gt;{const on=u&gt;=i/3-.001,brain=i==3,r=brain?.36:.24,col=brain?COL.mag:COL.teal;
+  sph(p,r,on?col:COL.steel,{f:on?1:.55});if(on)glow(p,r*3,col,.35);
+  txt([p[0],p[1]-(brain?.75:.6),p[2]],NAMES[i],on?&#x27;#FFFFFF&#x27;:&#x27;#7F8DA0&#x27;,28,&#x27;center&#x27;);});
+ if(tt&gt;6.5){const b=NODES[3];for(let k=0;k&lt;3;k++){const ph=((tt-6.5)*.7+k/3)%1;ring(b,.4+ph*1.6,COL.mag,.018,{a:.8*(1-ph)});}
+  hud(()=&gt;{g.font=&#x27;700 30px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#FF6B95&#x27;;g.textAlign=&#x27;right&#x27;;g.textBaseline=&#x27;top&#x27;;g.fillText(&#x27;Дофамін: «нагорода» → хочеться ще&#x27;,W-34,26);});}
+ hud(()=&gt;{g.textAlign=&#x27;left&#x27;;g.textBaseline=&#x27;top&#x27;;g.font=&#x27;600 70px Oswald,&quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#FF2D6F&#x27;;g.shadowColor=&#x27;rgba(255,45,111,.7)&#x27;;g.shadowBlur=22;
+  g.fillText(Math.min(6.5,tt).toFixed(1).replace(&#x27;.&#x27;,&#x27;,&#x27;),34,18);g.shadowBlur=0;g.font=&#x27;600 26px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#9AA7B6&#x27;;g.fillText(&#x27;секунд від вдиху&#x27;,34,96);});
+});
+&lt;/script&gt;"></iframe><div class="head">
+<p class="eyebrow">03 · ШВИДКІСТЬ</p>
+<h2>6–7 секунд від вдиху до мозку</h2>
+</div>
+<div class="body" style="flex-direction:column;gap:0">
+<div style="height:384px;flex:none"></div>
+<div class="tips" style="grid-template-columns:1fr 1fr 1fr;gap:32px;flex:none">
+<div class="tip" style="--i:0"><p class="stat2" style="font-size:64px">6–7 с</p><p class="cap">швидкість всмоктування нікотину в кров</p></div>
+<div class="tip" style="--i:1"><p class="stat2" style="font-size:64px;color:#FF2D6F;text-shadow:0 0 20px rgba(255,45,111,.55)">20–50 мг/мл</p><p class="cap">концентрація без дискомфорту: потужна доза за вдих</p></div>
+<div class="tip" style="--i:2"><p class="stat2" style="font-size:64px">Дофамін</p><p class="cap">«нагорода» майже миттєво: вдих → задоволення</p></div>
+</div>
+</div>
+<p class="foot">Джерела: матеріали кейсу «Анатомія сучасних загроз», Кейс 02 · <a href="https://www.who.int/news-room/questions-and-answers/item/tobacco-e-cigarettes">ВООЗ — е-сигарети</a></p>
+<aside>Сольовий нікотин всмоктується швидко: за 6–7 секунд він потрапляє з легень у кров і до мозку. Така швидкість — ключ до залежності: мозок отримує «нагороду» майже одразу після дії, і зв’язок «вдих — задоволення» закріплюється. А висока концентрація без дискомфорту означає потужну дозу за кожен вдих. Стежте за таймером: одна секунда — і частинка вже в дорозі.</aside>
+</section>
+<section id="brain" class="g-purple" data-transition="push">
+<div class="pbg" style="left:128px;top:304px;width:960px;height:616px"></div><iframe class="bg3d emb" title="3D-модель" aria-hidden="true" tabindex="-1" sandbox="allow-scripts" style="position:absolute; left:128px; top:304px; width:960px; height:616px" data-srcdoc="&lt;style&gt;html,body{margin:0;height:100%;overflow:hidden;background:transparent}canvas{display:block;width:100%;height:100%}&lt;/style&gt;&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;&lt;script&gt;const cv=document.getElementById(&#x27;c&#x27;),g=cv.getContext(&#x27;2d&#x27;),PI=Math.PI,TAU=PI*2;
+let W=600,H=600;
+function fit(){const d=Math.min(window.devicePixelRatio||1,2);W=cv.clientWidth||600;H=cv.clientHeight||600;cv.width=Math.round(W*d);cv.height=Math.round(H*d);g.setTransform(d,0,0,d,0,0);}
+fit();addEventListener(&#x27;resize&#x27;,fit);
+const V={cx:.5,cy:.5,R:200,cam:6,yaw:0,pitch:.2,roll:0};
+const COL={teal:[37,244,238],mag:[255,45,111],pur:[150,110,255],steel:[168,176,200],white:[236,240,248],amber:[255,176,60],lime:[150,230,90],dark:[44,50,78],navy:[30,34,58]};
+const clamp=(x,a,b)=&gt;Math.max(a,Math.min(b,x)),sm=(a,b,x)=&gt;{x=clamp((x-a)/(b-a),0,1);return x*x*(3-2*x)},lerp=(a,b,t)=&gt;a+(b-a)*t;
+const rnd=i=&gt;{const x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)};
+function T(p){let x=p[0],y=p[1],z=p[2];
+ let c=Math.cos(V.yaw),s=Math.sin(V.yaw);const x1=x*c+z*s,z1=-x*s+z*c;
+ c=Math.cos(V.pitch);s=Math.sin(V.pitch);const y1=y*c-z1*s,z2=y*s+z1*c;
+ c=Math.cos(V.roll);s=Math.sin(V.roll);return [x1*c-y1*s,x1*s+y1*c,z2];}
+function PJ(q){const f=V.cam/(V.cam-q[2]);return [V.cx*W+q[0]*V.R*f,V.cy*H-q[1]*V.R*f,f];}
+let items=[];
+const LD=(()=&gt;{const l=[-.4,.6,.7],m=Math.hypot(l[0],l[1],l[2]);return l.map(v=&gt;v/m)})();
+function rgb(c,f,a){f=f==null?1:f;return &#x27;rgba(&#x27;+Math.min(255,c[0]*f|0)+&#x27;,&#x27;+Math.min(255,c[1]*f|0)+&#x27;,&#x27;+Math.min(255,c[2]*f|0)+&#x27;,&#x27;+(a==null?1:a)+&#x27;)&#x27;;}
+function face(pts,col,o){o=o||{};const q=pts.map(T);
+ const ax=q[1][0]-q[0][0],ay=q[1][1]-q[0][1],az=q[1][2]-q[0][2],bx=q[2][0]-q[0][0],by=q[2][1]-q[0][1],bz=q[2][2]-q[0][2];
+ let nx=ay*bz-az*by,ny=az*bx-ax*bz,nz=ax*by-ay*bx;const m=Math.hypot(nx,ny,nz)||1;nx/=m;ny/=m;nz/=m;if(nz&lt;0){nx=-nx;ny=-ny;nz=-nz;}
+ const sh=o.flat?1:.3+.7*Math.max(0,nx*LD[0]+ny*LD[1]+nz*LD[2]);
+ let z=0;q.forEach(v=&gt;z+=v[2]);z/=q.length;const p=q.map(PJ);
+ items.push({z:z+(o.bias||0),d(){g.beginPath();p.forEach((v,i)=&gt;i?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1]));g.closePath();
+  g.fillStyle=rgb(col,sh,o.a);g.fill();g.lineWidth=1;g.strokeStyle=rgb(col,sh*.8,o.a);g.stroke();
+  if(o.edge){g.strokeStyle=o.edge;g.lineWidth=o.ew||1.5;g.stroke();}}});}
+function box(c,s,col,o){const x=c[0],y=c[1],z=c[2],a=s[0]/2,b=s[1]/2,d=s[2]/2;
+ const v=[[x-a,y-b,z-d],[x+a,y-b,z-d],[x+a,y+b,z-d],[x-a,y+b,z-d],[x-a,y-b,z+d],[x+a,y-b,z+d],[x+a,y+b,z+d],[x-a,y+b,z+d]];
+ [[0,1,2,3],[4,5,6,7],[0,1,5,4],[3,2,6,7],[0,3,7,4],[1,2,6,5]].forEach(f=&gt;face(f.map(i=&gt;v[i]),col,o));}
+function cyl(c,r,h,col,o){o=o||{};const n=o.seg||22,x=c[0],y=c[1],z=c[2],top=[],bot=[];
+ for(let i=0;i&lt;n;i++){const a=i/n*TAU;top.push([x+Math.cos(a)*r,y+h/2,z+Math.sin(a)*r]);bot.push([x+Math.cos(a)*r,y-h/2,z+Math.sin(a)*r]);}
+ for(let i=0;i&lt;n;i++){const j=(i+1)%n;face([bot[i],bot[j],top[j],top[i]],col,o);}
+ if(!o.open){face(top,col,Object.assign({},o,{bias:(o.bias||0)+.02}));face(bot,col,o);}}
+function sph(c,r,col,o){o=o||{};const q=T(c),p=PJ(q),rr=r*V.R*p[2];
+ items.push({z:q[2]+(o.bias||0),d(){const gr=g.createRadialGradient(p[0]-rr*.35,p[1]-rr*.4,rr*.08,p[0],p[1],rr),F=o.f||1;
+  gr.addColorStop(0,rgb(col,1.25*F,o.a));gr.addColorStop(.55,rgb(col,.85*F,o.a));gr.addColorStop(1,rgb(col,.38*F,o.a));
+  g.fillStyle=gr;g.beginPath();g.arc(p[0],p[1],rr,0,TAU);g.fill();}});}
+function glow(c,r,col,a){const q=T(c),p=PJ(q),rr=r*V.R*p[2];
+ items.push({z:q[2]+.001,d(){const gr=g.createRadialGradient(p[0],p[1],0,p[0],p[1],rr);gr.addColorStop(0,rgb(col,1,a));gr.addColorStop(1,rgb(col,1,0));g.fillStyle=gr;g.beginPath();g.arc(p[0],p[1],rr,0,TAU);g.fill();}});}
+function line(a,b,w,col,o){o=o||{};const qa=T(a),qb=T(b),pa=PJ(qa),pb=PJ(qb);
+ items.push({z:(qa[2]+qb[2])/2+(o.bias||0),d(){const f=(pa[2]+pb[2])/2,ww=Math.max(1,w*V.R*f),dx=pb[0]-pa[0],dy=pb[1]-pa[1],l=Math.hypot(dx,dy)||1,nx=-dy/l,ny=dx/l;
+  g.lineCap=&#x27;round&#x27;;(o.dbl?[-ww*.55,ww*.55]:[0]).forEach(d=&gt;{g.lineWidth=o.dbl?ww*.6:ww;g.strokeStyle=rgb(col,o.f||1,o.a);g.beginPath();g.moveTo(pa[0]+nx*d,pa[1]+ny*d);g.lineTo(pb[0]+nx*d,pb[1]+ny*d);g.stroke();});}});}
+function txt(p,s,col,size,align,bias){const q=T(p),pp=PJ(q);
+ items.push({z:q[2]+(bias==null?10:bias),d(){g.font=&#x27;600 &#x27;+size+&#x27;px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.textAlign=align||&#x27;center&#x27;;g.textBaseline=&#x27;middle&#x27;;g.fillStyle=col;g.fillText(s,pp[0],pp[1]);}});}
+function hud(fn){items.push({z:1e6,d:fn});}
+function ring(c,r,col,w,o,n){n=n||36;const pts=[];for(let i=0;i&lt;=n;i++){const a=i/n*TAU;pts.push([c[0]+Math.cos(a)*r,c[1],c[2]+Math.sin(a)*r]);}for(let i=0;i&lt;n;i++)line(pts[i],pts[i+1],w,col,o);}
+function render(){g.clearRect(0,0,W,H);items.sort((a,b)=&gt;a.z-b.z);for(const it of items)it.d();items=[];}
+function loop(scene){let t0=null;function fr(ts){if(t0===null)t0=ts;if(cv.clientWidth&amp;&amp;(cv.clientWidth!==W||cv.clientHeight!==H))fit();items=[];scene((ts-t0)/1000);render();requestAnimationFrame(fr);}requestAnimationFrame(fr);}
+/* molecules */
+const COLA={C:[168,176,200],H:[236,240,248],N:[37,244,238],O:[255,45,111]},RADA={C:.38,H:.25,N:.36,O:.36};
+function mkMol(A,B){let mx=0,my=0,mz=0;A.forEach(e=&gt;{mx+=e[1];my+=e[2];mz+=e[3]});mx/=A.length;my/=A.length;mz/=A.length;let m=0;
+ const P=A.map(e=&gt;{const p=[e[1]-mx,e[2]-my,e[3]-mz];m=Math.max(m,Math.hypot(p[0],p[1],p[2])+RADA[e[0]]);return p});
+ const k=1/m;P.forEach(p=&gt;{p[0]*=k;p[1]*=k;p[2]*=k});return {A,B,P,k};}
+function drawMol(M,c,sc,a,b,o){o=o||{};
+ const Q=M.P.map(p=&gt;{const x=p[0]*Math.cos(a)+p[2]*Math.sin(a),z=-p[0]*Math.sin(a)+p[2]*Math.cos(a),y=p[1]*Math.cos(b)-z*Math.sin(b),w=p[1]*Math.sin(b)+z*Math.cos(b);return [c[0]+x*sc,c[1]+y*sc,c[2]+w*sc];});
+ M.B.forEach(e=&gt;{const i=e[0]-1,j=e[1]-1,p=Q[i],s=Q[j],mid=[(p[0]+s[0])/2,(p[1]+s[1])/2,(p[2]+s[2])/2],w=.2*M.k*sc,dbl=e[2]&gt;1;
+  line(p,mid,w,COLA[M.A[i][0]],{dbl,f:.8,a:o.a,bias:o.bias});line(mid,s,w,COLA[M.A[j][0]],{dbl,f:.8,a:o.a,bias:o.bias});});
+ M.A.forEach((e,i)=&gt;sph(Q[i],RADA[e[0]]*M.k*sc,COLA[e[0]],{a:o.a,bias:o.bias}));}
+/* vape pod */
+function vape(c,o){o=o||{};const x=c[0],y=c[1],z=c[2];
+ box([x,y,z],[1.0,2.5,.52],COL.dark);
+ box([x,y,z+.265],[.84,2.1,.03],COL.navy);
+ box([x,y-.35,z],[1.03,.14,.55],COL.mag);
+ box([x,y+1.42,z],[.62,.38,.36],[70,78,120]);
+ box([x,y+1.62,z],[.46,.05,.22],[20,22,36]);
+ const pulse=.5+.5*Math.sin((o.t||0)*3);
+ sph([x,y-.95,z+.3],.07,COL.teal,{bias:.05});glow([x,y-.95,z+.3],.5,COL.teal,.45+.3*pulse);
+ line([x-.25,y+.55,z+.28],[x+.25,y+.55,z+.28],.018,COL.teal,{a:.7,bias:.05});
+ line([x-.25,y+.38,z+.28],[x+.1,y+.38,z+.28],.018,COL.teal,{a:.5,bias:.05});}
+function floorGrid(y,n,s,col,a){for(let i=-n;i&lt;=n;i++){line([-n*s,y,i*s],[n*s,y,i*s],.005,col,{a});line([i*s,y,-n*s],[i*s,y,n*s],.005,col,{a});}}
+
+V.cx=.5;V.cy=.52;V.R=104;V.cam=7;V.pitch=.5;
+const SL=[];for(let i=0;i&lt;6;i++)for(let j=0;j&lt;4;j++)SL.push([-2.0+i*.8+(j%2)*.4,-1.4,-1.1+j*.73]);
+const order=SL.map((_,i)=&gt;i).sort((a,b)=&gt;rnd(a+3)-rnd(b+3));
+loop(t=&gt;{V.yaw=.5*Math.sin(t*.25);
+ const tt=t%11,fade=1-sm(10.3,10.9,tt);let cnt=0;
+ box([0,-1.52,0],[5.6,.2,3.6],[70,80,130],{a:.95});
+ glow([0,-1.4,0],3.6,COL.teal,.08);
+ cyl([0,2.15,0],1.95,.55,COL.pur,{a:.3,seg:34});ring([0,1.88,0],1.95,COL.pur,.02,{a:.7},40);
+ for(let i=0;i&lt;7;i++){const a=i*TAU/7+t*.1,r=.2+.9*rnd(i+4);sph([Math.cos(a)*r,2.15+.1*Math.sin(t+i),Math.sin(a)*r],.12,COL.teal,{a:.55});}
+ for(let k=0;k&lt;24;k++){const p=SL[order[k]],born=k&lt;5?-1:.5+(k-5)/19*8,gr=(k&lt;5?1:sm(0,.7,tt-born))*fade;if(gr&lt;.02)continue;if(gr&gt;.5)cnt++;
+  cyl([p[0],-1.42+.3*gr,p[2]],.09,.6*gr,[40,150,170],{seg:12});sph([p[0],-1.42+.62*gr,p[2]],.17*gr,COL.teal,{});
+  glow([p[0],-1.42+.62*gr,p[2]],.5*gr,COL.teal,.25);}
+ for(let i=0;i&lt;16;i++){const ph=(t*.32+rnd(i)*3)%1,kk=Math.min(23,i)%Math.max(1,cnt||5),p=SL[order[kk]],e=ph*ph*(3-2*ph),
+  s0=[(rnd(i+10)-.5)*2.6,1.9,(rnd(i+20)-.5)*1.6],tg=[p[0],-.65,p[2]],x=lerp(s0[0],tg[0],e),y=lerp(s0[1],tg[1],e),z=lerp(s0[2],tg[2],e);
+  sph([x,y,z],.08,COL.mag,{a:fade});glow([x,y,z],.3,COL.mag,.35*fade);if(ph&gt;.88)glow(tg,.7,COL.mag,.5*(1-ph)*8*fade);}
+ hud(()=&gt;{g.textAlign=&#x27;left&#x27;;g.textBaseline=&#x27;top&#x27;;g.font=&#x27;600 22px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#9AA7B6&#x27;;g.fillText(&#x27;Нікотинові рецептори&#x27;,30,24);
+  g.font=&#x27;600 66px Oswald,&quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#25F4EE&#x27;;g.shadowColor=&#x27;rgba(37,244,238,.6)&#x27;;g.shadowBlur=18;g.fillText(String(cnt),30,48);g.shadowBlur=0;
+  g.font=&#x27;600 22px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#FF6B95&#x27;;g.textAlign=&#x27;right&#x27;;g.fillText(&#x27;нікотин&#x27;,W-30,24);g.fillStyle=&#x27;#B9A3FF&#x27;;g.fillText(&#x27;пресинапс ↑&#x27;,W-30,52);
+  const bw=W-60,by=H-44;g.fillStyle=&#x27;rgba(255,255,255,.09)&#x27;;g.fillRect(30,by,bw,12);g.fillStyle=&#x27;#FF2D6F&#x27;;g.fillRect(30,by,bw*clamp(tt/8.5,0,1),12);
+  g.textAlign=&#x27;left&#x27;;g.font=&#x27;500 20px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#8A90A0&#x27;;g.fillText(&#x27;регулярне вживання → ап-регуляція&#x27;,30,by-28);});
+});
+&lt;/script&gt;"></iframe><div class="head">
+<p class="eyebrow">04 · НЕЙРОБІОЛОГІЯ</p>
+<h2>Мозок відповідає: рецепторів стає більше</h2>
+</div>
+<div class="body">
+<div style="width:960px;flex:none"></div>
+<div class="pts">
+<div class="pt" style="--i:0"><p><b>Нікотин зв’язується</b> з нікотиновими рецепторами й запускає викид дофаміну.</p></div>
+<div class="pt" style="--i:1"><p><b>Ап-регуляція:</b> за регулярного вживання нікотинових рецепторів фізично стає більше.</p></div>
+<div class="pt" style="--i:2"><p><b>Більше рецепторів — більша «потреба».</b> Без нікотину з’являється бажання нової дози, тому «просто кинути» складно.</p></div>
+</div>
+</div>
+<p class="foot">Джерела: матеріали кейсу «Анатомія сучасних загроз», Кейс 02 (Зона C: нейробіологія) · <a href="https://www.who.int/health-topics/tobacco">ВООЗ — тютюн</a></p>
+<aside>Що відбувається в мозку? Нікотин зв’язується з нікотиновими рецепторами й запускає викид дофаміну. Якщо це повторювати, мозок підлаштовується: рецепторів фізично стає більше — це називається ап-регуляція. Коли нікотину немає, ці рецептори залишаються без «їжі», і з’являється бажання нової дози. Тому «просто кинути» так складно — мозок уже перебудувався. На 3D-моделі видно, як кількість рецепторів на мембрані зростає з часом.</aside>
+</section>
+<section id="task1" class="g-purple" data-transition="push">
+<div class="head">
+<p class="eyebrow">ДОСЛІДНИЦЬКЕ ЗАВДАННЯ 1</p>
+<h2>Експертиза: схема залежності і міф «кинути»</h2>
+</div><div class="body" style="flex-direction:column;gap:32px"><div style="display:flex;gap:16px;align-items:stretch"><div class="tip" style="--i:0;flex:1 1 0;min-width:0;padding:28px;display:flex;flex-direction:column;gap:10px;border-color:#25F4EE"><p class="plabel" style="color:#25F4EE;font-size:20px">1 · ХІМІЯ</p><p class="stat2" style="font-size:36px;line-height:1.1;color:#fff;text-shadow:none">Зміна pH</p><p class="cap" style="font-size:24px">+ бензойна кислота: pH знижується, горло не дратується</p></div><div style="font-size:56px;color:#FF2D6F;align-self:center;text-shadow:0 0 18px rgba(255,45,111,.7)">→</div><div class="tip" style="--i:1;flex:1 1 0;min-width:0;padding:28px;display:flex;flex-direction:column;gap:10px;border-color:#25F4EE"><p class="plabel" style="color:#25F4EE;font-size:20px">2 · ЧАС</p><p class="stat2" style="font-size:36px;line-height:1.1;color:#fff;text-shadow:none">6–7 с</p><p class="cap" style="font-size:24px">нікотин швидко потрапляє в кров і до мозку</p></div><div style="font-size:56px;color:#FF2D6F;align-self:center;text-shadow:0 0 18px rgba(255,45,111,.7)">→</div><div class="tip" style="--i:2;flex:1 1 0;min-width:0;padding:28px;display:flex;flex-direction:column;gap:10px;border-color:#B9A3FF"><p class="plabel" style="color:#B9A3FF;font-size:20px">3 · МОЗОК</p><p class="stat2" style="font-size:36px;line-height:1.1;color:#fff;text-shadow:none">Дофамін</p><p class="cap" style="font-size:24px">миттєва «нагорода» за кожен вдих</p></div><div style="font-size:56px;color:#FF2D6F;align-self:center;text-shadow:0 0 18px rgba(255,45,111,.7)">→</div><div class="tip" style="--i:3;flex:1 1 0;min-width:0;padding:28px;display:flex;flex-direction:column;gap:10px;border-color:#FF6B95"><p class="plabel" style="color:#FF6B95;font-size:20px">4 · РЕЦЕПТОРИ</p><p class="stat2" style="font-size:36px;line-height:1.1;color:#fff;text-shadow:none">Більше рецепторів</p><p class="cap" style="font-size:24px">ап-регуляція: мозок підлаштовується</p></div><div style="font-size:56px;color:#FF2D6F;align-self:center;text-shadow:0 0 18px rgba(255,45,111,.7)">→</div><div class="tip" style="--i:4;flex:1 1 0;min-width:0;padding:28px;display:flex;flex-direction:column;gap:10px;border-color:#FF2D6F"><p class="plabel" style="color:#FF2D6F;font-size:20px">5 · НАСЛІДОК</p><p class="stat2" style="font-size:36px;line-height:1.1;color:#fff;text-shadow:none">Залежність</p><p class="cap" style="font-size:24px">без нікотину — потреба в новій дозі</p></div></div><div style="display:flex;gap:32px;flex:1"><div class="tip" style="--i:5;flex:1;background:rgba(255,45,111,.10);border-color:rgba(255,45,111,.6)"><p class="plabel" style="color:#FF6B95">МІФ</p><p style="font-size:44px;line-height:1.2;color:#fff;font-weight:700;margin:6px 0 0">«Палю вейп, щоб кинути»</p></div><div class="tip" style="--i:6;flex:2;background:rgba(37,244,238,.07);border-color:rgba(37,244,238,.5)"><p class="plabel">РОЗВІНЧАННЯ ЗА СХЕМОЮ</p><p style="font-size:28px;line-height:1.35;color:#D5DCE4;margin:6px 0 0"><b style="color:#fff">Нікотин не зникає</b> — він і далі швидко потрапляє в мозок, а рецепторів не меншає, тож потреба лишається. <b style="color:#fff">Змінюється лише пристрій.</b> Кинути — значить знизити нікотин до нуля, з планом і підтримкою, а не замінити одну залежність іншою.</p></div></div></div><p class="foot">Джерела: матеріали кейсу «Анатомія сучасних загроз», Кейс 02 (завдання «Експертиза») · <a href="https://www.who.int/news-room/questions-and-answers/item/tobacco-e-cigarettes">ВООЗ — е-сигарети</a> · <a href="https://www.who.int/health-topics/tobacco">ВООЗ — тютюн</a></p>
+<aside>Перше дослідницьке завдання — побудувати схему. Зміна pH: бензойна кислота знімає подразнення. Далі швидкість всмоктування — 6–7 секунд до мозку. Потім дофамін — миттєва нагорода. Мозок підлаштовується: рецепторів стає більше. І наслідок — залежність: без нікотину виникає потреба в новій дозі. За цією схемою легко розвінчати міф «палю вейп, щоб кинути»: нікотин нікуди не зникає, рецептори залишаються, змінюється лише пристрій. Кинути — це знизити нікотин до нуля, з планом і підтримкою.</aside>
+</section>
+<section id="data" class="g-magenta" data-transition="push">
+<div class="pbg" style="left:128px;top:304px;width:1000px;height:616px"></div><iframe class="bg3d emb" title="3D-модель" aria-hidden="true" tabindex="-1" sandbox="allow-scripts" style="position:absolute; left:128px; top:304px; width:1000px; height:616px" data-srcdoc="&lt;style&gt;html,body{margin:0;height:100%;overflow:hidden;background:transparent}canvas{display:block;width:100%;height:100%}&lt;/style&gt;&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;&lt;script&gt;const cv=document.getElementById(&#x27;c&#x27;),g=cv.getContext(&#x27;2d&#x27;),PI=Math.PI,TAU=PI*2;
+let W=600,H=600;
+function fit(){const d=Math.min(window.devicePixelRatio||1,2);W=cv.clientWidth||600;H=cv.clientHeight||600;cv.width=Math.round(W*d);cv.height=Math.round(H*d);g.setTransform(d,0,0,d,0,0);}
+fit();addEventListener(&#x27;resize&#x27;,fit);
+const V={cx:.5,cy:.5,R:200,cam:6,yaw:0,pitch:.2,roll:0};
+const COL={teal:[37,244,238],mag:[255,45,111],pur:[150,110,255],steel:[168,176,200],white:[236,240,248],amber:[255,176,60],lime:[150,230,90],dark:[44,50,78],navy:[30,34,58]};
+const clamp=(x,a,b)=&gt;Math.max(a,Math.min(b,x)),sm=(a,b,x)=&gt;{x=clamp((x-a)/(b-a),0,1);return x*x*(3-2*x)},lerp=(a,b,t)=&gt;a+(b-a)*t;
+const rnd=i=&gt;{const x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)};
+function T(p){let x=p[0],y=p[1],z=p[2];
+ let c=Math.cos(V.yaw),s=Math.sin(V.yaw);const x1=x*c+z*s,z1=-x*s+z*c;
+ c=Math.cos(V.pitch);s=Math.sin(V.pitch);const y1=y*c-z1*s,z2=y*s+z1*c;
+ c=Math.cos(V.roll);s=Math.sin(V.roll);return [x1*c-y1*s,x1*s+y1*c,z2];}
+function PJ(q){const f=V.cam/(V.cam-q[2]);return [V.cx*W+q[0]*V.R*f,V.cy*H-q[1]*V.R*f,f];}
+let items=[];
+const LD=(()=&gt;{const l=[-.4,.6,.7],m=Math.hypot(l[0],l[1],l[2]);return l.map(v=&gt;v/m)})();
+function rgb(c,f,a){f=f==null?1:f;return &#x27;rgba(&#x27;+Math.min(255,c[0]*f|0)+&#x27;,&#x27;+Math.min(255,c[1]*f|0)+&#x27;,&#x27;+Math.min(255,c[2]*f|0)+&#x27;,&#x27;+(a==null?1:a)+&#x27;)&#x27;;}
+function face(pts,col,o){o=o||{};const q=pts.map(T);
+ const ax=q[1][0]-q[0][0],ay=q[1][1]-q[0][1],az=q[1][2]-q[0][2],bx=q[2][0]-q[0][0],by=q[2][1]-q[0][1],bz=q[2][2]-q[0][2];
+ let nx=ay*bz-az*by,ny=az*bx-ax*bz,nz=ax*by-ay*bx;const m=Math.hypot(nx,ny,nz)||1;nx/=m;ny/=m;nz/=m;if(nz&lt;0){nx=-nx;ny=-ny;nz=-nz;}
+ const sh=o.flat?1:.3+.7*Math.max(0,nx*LD[0]+ny*LD[1]+nz*LD[2]);
+ let z=0;q.forEach(v=&gt;z+=v[2]);z/=q.length;const p=q.map(PJ);
+ items.push({z:z+(o.bias||0),d(){g.beginPath();p.forEach((v,i)=&gt;i?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1]));g.closePath();
+  g.fillStyle=rgb(col,sh,o.a);g.fill();g.lineWidth=1;g.strokeStyle=rgb(col,sh*.8,o.a);g.stroke();
+  if(o.edge){g.strokeStyle=o.edge;g.lineWidth=o.ew||1.5;g.stroke();}}});}
+function box(c,s,col,o){const x=c[0],y=c[1],z=c[2],a=s[0]/2,b=s[1]/2,d=s[2]/2;
+ const v=[[x-a,y-b,z-d],[x+a,y-b,z-d],[x+a,y+b,z-d],[x-a,y+b,z-d],[x-a,y-b,z+d],[x+a,y-b,z+d],[x+a,y+b,z+d],[x-a,y+b,z+d]];
+ [[0,1,2,3],[4,5,6,7],[0,1,5,4],[3,2,6,7],[0,3,7,4],[1,2,6,5]].forEach(f=&gt;face(f.map(i=&gt;v[i]),col,o));}
+function cyl(c,r,h,col,o){o=o||{};const n=o.seg||22,x=c[0],y=c[1],z=c[2],top=[],bot=[];
+ for(let i=0;i&lt;n;i++){const a=i/n*TAU;top.push([x+Math.cos(a)*r,y+h/2,z+Math.sin(a)*r]);bot.push([x+Math.cos(a)*r,y-h/2,z+Math.sin(a)*r]);}
+ for(let i=0;i&lt;n;i++){const j=(i+1)%n;face([bot[i],bot[j],top[j],top[i]],col,o);}
+ if(!o.open){face(top,col,Object.assign({},o,{bias:(o.bias||0)+.02}));face(bot,col,o);}}
+function sph(c,r,col,o){o=o||{};const q=T(c),p=PJ(q),rr=r*V.R*p[2];
+ items.push({z:q[2]+(o.bias||0),d(){const gr=g.createRadialGradient(p[0]-rr*.35,p[1]-rr*.4,rr*.08,p[0],p[1],rr),F=o.f||1;
+  gr.addColorStop(0,rgb(col,1.25*F,o.a));gr.addColorStop(.55,rgb(col,.85*F,o.a));gr.addColorStop(1,rgb(col,.38*F,o.a));
+  g.fillStyle=gr;g.beginPath();g.arc(p[0],p[1],rr,0,TAU);g.fill();}});}
+function glow(c,r,col,a){const q=T(c),p=PJ(q),rr=r*V.R*p[2];
+ items.push({z:q[2]+.001,d(){const gr=g.createRadialGradient(p[0],p[1],0,p[0],p[1],rr);gr.addColorStop(0,rgb(col,1,a));gr.addColorStop(1,rgb(col,1,0));g.fillStyle=gr;g.beginPath();g.arc(p[0],p[1],rr,0,TAU);g.fill();}});}
+function line(a,b,w,col,o){o=o||{};const qa=T(a),qb=T(b),pa=PJ(qa),pb=PJ(qb);
+ items.push({z:(qa[2]+qb[2])/2+(o.bias||0),d(){const f=(pa[2]+pb[2])/2,ww=Math.max(1,w*V.R*f),dx=pb[0]-pa[0],dy=pb[1]-pa[1],l=Math.hypot(dx,dy)||1,nx=-dy/l,ny=dx/l;
+  g.lineCap=&#x27;round&#x27;;(o.dbl?[-ww*.55,ww*.55]:[0]).forEach(d=&gt;{g.lineWidth=o.dbl?ww*.6:ww;g.strokeStyle=rgb(col,o.f||1,o.a);g.beginPath();g.moveTo(pa[0]+nx*d,pa[1]+ny*d);g.lineTo(pb[0]+nx*d,pb[1]+ny*d);g.stroke();});}});}
+function txt(p,s,col,size,align,bias){const q=T(p),pp=PJ(q);
+ items.push({z:q[2]+(bias==null?10:bias),d(){g.font=&#x27;600 &#x27;+size+&#x27;px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.textAlign=align||&#x27;center&#x27;;g.textBaseline=&#x27;middle&#x27;;g.fillStyle=col;g.fillText(s,pp[0],pp[1]);}});}
+function hud(fn){items.push({z:1e6,d:fn});}
+function ring(c,r,col,w,o,n){n=n||36;const pts=[];for(let i=0;i&lt;=n;i++){const a=i/n*TAU;pts.push([c[0]+Math.cos(a)*r,c[1],c[2]+Math.sin(a)*r]);}for(let i=0;i&lt;n;i++)line(pts[i],pts[i+1],w,col,o);}
+function render(){g.clearRect(0,0,W,H);items.sort((a,b)=&gt;a.z-b.z);for(const it of items)it.d();items=[];}
+function loop(scene){let t0=null;function fr(ts){if(t0===null)t0=ts;if(cv.clientWidth&amp;&amp;(cv.clientWidth!==W||cv.clientHeight!==H))fit();items=[];scene((ts-t0)/1000);render();requestAnimationFrame(fr);}requestAnimationFrame(fr);}
+/* molecules */
+const COLA={C:[168,176,200],H:[236,240,248],N:[37,244,238],O:[255,45,111]},RADA={C:.38,H:.25,N:.36,O:.36};
+function mkMol(A,B){let mx=0,my=0,mz=0;A.forEach(e=&gt;{mx+=e[1];my+=e[2];mz+=e[3]});mx/=A.length;my/=A.length;mz/=A.length;let m=0;
+ const P=A.map(e=&gt;{const p=[e[1]-mx,e[2]-my,e[3]-mz];m=Math.max(m,Math.hypot(p[0],p[1],p[2])+RADA[e[0]]);return p});
+ const k=1/m;P.forEach(p=&gt;{p[0]*=k;p[1]*=k;p[2]*=k});return {A,B,P,k};}
+function drawMol(M,c,sc,a,b,o){o=o||{};
+ const Q=M.P.map(p=&gt;{const x=p[0]*Math.cos(a)+p[2]*Math.sin(a),z=-p[0]*Math.sin(a)+p[2]*Math.cos(a),y=p[1]*Math.cos(b)-z*Math.sin(b),w=p[1]*Math.sin(b)+z*Math.cos(b);return [c[0]+x*sc,c[1]+y*sc,c[2]+w*sc];});
+ M.B.forEach(e=&gt;{const i=e[0]-1,j=e[1]-1,p=Q[i],s=Q[j],mid=[(p[0]+s[0])/2,(p[1]+s[1])/2,(p[2]+s[2])/2],w=.2*M.k*sc,dbl=e[2]&gt;1;
+  line(p,mid,w,COLA[M.A[i][0]],{dbl,f:.8,a:o.a,bias:o.bias});line(mid,s,w,COLA[M.A[j][0]],{dbl,f:.8,a:o.a,bias:o.bias});});
+ M.A.forEach((e,i)=&gt;sph(Q[i],RADA[e[0]]*M.k*sc,COLA[e[0]],{a:o.a,bias:o.bias}));}
+/* vape pod */
+function vape(c,o){o=o||{};const x=c[0],y=c[1],z=c[2];
+ box([x,y,z],[1.0,2.5,.52],COL.dark);
+ box([x,y,z+.265],[.84,2.1,.03],COL.navy);
+ box([x,y-.35,z],[1.03,.14,.55],COL.mag);
+ box([x,y+1.42,z],[.62,.38,.36],[70,78,120]);
+ box([x,y+1.62,z],[.46,.05,.22],[20,22,36]);
+ const pulse=.5+.5*Math.sin((o.t||0)*3);
+ sph([x,y-.95,z+.3],.07,COL.teal,{bias:.05});glow([x,y-.95,z+.3],.5,COL.teal,.45+.3*pulse);
+ line([x-.25,y+.55,z+.28],[x+.25,y+.55,z+.28],.018,COL.teal,{a:.7,bias:.05});
+ line([x-.25,y+.38,z+.28],[x+.1,y+.38,z+.28],.018,COL.teal,{a:.5,bias:.05});}
+function floorGrid(y,n,s,col,a){for(let i=-n;i&lt;=n;i++){line([-n*s,y,i*s],[n*s,y,i*s],.005,col,{a});line([i*s,y,-n*s],[i*s,y,n*s],.005,col,{a});}}
+
+V.cx=.54;V.cy=.5;V.R=100;V.cam=8;V.pitch=.34;
+const YS=3.0/20;
+loop(t=&gt;{V.yaw=.38+.2*Math.sin(t*.3);
+ const tt=t%13,gw=sm(.4,2.4,tt),h2=Math.max(.05,19.6*YS*gw),h1=.05;
+ box([0,-1.6,0],[5.6,.12,3.2],[28,32,52]);
+ for(let k=0;k&lt;=2;k++){const y=-1.54+k*10*YS;line([-2.7,y,-1.5],[2.7,y,-1.5],.006,COL.white,{a:.18});line([-2.7,y,-1.5],[-2.7,y,1.5],.006,COL.white,{a:.12});txt([-2.95,y,-1.5],(k*10)+&#x27;%&#x27;,&#x27;#8A90A0&#x27;,24,&#x27;right&#x27;);}
+ box([-1.35,-1.54+h1/2,0],[1.35,h1,1.35],[90,150,255]);
+ box([1.35,-1.54+h2/2,0],[1.35,h2,1.35],COL.mag);glow([1.35,-1.54+h2,0],1.5,COL.mag,.28*gw);
+ txt([-1.35,-1.54+h1+.45,0],&#x27;≈ 0%&#x27;,&#x27;#8FB8FF&#x27;,40,&#x27;center&#x27;);
+ txt([1.35,-1.54+h2+.5,0],(19.6*gw).toFixed(1).replace(&#x27;.&#x27;,&#x27;,&#x27;)+&#x27;%&#x27;,&#x27;#FF6B95&#x27;,54,&#x27;center&#x27;);
+ txt([-1.35,-1.52,1.2],&#x27;10 років тому&#x27;,&#x27;#C9CED8&#x27;,26,&#x27;center&#x27;);txt([1.35,-1.52,1.2],&#x27;сьогодні&#x27;,&#x27;#FFFFFF&#x27;,26,&#x27;center&#x27;);
+ hud(()=&gt;{g.textAlign=&#x27;left&#x27;;g.textBaseline=&#x27;top&#x27;;g.font=&#x27;600 23px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#9AA7B6&#x27;;g.fillText(&#x27;Україна, 13–15 років · GATS/GYTS&#x27;,30,24);});
+});
+&lt;/script&gt;"></iframe><div class="head">
+<p class="eyebrow">05 · СТАТИСТИКА</p>
+<h2>Дані: майже кожен п’ятий школяр вейпує</h2>
+</div>
+<div class="body">
+<div style="width:1000px;flex:none"></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<div class="panel" style="--i:0;width:100%;flex:1"><p class="stat n">19,6%</p><p class="cap">підлітків 13–15 років в Ук&shy;раїні вживають е-сигарети сьогодні (GATS/GYTS)</p></div>
+<div class="panel" style="--i:1;width:100%;flex:1"><p class="stat2 n" style="font-size:96px">60%</p><p class="cap">переходять на подвійне споживання: вейп + сигарети</p></div>
+</div>
+</div>
+<p class="foot">Джерела: матеріали кейсу «Анатомія сучасних загроз», Кейс 02 (дані GATS/GYTS, Україна, 13–15 років) · <a href="https://suspilne.media/1031395-kozen-patij-pidlitok-v-ukraini-kurit-elektronni-sigareti-zvit-moz/">МОЗ, GYTS 2023</a></p>
+<aside>Тепер цифри. За даними GATS і GYTS, в Україні серед підлітків 13–15 років е-сигарети вживає 19,6% — майже кожен п’ятий. А десять років тому цей показник був близьким до нуля. Є й друга тривожна деталь: за матеріалами кейсу, близько 60% переходять на подвійне споживання — вейп разом із сигаретами. Тобто вейп часто не заміна сигареті, а додаток до неї.</aside>
+</section>
+<section id="marketing" class="g-teal" data-transition="push">
+<div class="pbg" style="left:128px;top:304px;width:560px;height:616px"></div><iframe class="bg3d emb" title="3D-модель" aria-hidden="true" tabindex="-1" sandbox="allow-scripts" style="position:absolute; left:128px; top:304px; width:560px; height:616px" data-srcdoc="&lt;style&gt;html,body{margin:0;height:100%;overflow:hidden;background:transparent}canvas{display:block;width:100%;height:100%}&lt;/style&gt;&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;&lt;script&gt;const cv=document.getElementById(&#x27;c&#x27;),g=cv.getContext(&#x27;2d&#x27;),PI=Math.PI,TAU=PI*2;
+let W=600,H=600;
+function fit(){const d=Math.min(window.devicePixelRatio||1,2);W=cv.clientWidth||600;H=cv.clientHeight||600;cv.width=Math.round(W*d);cv.height=Math.round(H*d);g.setTransform(d,0,0,d,0,0);}
+fit();addEventListener(&#x27;resize&#x27;,fit);
+const V={cx:.5,cy:.5,R:200,cam:6,yaw:0,pitch:.2,roll:0};
+const COL={teal:[37,244,238],mag:[255,45,111],pur:[150,110,255],steel:[168,176,200],white:[236,240,248],amber:[255,176,60],lime:[150,230,90],dark:[44,50,78],navy:[30,34,58]};
+const clamp=(x,a,b)=&gt;Math.max(a,Math.min(b,x)),sm=(a,b,x)=&gt;{x=clamp((x-a)/(b-a),0,1);return x*x*(3-2*x)},lerp=(a,b,t)=&gt;a+(b-a)*t;
+const rnd=i=&gt;{const x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)};
+function T(p){let x=p[0],y=p[1],z=p[2];
+ let c=Math.cos(V.yaw),s=Math.sin(V.yaw);const x1=x*c+z*s,z1=-x*s+z*c;
+ c=Math.cos(V.pitch);s=Math.sin(V.pitch);const y1=y*c-z1*s,z2=y*s+z1*c;
+ c=Math.cos(V.roll);s=Math.sin(V.roll);return [x1*c-y1*s,x1*s+y1*c,z2];}
+function PJ(q){const f=V.cam/(V.cam-q[2]);return [V.cx*W+q[0]*V.R*f,V.cy*H-q[1]*V.R*f,f];}
+let items=[];
+const LD=(()=&gt;{const l=[-.4,.6,.7],m=Math.hypot(l[0],l[1],l[2]);return l.map(v=&gt;v/m)})();
+function rgb(c,f,a){f=f==null?1:f;return &#x27;rgba(&#x27;+Math.min(255,c[0]*f|0)+&#x27;,&#x27;+Math.min(255,c[1]*f|0)+&#x27;,&#x27;+Math.min(255,c[2]*f|0)+&#x27;,&#x27;+(a==null?1:a)+&#x27;)&#x27;;}
+function face(pts,col,o){o=o||{};const q=pts.map(T);
+ const ax=q[1][0]-q[0][0],ay=q[1][1]-q[0][1],az=q[1][2]-q[0][2],bx=q[2][0]-q[0][0],by=q[2][1]-q[0][1],bz=q[2][2]-q[0][2];
+ let nx=ay*bz-az*by,ny=az*bx-ax*bz,nz=ax*by-ay*bx;const m=Math.hypot(nx,ny,nz)||1;nx/=m;ny/=m;nz/=m;if(nz&lt;0){nx=-nx;ny=-ny;nz=-nz;}
+ const sh=o.flat?1:.3+.7*Math.max(0,nx*LD[0]+ny*LD[1]+nz*LD[2]);
+ let z=0;q.forEach(v=&gt;z+=v[2]);z/=q.length;const p=q.map(PJ);
+ items.push({z:z+(o.bias||0),d(){g.beginPath();p.forEach((v,i)=&gt;i?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1]));g.closePath();
+  g.fillStyle=rgb(col,sh,o.a);g.fill();g.lineWidth=1;g.strokeStyle=rgb(col,sh*.8,o.a);g.stroke();
+  if(o.edge){g.strokeStyle=o.edge;g.lineWidth=o.ew||1.5;g.stroke();}}});}
+function box(c,s,col,o){const x=c[0],y=c[1],z=c[2],a=s[0]/2,b=s[1]/2,d=s[2]/2;
+ const v=[[x-a,y-b,z-d],[x+a,y-b,z-d],[x+a,y+b,z-d],[x-a,y+b,z-d],[x-a,y-b,z+d],[x+a,y-b,z+d],[x+a,y+b,z+d],[x-a,y+b,z+d]];
+ [[0,1,2,3],[4,5,6,7],[0,1,5,4],[3,2,6,7],[0,3,7,4],[1,2,6,5]].forEach(f=&gt;face(f.map(i=&gt;v[i]),col,o));}
+function cyl(c,r,h,col,o){o=o||{};const n=o.seg||22,x=c[0],y=c[1],z=c[2],top=[],bot=[];
+ for(let i=0;i&lt;n;i++){const a=i/n*TAU;top.push([x+Math.cos(a)*r,y+h/2,z+Math.sin(a)*r]);bot.push([x+Math.cos(a)*r,y-h/2,z+Math.sin(a)*r]);}
+ for(let i=0;i&lt;n;i++){const j=(i+1)%n;face([bot[i],bot[j],top[j],top[i]],col,o);}
+ if(!o.open){face(top,col,Object.assign({},o,{bias:(o.bias||0)+.02}));face(bot,col,o);}}
+function sph(c,r,col,o){o=o||{};const q=T(c),p=PJ(q),rr=r*V.R*p[2];
+ items.push({z:q[2]+(o.bias||0),d(){const gr=g.createRadialGradient(p[0]-rr*.35,p[1]-rr*.4,rr*.08,p[0],p[1],rr),F=o.f||1;
+  gr.addColorStop(0,rgb(col,1.25*F,o.a));gr.addColorStop(.55,rgb(col,.85*F,o.a));gr.addColorStop(1,rgb(col,.38*F,o.a));
+  g.fillStyle=gr;g.beginPath();g.arc(p[0],p[1],rr,0,TAU);g.fill();}});}
+function glow(c,r,col,a){const q=T(c),p=PJ(q),rr=r*V.R*p[2];
+ items.push({z:q[2]+.001,d(){const gr=g.createRadialGradient(p[0],p[1],0,p[0],p[1],rr);gr.addColorStop(0,rgb(col,1,a));gr.addColorStop(1,rgb(col,1,0));g.fillStyle=gr;g.beginPath();g.arc(p[0],p[1],rr,0,TAU);g.fill();}});}
+function line(a,b,w,col,o){o=o||{};const qa=T(a),qb=T(b),pa=PJ(qa),pb=PJ(qb);
+ items.push({z:(qa[2]+qb[2])/2+(o.bias||0),d(){const f=(pa[2]+pb[2])/2,ww=Math.max(1,w*V.R*f),dx=pb[0]-pa[0],dy=pb[1]-pa[1],l=Math.hypot(dx,dy)||1,nx=-dy/l,ny=dx/l;
+  g.lineCap=&#x27;round&#x27;;(o.dbl?[-ww*.55,ww*.55]:[0]).forEach(d=&gt;{g.lineWidth=o.dbl?ww*.6:ww;g.strokeStyle=rgb(col,o.f||1,o.a);g.beginPath();g.moveTo(pa[0]+nx*d,pa[1]+ny*d);g.lineTo(pb[0]+nx*d,pb[1]+ny*d);g.stroke();});}});}
+function txt(p,s,col,size,align,bias){const q=T(p),pp=PJ(q);
+ items.push({z:q[2]+(bias==null?10:bias),d(){g.font=&#x27;600 &#x27;+size+&#x27;px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.textAlign=align||&#x27;center&#x27;;g.textBaseline=&#x27;middle&#x27;;g.fillStyle=col;g.fillText(s,pp[0],pp[1]);}});}
+function hud(fn){items.push({z:1e6,d:fn});}
+function ring(c,r,col,w,o,n){n=n||36;const pts=[];for(let i=0;i&lt;=n;i++){const a=i/n*TAU;pts.push([c[0]+Math.cos(a)*r,c[1],c[2]+Math.sin(a)*r]);}for(let i=0;i&lt;n;i++)line(pts[i],pts[i+1],w,col,o);}
+function render(){g.clearRect(0,0,W,H);items.sort((a,b)=&gt;a.z-b.z);for(const it of items)it.d();items=[];}
+function loop(scene){let t0=null;function fr(ts){if(t0===null)t0=ts;if(cv.clientWidth&amp;&amp;(cv.clientWidth!==W||cv.clientHeight!==H))fit();items=[];scene((ts-t0)/1000);render();requestAnimationFrame(fr);}requestAnimationFrame(fr);}
+/* molecules */
+const COLA={C:[168,176,200],H:[236,240,248],N:[37,244,238],O:[255,45,111]},RADA={C:.38,H:.25,N:.36,O:.36};
+function mkMol(A,B){let mx=0,my=0,mz=0;A.forEach(e=&gt;{mx+=e[1];my+=e[2];mz+=e[3]});mx/=A.length;my/=A.length;mz/=A.length;let m=0;
+ const P=A.map(e=&gt;{const p=[e[1]-mx,e[2]-my,e[3]-mz];m=Math.max(m,Math.hypot(p[0],p[1],p[2])+RADA[e[0]]);return p});
+ const k=1/m;P.forEach(p=&gt;{p[0]*=k;p[1]*=k;p[2]*=k});return {A,B,P,k};}
+function drawMol(M,c,sc,a,b,o){o=o||{};
+ const Q=M.P.map(p=&gt;{const x=p[0]*Math.cos(a)+p[2]*Math.sin(a),z=-p[0]*Math.sin(a)+p[2]*Math.cos(a),y=p[1]*Math.cos(b)-z*Math.sin(b),w=p[1]*Math.sin(b)+z*Math.cos(b);return [c[0]+x*sc,c[1]+y*sc,c[2]+w*sc];});
+ M.B.forEach(e=&gt;{const i=e[0]-1,j=e[1]-1,p=Q[i],s=Q[j],mid=[(p[0]+s[0])/2,(p[1]+s[1])/2,(p[2]+s[2])/2],w=.2*M.k*sc,dbl=e[2]&gt;1;
+  line(p,mid,w,COLA[M.A[i][0]],{dbl,f:.8,a:o.a,bias:o.bias});line(mid,s,w,COLA[M.A[j][0]],{dbl,f:.8,a:o.a,bias:o.bias});});
+ M.A.forEach((e,i)=&gt;sph(Q[i],RADA[e[0]]*M.k*sc,COLA[e[0]],{a:o.a,bias:o.bias}));}
+/* vape pod */
+function vape(c,o){o=o||{};const x=c[0],y=c[1],z=c[2];
+ box([x,y,z],[1.0,2.5,.52],COL.dark);
+ box([x,y,z+.265],[.84,2.1,.03],COL.navy);
+ box([x,y-.35,z],[1.03,.14,.55],COL.mag);
+ box([x,y+1.42,z],[.62,.38,.36],[70,78,120]);
+ box([x,y+1.62,z],[.46,.05,.22],[20,22,36]);
+ const pulse=.5+.5*Math.sin((o.t||0)*3);
+ sph([x,y-.95,z+.3],.07,COL.teal,{bias:.05});glow([x,y-.95,z+.3],.5,COL.teal,.45+.3*pulse);
+ line([x-.25,y+.55,z+.28],[x+.25,y+.55,z+.28],.018,COL.teal,{a:.7,bias:.05});
+ line([x-.25,y+.38,z+.28],[x+.1,y+.38,z+.28],.018,COL.teal,{a:.5,bias:.05});}
+function floorGrid(y,n,s,col,a){for(let i=-n;i&lt;=n;i++){line([-n*s,y,i*s],[n*s,y,i*s],.005,col,{a});line([i*s,y,-n*s],[i*s,y,n*s],.005,col,{a});}}
+
+V.cx=.5;V.cy=.54;V.R=108;V.cam=7;V.pitch=.42;
+const FC=[[255,95,160],[255,150,50],[150,230,90],[170,120,255],[255,210,70],[37,244,238],[255,70,80],[120,200,255]];
+loop(t=&gt;{V.yaw=.5*Math.sin(t*.3)+.2;
+ floorGrid(-1.5,5,.7,COL.teal,.12);
+ vape([0,-.1,0],{t});
+ const hy=1.85+.12*Math.sin(t*1.6);glow([0,hy,0],1.5,COL.amber,.3);ring([0,hy,0],.6,COL.amber,.05,{a:.95},40);ring([0,hy,0],.6,[255,236,150],.02,{a:1,bias:.01},40);
+ FC.forEach((c,i)=&gt;{const a=t*.7+i*TAU/FC.length,r=1.95,p=[Math.cos(a)*r,.1+.45*Math.sin(a*2+i),Math.sin(a)*r];glow(p,.55,c,.35);sph(p,.2,c,{});});
+ hud(()=&gt;{g.textAlign=&#x27;left&#x27;;g.textBaseline=&#x27;top&#x27;;g.font=&#x27;600 22px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#9AA7B6&#x27;;g.fillText(&#x27;Гаджет + «фрукти» = «гало»&#x27;,28,24);});
+});
+&lt;/script&gt;"></iframe><div class="head">
+<p class="eyebrow">06 · ДОСЛІДНИЦЬКЕ ЗАВДАННЯ 2: МАНІПУЛЯЦІЇ</p>
+<h2>Ілюзія безпеки: ефект «гало» і «95%»</h2>
+</div>
+<div class="body">
+<div style="width:560px;flex:none"></div>
+<div class="pts">
+<div class="pt" style="--i:0"><p><b>Ефект «гало»:</b> стильний гаджет і фруктові смаки переносять приємне враження на сам продукт — вейп здається «чистим» і безпечним.</p></div>
+<div class="pt" style="--i:1"><p><b>Теза «95% безпеки»</b> — це порівняння з сигаретою, а не з відсутністю куріння. Для підлітка, який ніколи не курив, вона нічого не доводить.</p></div>
+<div class="pt" style="--i:2"><p><b>Три питання до будь-якої тези:</b> з чим порівнюють? кого досліджували? що вимірювали — і як довго?</p></div>
+</div>
+</div>
+<p class="foot">Джерела: матеріали кейсу «Анатомія сучасних загроз», Кейс 02 (завдання «Маніпуляції») · <a href="https://www.who.int/news-room/questions-and-answers/item/tobacco-e-cigarettes">ВООЗ — е-сигарети</a></p>
+<aside>Окремо про маркетинг. Ефект «гало» — коли приємна обгортка переносить враження на сам продукт: стильний гаджет, фруктові смаки — і вейп здається безпечним. Часто чуєш тезу про «95% безпеки». Її треба розбирати критично: з чим порівнювали, кого досліджували і що саме вимірювали. Порівняння з сигаретою не доводить, що вейп безпечний для підлітка, який ніколи не курив. Три запитання — і більшість красивих тез розсипається.</aside>
+</section>
+<section id="eco" class="g-purple" data-transition="push">
+<div class="pbg" style="left:128px;top:304px;width:840px;height:616px"></div><iframe class="bg3d emb" title="3D-модель" aria-hidden="true" tabindex="-1" sandbox="allow-scripts" style="position:absolute; left:128px; top:304px; width:840px; height:616px" data-srcdoc="&lt;style&gt;html,body{margin:0;height:100%;overflow:hidden;background:transparent}canvas{display:block;width:100%;height:100%}&lt;/style&gt;&lt;canvas id=&quot;c&quot;&gt;&lt;/canvas&gt;&lt;script&gt;const cv=document.getElementById(&#x27;c&#x27;),g=cv.getContext(&#x27;2d&#x27;),PI=Math.PI,TAU=PI*2;
+let W=600,H=600;
+function fit(){const d=Math.min(window.devicePixelRatio||1,2);W=cv.clientWidth||600;H=cv.clientHeight||600;cv.width=Math.round(W*d);cv.height=Math.round(H*d);g.setTransform(d,0,0,d,0,0);}
+fit();addEventListener(&#x27;resize&#x27;,fit);
+const V={cx:.5,cy:.5,R:200,cam:6,yaw:0,pitch:.2,roll:0};
+const COL={teal:[37,244,238],mag:[255,45,111],pur:[150,110,255],steel:[168,176,200],white:[236,240,248],amber:[255,176,60],lime:[150,230,90],dark:[44,50,78],navy:[30,34,58]};
+const clamp=(x,a,b)=&gt;Math.max(a,Math.min(b,x)),sm=(a,b,x)=&gt;{x=clamp((x-a)/(b-a),0,1);return x*x*(3-2*x)},lerp=(a,b,t)=&gt;a+(b-a)*t;
+const rnd=i=&gt;{const x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)};
+function T(p){let x=p[0],y=p[1],z=p[2];
+ let c=Math.cos(V.yaw),s=Math.sin(V.yaw);const x1=x*c+z*s,z1=-x*s+z*c;
+ c=Math.cos(V.pitch);s=Math.sin(V.pitch);const y1=y*c-z1*s,z2=y*s+z1*c;
+ c=Math.cos(V.roll);s=Math.sin(V.roll);return [x1*c-y1*s,x1*s+y1*c,z2];}
+function PJ(q){const f=V.cam/(V.cam-q[2]);return [V.cx*W+q[0]*V.R*f,V.cy*H-q[1]*V.R*f,f];}
+let items=[];
+const LD=(()=&gt;{const l=[-.4,.6,.7],m=Math.hypot(l[0],l[1],l[2]);return l.map(v=&gt;v/m)})();
+function rgb(c,f,a){f=f==null?1:f;return &#x27;rgba(&#x27;+Math.min(255,c[0]*f|0)+&#x27;,&#x27;+Math.min(255,c[1]*f|0)+&#x27;,&#x27;+Math.min(255,c[2]*f|0)+&#x27;,&#x27;+(a==null?1:a)+&#x27;)&#x27;;}
+function face(pts,col,o){o=o||{};const q=pts.map(T);
+ const ax=q[1][0]-q[0][0],ay=q[1][1]-q[0][1],az=q[1][2]-q[0][2],bx=q[2][0]-q[0][0],by=q[2][1]-q[0][1],bz=q[2][2]-q[0][2];
+ let nx=ay*bz-az*by,ny=az*bx-ax*bz,nz=ax*by-ay*bx;const m=Math.hypot(nx,ny,nz)||1;nx/=m;ny/=m;nz/=m;if(nz&lt;0){nx=-nx;ny=-ny;nz=-nz;}
+ const sh=o.flat?1:.3+.7*Math.max(0,nx*LD[0]+ny*LD[1]+nz*LD[2]);
+ let z=0;q.forEach(v=&gt;z+=v[2]);z/=q.length;const p=q.map(PJ);
+ items.push({z:z+(o.bias||0),d(){g.beginPath();p.forEach((v,i)=&gt;i?g.lineTo(v[0],v[1]):g.moveTo(v[0],v[1]));g.closePath();
+  g.fillStyle=rgb(col,sh,o.a);g.fill();g.lineWidth=1;g.strokeStyle=rgb(col,sh*.8,o.a);g.stroke();
+  if(o.edge){g.strokeStyle=o.edge;g.lineWidth=o.ew||1.5;g.stroke();}}});}
+function box(c,s,col,o){const x=c[0],y=c[1],z=c[2],a=s[0]/2,b=s[1]/2,d=s[2]/2;
+ const v=[[x-a,y-b,z-d],[x+a,y-b,z-d],[x+a,y+b,z-d],[x-a,y+b,z-d],[x-a,y-b,z+d],[x+a,y-b,z+d],[x+a,y+b,z+d],[x-a,y+b,z+d]];
+ [[0,1,2,3],[4,5,6,7],[0,1,5,4],[3,2,6,7],[0,3,7,4],[1,2,6,5]].forEach(f=&gt;face(f.map(i=&gt;v[i]),col,o));}
+function cyl(c,r,h,col,o){o=o||{};const n=o.seg||22,x=c[0],y=c[1],z=c[2],top=[],bot=[];
+ for(let i=0;i&lt;n;i++){const a=i/n*TAU;top.push([x+Math.cos(a)*r,y+h/2,z+Math.sin(a)*r]);bot.push([x+Math.cos(a)*r,y-h/2,z+Math.sin(a)*r]);}
+ for(let i=0;i&lt;n;i++){const j=(i+1)%n;face([bot[i],bot[j],top[j],top[i]],col,o);}
+ if(!o.open){face(top,col,Object.assign({},o,{bias:(o.bias||0)+.02}));face(bot,col,o);}}
+function sph(c,r,col,o){o=o||{};const q=T(c),p=PJ(q),rr=r*V.R*p[2];
+ items.push({z:q[2]+(o.bias||0),d(){const gr=g.createRadialGradient(p[0]-rr*.35,p[1]-rr*.4,rr*.08,p[0],p[1],rr),F=o.f||1;
+  gr.addColorStop(0,rgb(col,1.25*F,o.a));gr.addColorStop(.55,rgb(col,.85*F,o.a));gr.addColorStop(1,rgb(col,.38*F,o.a));
+  g.fillStyle=gr;g.beginPath();g.arc(p[0],p[1],rr,0,TAU);g.fill();}});}
+function glow(c,r,col,a){const q=T(c),p=PJ(q),rr=r*V.R*p[2];
+ items.push({z:q[2]+.001,d(){const gr=g.createRadialGradient(p[0],p[1],0,p[0],p[1],rr);gr.addColorStop(0,rgb(col,1,a));gr.addColorStop(1,rgb(col,1,0));g.fillStyle=gr;g.beginPath();g.arc(p[0],p[1],rr,0,TAU);g.fill();}});}
+function line(a,b,w,col,o){o=o||{};const qa=T(a),qb=T(b),pa=PJ(qa),pb=PJ(qb);
+ items.push({z:(qa[2]+qb[2])/2+(o.bias||0),d(){const f=(pa[2]+pb[2])/2,ww=Math.max(1,w*V.R*f),dx=pb[0]-pa[0],dy=pb[1]-pa[1],l=Math.hypot(dx,dy)||1,nx=-dy/l,ny=dx/l;
+  g.lineCap=&#x27;round&#x27;;(o.dbl?[-ww*.55,ww*.55]:[0]).forEach(d=&gt;{g.lineWidth=o.dbl?ww*.6:ww;g.strokeStyle=rgb(col,o.f||1,o.a);g.beginPath();g.moveTo(pa[0]+nx*d,pa[1]+ny*d);g.lineTo(pb[0]+nx*d,pb[1]+ny*d);g.stroke();});}});}
+function txt(p,s,col,size,align,bias){const q=T(p),pp=PJ(q);
+ items.push({z:q[2]+(bias==null?10:bias),d(){g.font=&#x27;600 &#x27;+size+&#x27;px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.textAlign=align||&#x27;center&#x27;;g.textBaseline=&#x27;middle&#x27;;g.fillStyle=col;g.fillText(s,pp[0],pp[1]);}});}
+function hud(fn){items.push({z:1e6,d:fn});}
+function ring(c,r,col,w,o,n){n=n||36;const pts=[];for(let i=0;i&lt;=n;i++){const a=i/n*TAU;pts.push([c[0]+Math.cos(a)*r,c[1],c[2]+Math.sin(a)*r]);}for(let i=0;i&lt;n;i++)line(pts[i],pts[i+1],w,col,o);}
+function render(){g.clearRect(0,0,W,H);items.sort((a,b)=&gt;a.z-b.z);for(const it of items)it.d();items=[];}
+function loop(scene){let t0=null;function fr(ts){if(t0===null)t0=ts;if(cv.clientWidth&amp;&amp;(cv.clientWidth!==W||cv.clientHeight!==H))fit();items=[];scene((ts-t0)/1000);render();requestAnimationFrame(fr);}requestAnimationFrame(fr);}
+/* molecules */
+const COLA={C:[168,176,200],H:[236,240,248],N:[37,244,238],O:[255,45,111]},RADA={C:.38,H:.25,N:.36,O:.36};
+function mkMol(A,B){let mx=0,my=0,mz=0;A.forEach(e=&gt;{mx+=e[1];my+=e[2];mz+=e[3]});mx/=A.length;my/=A.length;mz/=A.length;let m=0;
+ const P=A.map(e=&gt;{const p=[e[1]-mx,e[2]-my,e[3]-mz];m=Math.max(m,Math.hypot(p[0],p[1],p[2])+RADA[e[0]]);return p});
+ const k=1/m;P.forEach(p=&gt;{p[0]*=k;p[1]*=k;p[2]*=k});return {A,B,P,k};}
+function drawMol(M,c,sc,a,b,o){o=o||{};
+ const Q=M.P.map(p=&gt;{const x=p[0]*Math.cos(a)+p[2]*Math.sin(a),z=-p[0]*Math.sin(a)+p[2]*Math.cos(a),y=p[1]*Math.cos(b)-z*Math.sin(b),w=p[1]*Math.sin(b)+z*Math.cos(b);return [c[0]+x*sc,c[1]+y*sc,c[2]+w*sc];});
+ M.B.forEach(e=&gt;{const i=e[0]-1,j=e[1]-1,p=Q[i],s=Q[j],mid=[(p[0]+s[0])/2,(p[1]+s[1])/2,(p[2]+s[2])/2],w=.2*M.k*sc,dbl=e[2]&gt;1;
+  line(p,mid,w,COLA[M.A[i][0]],{dbl,f:.8,a:o.a,bias:o.bias});line(mid,s,w,COLA[M.A[j][0]],{dbl,f:.8,a:o.a,bias:o.bias});});
+ M.A.forEach((e,i)=&gt;sph(Q[i],RADA[e[0]]*M.k*sc,COLA[e[0]],{a:o.a,bias:o.bias}));}
+/* vape pod */
+function vape(c,o){o=o||{};const x=c[0],y=c[1],z=c[2];
+ box([x,y,z],[1.0,2.5,.52],COL.dark);
+ box([x,y,z+.265],[.84,2.1,.03],COL.navy);
+ box([x,y-.35,z],[1.03,.14,.55],COL.mag);
+ box([x,y+1.42,z],[.62,.38,.36],[70,78,120]);
+ box([x,y+1.62,z],[.46,.05,.22],[20,22,36]);
+ const pulse=.5+.5*Math.sin((o.t||0)*3);
+ sph([x,y-.95,z+.3],.07,COL.teal,{bias:.05});glow([x,y-.95,z+.3],.5,COL.teal,.45+.3*pulse);
+ line([x-.25,y+.55,z+.28],[x+.25,y+.55,z+.28],.018,COL.teal,{a:.7,bias:.05});
+ line([x-.25,y+.38,z+.28],[x+.1,y+.38,z+.28],.018,COL.teal,{a:.5,bias:.05});}
+function floorGrid(y,n,s,col,a){for(let i=-n;i&lt;=n;i++){line([-n*s,y,i*s],[n*s,y,i*s],.005,col,{a});line([i*s,y,-n*s],[i*s,y,n*s],.005,col,{a});}}
+
+V.cx=.5;V.cy=.55;V.R=100;V.cam=7;V.pitch=.18;
+loop(t=&gt;{V.yaw=.65*Math.sin(t*.28)+.1;
+ const e=.5+.5*Math.sin(t*.9-1.2);
+ floorGrid(-1.85,6,.8,COL.teal,.1);
+ // plastic shell halves
+ box([0,0,.34+e*1.0],[1.04,2.8,.16],[170,180,205],{a:.5,edge:&#x27;rgba(255,255,255,.35)&#x27;});
+ box([0,0,-.34-e*1.0],[1.04,2.8,.16],[170,180,205],{a:.5,edge:&#x27;rgba(255,255,255,.35)&#x27;});
+ txt([0,1.78,.34+e*1.0],&#x27;Пластик&#x27;,&#x27;#C9CED8&#x27;,24,&#x27;center&#x27;);
+ // battery
+ const bx=-.4-e*1.3;cyl([bx,-.2,0],.22,1.5,COL.lime,{seg:22});cyl([bx,.6,0],.1,.12,[200,200,210],{seg:14});
+ txt([bx,.95,0],&#x27;Літій (Li)&#x27;,&#x27;#B6F08A&#x27;,24,&#x27;center&#x27;);glow([bx,-.2,0],.9,COL.lime,.18);
+ // board
+ const px=.45+e*1.4;box([px,.5,-.15],[.7,1.1,.06],[40,190,120]);for(let i=0;i&lt;6;i++)box([px-.2+(i%3)*.2,.25+Math.floor(i/3)*.4,-.11],[.12,.1,.05],[30,30,40]);
+ txt([px,1.3,-.15],&#x27;Плата&#x27;,&#x27;#8FE3B6&#x27;,24,&#x27;center&#x27;);
+ // heater coil
+ const ox=.1,oy=-.75-e*.5;
+ for(let k=0;k&lt;60;k++){const a=k/60*TAU*5,b=(k+1)/60*TAU*5;line([ox+Math.cos(a)*.2,oy+k/60*.9,.15+Math.sin(a)*.2],[ox+Math.cos(b)*.2,oy+(k+1)/60*.9,.15+Math.sin(b)*.2],.025,COL.amber,{});}
+ glow([ox,oy+.45,.15],.8,COL.amber,.2);
+ txt([ox,oy-.3,.15],&#x27;Нагрівач: важкі метали&#x27;,&#x27;#F5C27A&#x27;,24,&#x27;center&#x27;);
+ hud(()=&gt;{g.textAlign=&#x27;left&#x27;;g.textBaseline=&#x27;top&#x27;;g.font=&#x27;600 22px &quot;Segoe UI&quot;,Arial,sans-serif&#x27;;g.fillStyle=&#x27;#9AA7B6&#x27;;g.fillText(&#x27;Один одноразовий пристрій — чотири види відходів&#x27;,28,24);});
+});
+&lt;/script&gt;"></iframe><div class="head">
+<p class="eyebrow">07 · ЕКОЛОГІЯ</p>
+<h2>Екологічний слід: 800 млн пристроїв на рік</h2>
+</div>
+<div class="body">
+<div style="width:840px;flex:none"></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:24px">
+<div class="panel" style="--i:0;width:100%;flex:1"><p class="stat n">800 млн</p><p class="cap">одноразових пристроїв викидається щороку у світі: літій, пластик, плата й нагрівач із важкими металами</p></div>
+<div class="panel" style="--i:1;width:100%;flex:1"><p class="plabel">ЗАВДАННЯ ДЛЯ ШКОЛИ</p><p class="stat2 n" style="font-size:72px">200 / тиждень</p><p class="cap">1000 учнів × 20% = по одному пристрою на тиждень → ≈ 10 400 пристроїв на рік (52 тижні)</p></div>
+</div>
+</div>
+<p class="foot">Джерела: матеріали кейсу «Анатомія сучасних загроз», Кейс 02 (Зона C, завдання «Проєкт») · розрахунок: 1000 × 0,2 × 52</p>
+<aside>І ще одна ціна — екологічна. У світі щороку викидають близько 800 мільйонів одноразових пристроїв. Кожен — це літій-іонний акумулятор, пластик, плата й нагрівальний елемент із важкими металами; розібрати та переробити його непросто. Для прикладу порахуємо для школи: 1000 учнів, 20% з них — по одному пристрою на тиждень. Це 200 пристроїв щотижня, а за цілий рік — понад десять тисяч.</aside>
+</section>
+<section id="task3" class="g-teal" data-transition="push">
+<div class="head">
+<p class="eyebrow">ДОСЛІДНИЦЬКЕ ЗАВДАННЯ 3</p>
+<h2>Проєкт для школи: розрахунок і кампанія</h2>
+</div><div class="body" style="flex-direction:column;gap:28px"><div style="display:flex;gap:12px;align-items:stretch"><div class="tip" style="--i:0;flex:1 1 0;min-width:0;padding:24px 28px"><p class="stat2" style="font-size:56px;color:#25F4EE">1000</p><p class="cap">учнів у школі</p></div><div style="font-size:44px;color:#FF2D6F;align-self:center">→</div><div class="tip" style="--i:1;flex:1 1 0;min-width:0;padding:24px 28px"><p class="stat2" style="font-size:56px;color:#FF6B95">× 20%</p><p class="cap">вживають: 200 учнів</p></div><div style="font-size:44px;color:#FF2D6F;align-self:center">→</div><div class="tip" style="--i:2;flex:1 1 0;min-width:0;padding:24px 28px"><p class="stat2" style="font-size:56px;color:#FF2D6F">200/тиж.</p><p class="cap">пристроїв щотижня (по 1 на учня)</p></div><div style="font-size:44px;color:#FF2D6F;align-self:center">→</div><div class="tip" style="--i:3;flex:1 1 0;min-width:0;padding:24px 28px"><p class="stat2" style="font-size:56px;color:#25F4EE">≈ 10 400</p><p class="cap">на рік (52 тижні)</p></div></div><p class="plabel" style="font-size:28px;margin:0">Адвокаційна кампанія «Не лишай слід»</p><div style="display:flex;gap:24px;flex:1"><div class="tip" style="--i:4;flex:1;padding:28px"><p class="plabel" style="color:#FF6B95">ДІЯ 1</p><p style="font-size:30px;line-height:1.2;color:#fff;font-weight:700;margin:6px 0 10px">Покажи цифри</p><p class="cap" style="font-size:24px">Інфографіка в коридорах: «200 пристроїв на тиждень = літій + пластик + важкі метали».</p></div><div class="tip" style="--i:5;flex:1;padding:28px"><p class="plabel" style="color:#FF6B95">ДІЯ 2</p><p style="font-size:30px;line-height:1.2;color:#fff;font-weight:700;margin:6px 0 10px">Збір відходів</p><p class="cap" style="font-size:24px">Контейнер для використаних пристроїв і батарейок та домовленість із пунктом прийому.</p></div><div class="tip" style="--i:6;flex:1;padding:28px"><p class="plabel" style="color:#FF6B95">ДІЯ 3</p><p style="font-size:30px;line-height:1.2;color:#fff;font-weight:700;margin:6px 0 10px">Учні — учням</p><p class="cap" style="font-size:24px">Короткі відео й уроки від старшокласників: схема залежності та «95%» без прикрас.</p></div><div class="tip" style="--i:7;flex:1;padding:28px"><p class="plabel" style="color:#FF6B95">ДІЯ 4</p><p style="font-size:30px;line-height:1.2;color:#fff;font-weight:700;margin:6px 0 10px">Лічильник і виклик</p><p class="cap" style="font-size:24px">Табло «скільки пристроїв ми не купили» і челендж «Тиждень без вейпа» між класами.</p></div></div></div><p class="foot">Джерела: матеріали кейсу «Анатомія сучасних загроз», Кейс 02 (завдання «Проєкт») · розрахунок: 1000 × 0,2 × 52 = 10 400</p>
+<aside>Третє завдання — проєкт для школи. Беремо 1000 учнів. Якщо 20% вживають — це 200 учнів. По одному пристрою на тиждень — 200 пристроїв щотижня, а за рік близько 10 400. Для кампанії «Не лишай слід» пропоную чотири дії: показати цифри в коридорах, організувати збір відходів, зробити формат «учні — учням» і запустити лічильник та челендж «Тиждень без вейпа» між класами. Успіх можна міряти кількістю зданих пристроїв і результатом опитування наприкінці року.</aside>
+</section>
+<section id="outro" class="dark" data-transition="push">
+<div class="head">
+<p class="eyebrow">08 · ВИСНОВОК</p>
+<h2>Висновок: хімія, мозок і маркетинг</h2>
+</div>
+<div class="body">
+<div class="tips">
+<div class="tip" style="--i:0"><p><b>Хімія.</b> Бензойна кислота знижує pH — нікотин не дратує горло, тож його можна вдихати багато й швидко.</p></div>
+<div class="tip" style="--i:1"><p><b>Мозок.</b> 6–7 секунд до дофаміну, потім ап-регуляція: рецепторів більше — залежність міцніша.</p></div>
+<div class="tip" style="--i:2"><p><b>Маркетинг.</b> Гаджет, фрукти та «95% безпеки» маскують ризик, особливо для тих, хто ніколи не курив.</p></div>
+<div class="tip" style="--i:3"><p><b>Довкілля.</b> 800 млн пристроїв на рік: літій, пластик і важкі метали.</p></div>
+</div>
+<div class="help" style="--i:4">
+<h3>Міф: «палю вейп, щоб кинути»</h3>
+<p class="hs">Нікотин і рецептори нікуди не зникають — змінюється лише пристрій. Це не відмова, а заміна.</p>
+<hr>
+<h3>Потрібна допомога?</h3>
+<p class="hs">Лінія для дітей та молоді, анонімно:</p>
+<p class="hnum">116 111</p>
+</div>
+</div>
+<p class="foot">Джерела: матеріали кейсу «Анатомія сучасних загроз», Кейс 02 · <a href="https://la-strada.org.ua/garyachi-liniyi">«Ла Страда-Україна»</a> · <a href="https://www.who.int/health-topics/tobacco">ВООЗ — тютюн</a></p>
+<aside>Підсумую. Хімія: бензойна кислота знімає подразнення горла. Мозок: 6–7 секунд до дофаміну, а потім ап-регуляція рецепторів. Маркетинг: ефект гало та «95% безпеки» маскують ризик. Довкілля: 800 мільйонів пристроїв на рік. А міф «палю вейп, щоб кинути» за цією схемою не працює: нікотин і рецептори залишаються, змінюється лише пристрій. Якщо потрібна допомога — лінія для дітей та молоді 116 111. Дякую за увагу!</aside>
+</section>
+</div></div>
+<div id="notes" aria-live="polite"></div>
+<div id="hud"></div>
+<script>
+(function(){
+'use strict';
+const stage=document.getElementById('stage');
+if(/[?&]thumb\b/.test(location.search))document.body.classList.add('thumb');
+if(/[?&]still\b/.test(location.search))document.body.classList.add('still');
+function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.transform='scale('+s+')';}
+addEventListener('resize',fit);fit();
+
+const slides=Array.from(stage.querySelectorAll(':scope > section'));
+const hud=document.getElementById('hud'),bar=document.getElementById('bar'),notes=document.getElementById('notes');
+/* motion is on even when Windows "animation effects" are off; ?still turns it off */
+const reduce=document.body.classList.contains('thumb')||document.body.classList.contains('still');
+let cur=0,busy=false;
+
+stage.querySelectorAll('.foot a').forEach(a=>{a.target='_blank';a.rel='noopener';});
+
+/* numbers count up when a slide arrives */
+stage.querySelectorAll('.n').forEach(el=>{el.dataset.full=el.textContent;});
+function countUp(sec){
+  sec.querySelectorAll('.n').forEach(el=>{
+    const full=el.dataset.full,m=full.match(/\d+/);
+    if(!m||reduce){el.textContent=full;return;}
+    const target=parseInt(m[0],10),pre=full.slice(0,m.index),post=full.slice(m.index+m[0].length),t0=performance.now(),dur=1200;
+    (function step(now){const p=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-p,3);el.textContent=pre+Math.round(target*e)+post;if(p<1)requestAnimationFrame(step);})(t0);
+  });
+}
+
+/* 3D canvases start only while their slide is on screen (a canvas loaded inside a hidden slide never starts) */
+function wake(sec){sec.querySelectorAll('iframe.emb').forEach(f=>{f.srcdoc=f.dataset.srcdoc;});}
+function sleep(sec){sec.querySelectorAll('iframe.emb').forEach(f=>{f.removeAttribute('srcdoc');});}
+
+function update(){
+  hud.textContent=(cur+1)+' / '+slides.length+'   ·   ← → гортати   ·   F повний екран   ·   N текст виступу';
+  bar.style.width=((cur+1)/slides.length*100)+'%';
+  const a=slides[cur].querySelector('aside');
+  notes.innerHTML='<b>Текст виступу · слайд '+(cur+1)+'</b>';
+  notes.appendChild(document.createTextNode(a?a.textContent:''));
+  history.replaceState(null,'','#'+(cur+1));
+}
+
+function show(i,dir){
+  if(busy||i<0||i>=slides.length||i===cur)return;
+  busy=true;
+  const from=slides[cur],to=slides[i];
+  from.classList.remove('active');
+  from.classList.add('leaving',dir>0?'out-fwd':'out-back');
+  to.classList.add('active',dir>0?'in-fwd':'in-back');
+  cur=i;update();countUp(to);wake(to);
+  setTimeout(()=>{from.classList.remove('leaving','out-fwd','out-back');to.classList.remove('in-fwd','in-back');sleep(from);busy=false;},reduce?0:560);
+}
+
+cur=Math.min(slides.length-1,Math.max(0,(parseInt(location.hash.slice(1),10)||1)-1));
+slides[cur].classList.add('active');update();countUp(slides[cur]);wake(slides[cur]);
+
+const next=()=>show(cur+1,1),prev=()=>show(cur-1,-1);
+document.addEventListener('keydown',e=>{
+  const k=e.key;
+  if(['ArrowRight','ArrowDown','PageDown',' ','Enter'].includes(k)){e.preventDefault();next();}
+  else if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(k)){e.preventDefault();prev();}
+  else if(k==='Home')show(0,-1);
+  else if(k==='End')show(slides.length-1,1);
+  else if(['f','F','а','А'].includes(k))toggleFS();
+  else if(['n','N','т','Т'].includes(k))document.body.classList.toggle('notes');
+});
+document.getElementById('viewport').addEventListener('click',e=>{
+  if(e.target.closest('a'))return;
+  if(e.clientX<innerWidth*0.25)prev();else next();
+});
+let tx=null;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
+document.addEventListener('touchend',e=>{
+  if(tx===null)return;
+  const dx=e.changedTouches[0].clientX-tx;tx=null;
+  if(Math.abs(dx)>50)(dx<0?next:prev)();
+});
+function toggleFS(){try{if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}catch(_){}}
+let ht;
+function showHud(){document.body.classList.add('show-hud');clearTimeout(ht);ht=setTimeout(()=>document.body.classList.remove('show-hud'),2200);}
+document.addEventListener('mousemove',showHud);showHud();
+})();
+</script>
+</body>
+</html>
